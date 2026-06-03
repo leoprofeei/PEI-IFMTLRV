@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PEI — IFMT Campus Lucas do Rio Verde</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:#1B6B4540;border-radius:3px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.fade{animation:fadeIn 0.25s ease}
+.slide{animation:slideIn 0.2s ease}
+.tabs-bar{display:flex;overflow-x:auto;padding:0 16px;background:white;border-bottom:2px solid #1B6B4520}
+.tabs-bar::-webkit-scrollbar{height:3px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useRef,useEffect}=React;
+const G="#1B6B45";
+
+/* ── Logo SVG oficial completo ── */
+const Logo=({h=80})=>(
+<svg height={h} viewBox="0 0 744.65 253.4" xmlns="http://www.w3.org/2000/svg" style={{display:"block",flexShrink:0}}>
+<defs><style>{`.lw{fill:#fff}`}</style></defs>
+<g>
+<path className="lw" d="M221.35,116.24v-31.63h6.72v31.63h-6.72Z"/>
+<path className="lw" d="M264.16,116.24h-8.54l-13.79-23.93h-.19c.27,4.23.41,7.24.41,9.05v14.89h-6.01v-31.63h8.47l13.76,23.69h.15c-.22-4.11-.33-7.02-.33-8.72v-14.97h6.05v31.63Z"/>
+<path className="lw" d="M290.84,107.46c0,2.86-1.03,5.11-3.09,6.75-2.06,1.64-4.92,2.47-8.59,2.47-3.38,0-6.37-.63-8.97-1.9v-6.23c2.14.95,3.95,1.62,5.43,2.01,1.48.39,2.84.58,4.06.58,1.47,0,2.6-.28,3.39-.85.79-.56,1.18-1.4,1.18-2.51,0-.62-.17-1.17-.52-1.66s-.86-.95-1.53-1.39c-.67-.45-2.04-1.16-4.11-2.14-1.94-.91-3.39-1.78-4.36-2.62-.97-.84-1.74-1.81-2.32-2.92-.58-1.11-.87-2.41-.87-3.9,0-2.8.95-5,2.85-6.6s4.53-2.4,7.88-2.4c1.65,0,3.22.19,4.71.58s3.06.94,4.69,1.64l-2.17,5.22c-1.69-.69-3.09-1.18-4.19-1.45-1.1-.27-2.19-.41-3.26-.41-1.27,0-2.25.3-2.92.89-.68.59-1.02,1.36-1.02,2.31,0,.59.14,1.11.41,1.55.27.44.71.86,1.31,1.28.6.41,2.02,1.15,4.26,2.22,2.96,1.41,4.99,2.83,6.09,4.25,1.1,1.42,1.65,3.16,1.65,5.23Z"/>
+<path className="lw" d="M308.81,116.24h-6.72v-26.05h-8.6v-5.58h23.93v5.58h-8.6v26.05Z"/>
+<path className="lw" d="M322.29,116.24v-31.63h6.72v31.63h-6.72Z"/>
+<path className="lw" d="M349.21,116.24h-6.72v-26.05h-8.6v-5.58h23.93v5.58h-8.6v26.05Z"/>
+<path className="lw" d="M388.49,84.61v20.47c0,2.34-.52,4.39-1.57,6.15-1.05,1.76-2.56,3.11-4.54,4.05-1.98.94-4.32,1.41-7.02,1.41-4.08,0-7.24-1.04-9.49-3.13-2.25-2.08-3.38-4.94-3.38-8.56v-20.38h6.7v19.37c0,2.44.49,4.23,1.47,5.37.98,1.14,2.61,1.71,4.88,1.71s3.79-.57,4.78-1.72c.99-1.15,1.49-2.95,1.49-5.4v-19.32h6.7Z"/>
+<path className="lw" d="M408.47,116.24h-6.72v-26.05h-8.6v-5.58h23.93v5.58h-8.6v26.05Z"/>
+<path className="lw" d="M450.72,100.38c0,5.24-1.3,9.26-3.9,12.07-2.6,2.81-6.33,4.22-11.18,4.22s-8.58-1.41-11.18-4.22c-2.6-2.81-3.9-6.85-3.9-12.12s1.3-9.28,3.91-12.06c2.61-2.78,6.35-4.16,11.22-4.16s8.59,1.4,11.17,4.2c2.58,2.8,3.87,6.82,3.87,12.07ZM427.59,100.38c0,3.53.67,6.19,2.02,7.98,1.35,1.79,3.35,2.68,6.03,2.68,5.36,0,8.04-3.56,8.04-10.67s-2.67-10.69-8-10.69c-2.67,0-4.69.9-6.05,2.69-1.36,1.8-2.04,4.46-2.04,8Z"/>
+<path className="lw" d="M475.42,116.24h-6.61v-31.63h18.16v5.5h-11.55v8.16h10.75v5.48h-10.75v12.51Z"/>
+<path className="lw" d="M511.43,116.24h-18.25v-31.63h18.25v5.5h-11.53v6.95h10.73v5.5h-10.73v8.16h11.53v5.54Z"/>
+<path className="lw" d="M544.33,100.12c0,5.21-1.48,9.2-4.45,11.97-2.97,2.77-7.26,4.15-12.87,4.15h-8.97v-31.63h9.95c5.17,0,9.19,1.36,12.05,4.09,2.86,2.73,4.29,6.53,4.29,11.42ZM537.35,100.3c0-6.79-3.01-10.19-9.02-10.19h-3.58v20.6h2.88c6.47,0,9.71-3.47,9.71-10.41Z"/>
+<path className="lw" d="M569.15,116.24h-18.25v-31.63h18.25v5.5h-11.53v6.95h10.73v5.5h-10.73v8.16h11.53v5.54Z"/>
+<path className="lw" d="M582.48,104.1v12.14h-6.72v-31.63h9.23c4.31,0,7.49.78,9.56,2.35,2.07,1.56,3.1,3.94,3.1,7.13,0,1.86-.51,3.52-1.54,4.97-1.03,1.45-2.48,2.58-4.36,3.41,4.77,7.11,7.88,11.71,9.32,13.78h-7.46l-7.56-12.14h-3.58ZM582.48,98.65h2.17c2.12,0,3.69-.35,4.7-1.06,1.01-.71,1.52-1.82,1.52-3.33s-.52-2.57-1.55-3.2c-1.03-.64-2.63-.95-4.8-.95h-2.04v8.55Z"/>
+<path className="lw" d="M624.46,116.24l-2.3-7.53h-11.55l-2.3,7.53h-7.24l11.18-31.76h8.21l11.23,31.76h-7.24ZM620.56,103.09c-2.12-6.82-3.32-10.68-3.59-11.58s-.46-1.6-.57-2.12c-.48,1.85-1.84,6.41-4.1,13.7h8.26Z"/>
+<path className="lw" d="M635.69,116.24v-31.63h6.72v26.09h12.85v5.54h-19.57Z"/>
+</g>
+<g>
+<path className="lw" d="M232.07,155.43l-8.12-21.19h-.13c.15,1.68.23,3.67.23,5.98v15.2h-2.57v-23.9h4.19l7.58,19.72h.13l7.65-19.72h4.16v23.9h-2.78v-15.4c0-1.77.08-3.68.23-5.75h-.13l-8.19,21.15h-2.24Z"/>
+<path className="lw" d="M262.38,155.43l-.54-2.55h-.13c-.9,1.12-1.79,1.88-2.68,2.28-.89.4-2,.6-3.33.6-1.78,0-3.17-.46-4.18-1.37-1.01-.92-1.51-2.22-1.51-3.91,0-3.62,2.9-5.51,8.7-5.69l3.05-.1v-1.11c0-1.41-.3-2.44-.91-3.11s-1.57-1.01-2.91-1.01c-1.5,0-3.19.46-5.08,1.37l-.84-2.08c.88-.48,1.85-.86,2.91-1.13,1.05-.27,2.11-.41,3.17-.41,2.14,0,3.73.47,4.76,1.42,1.03.95,1.55,2.47,1.55,4.56v12.23h-2.01ZM256.24,153.52c1.69,0,3.02-.46,3.99-1.39.97-.93,1.45-2.22,1.45-3.89v-1.62l-2.72.12c-2.16.08-3.72.41-4.68,1.01s-1.43,1.52-1.43,2.77c0,.98.3,1.73.89,2.24.59.51,1.43.77,2.5.77Z"/>
+<path className="lw" d="M275.79,153.52c.48,0,.94-.03,1.39-.11s.8-.15,1.06-.22v2.08c-.3.14-.73.26-1.3.35s-1.09.14-1.55.14c-3.47,0-5.21-1.83-5.21-5.48v-10.66h-2.57v-1.31l2.57-1.13,1.15-3.82h1.57v4.15h5.21v2.11h-5.21v10.55c0,1.08.26,1.91.77,2.48.51.58,1.22.87,2.11.87Z"/>
+<path className="lw" d="M297.33,146.45c0,2.92-.74,5.2-2.21,6.84-1.47,1.64-3.51,2.46-6.11,2.46-1.6,0-3.03-.38-4.28-1.13-1.24-.75-2.21-1.83-2.88-3.24-.68-1.41-1.02-3.05-1.02-4.94,0-2.92.73-5.2,2.2-6.83,1.46-1.63,3.49-2.44,6.09-2.44s4.51.83,5.99,2.5c1.48,1.67,2.22,3.92,2.22,6.77ZM283.66,146.45c0,2.29.46,4.03,1.37,5.23s2.26,1.8,4.05,1.8,3.13-.6,4.05-1.79,1.38-2.94,1.38-5.24-.46-4.01-1.38-5.19c-.92-1.18-2.28-1.77-4.09-1.77s-3.12.58-4.03,1.75c-.91,1.17-1.36,2.9-1.36,5.21Z"/>
+<path className="lw" d="M321.75,142.91h8.14v11.62c-1.27.4-2.56.71-3.86.92-1.31.21-2.83.31-4.55.31-3.62,0-6.45-1.08-8.47-3.23-2.02-2.15-3.03-5.17-3.03-9.05,0-2.49.5-4.66,1.5-6.53,1-1.87,2.44-3.3,4.31-4.28,1.88-.99,4.08-1.48,6.6-1.48s4.94.47,7.14,1.4l-1.08,2.45c-2.16-.92-4.24-1.37-6.24-1.37-2.92,0-5.19.87-6.83,2.6-1.64,1.73-2.46,4.14-2.46,7.21,0,3.23.79,5.67,2.37,7.34s3.9,2.5,6.95,2.5c1.66,0,3.28-.19,4.86-.57v-7.36h-5.35v-2.48Z"/>
+<path className="lw" d="M343.42,137.18c.8,0,1.51.07,2.15.2l-.38,2.52c-.74-.16-1.4-.24-1.97-.24-1.45,0-2.69.59-3.73,1.77-1.03,1.18-1.55,2.64-1.55,4.4v9.61h-2.72v-17.92h2.24l.31,3.32h.13c.67-1.17,1.47-2.06,2.41-2.7.94-.63,1.97-.95,3.09-.95Z"/>
+<path className="lw" d="M364.41,146.45c0,2.92-.74,5.2-2.21,6.84-1.47,1.64-3.51,2.46-6.11,2.46-1.6,0-3.03-.38-4.28-1.13-1.24-.75-2.21-1.83-2.88-3.24-.68-1.41-1.02-3.05-1.02-4.94,0-2.92.73-5.2,2.2-6.83,1.46-1.63,3.49-2.44,6.09-2.44s4.51.83,5.99,2.5c1.48,1.67,2.22,3.92,2.22,6.77ZM350.74,146.45c0,2.29.46,4.03,1.37,5.23.92,1.2,2.26,1.8,4.05,1.8s3.13-.6,4.05-1.79,1.38-2.94,1.38-5.24-.46-4.01-1.38-5.19c-.92-1.18-2.28-1.77-4.09-1.77s-3.12.58-4.03,1.75c-.91,1.17-1.36,2.9-1.36,5.21Z"/>
+<path className="lw" d="M380.76,150.54c0,1.67-.62,2.95-1.87,3.86s-2.99,1.36-5.24,1.36c-2.38,0-4.24-.38-5.57-1.13v-2.52c.86.44,1.79.78,2.78,1.03.99.25,1.94.38,2.86.38,1.42,0,2.51-.23,3.27-.68s1.15-1.14,1.15-2.07c0-.7-.3-1.29-.91-1.79-.61-.5-1.79-1.08-3.55-1.76-1.67-.62-2.86-1.16-3.56-1.63-.7-.46-1.23-.99-1.57-1.58-.34-.59-.52-1.29-.52-2.11,0-1.46.59-2.61,1.78-3.46,1.19-.85,2.82-1.27,4.9-1.27,1.93,0,3.82.39,5.67,1.18l-.97,2.21c-1.8-.74-3.43-1.11-4.9-1.11-1.29,0-2.26.2-2.92.61-.66.4-.98.96-.98,1.67,0,.48.12.89.37,1.23.24.34.64.66,1.19.96s1.59.75,3.14,1.32c2.13.77,3.57,1.55,4.31,2.34.75.78,1.12,1.77,1.12,2.96Z"/>
+<path className="lw" d="M396.76,150.54c0,1.67-.62,2.95-1.87,3.86s-2.99,1.36-5.24,1.36c-2.38,0-4.24-.38-5.57-1.13v-2.52c.86.44,1.79.78,2.78,1.03.99.25,1.94.38,2.86.38,1.42,0,2.51-.23,3.27-.68s1.15-1.14,1.15-2.07c0-.7-.3-1.29-.91-1.79-.61-.5-1.79-1.08-3.55-1.76-1.67-.62-2.86-1.16-3.56-1.63-.7-.46-1.23-.99-1.57-1.58-.34-.59-.52-1.29-.52-2.11,0-1.46.59-2.61,1.78-3.46,1.19-.85,2.82-1.27,4.9-1.27,1.93,0,3.82.39,5.67,1.18l-.97,2.21c-1.8-.74-3.43-1.11-4.9-1.11-1.29,0-2.26.2-2.92.61-.66.4-.98.96-.98,1.67,0,.48.12.89.37,1.23.24.34.64.66,1.19.96s1.59.75,3.14,1.32c2.13.77,3.57,1.55,4.31,2.34.75.78,1.12,1.77,1.12,2.96Z"/>
+<path className="lw" d="M416.67,146.45c0,2.92-.74,5.2-2.21,6.84-1.47,1.64-3.51,2.46-6.11,2.46-1.6,0-3.03-.38-4.28-1.13-1.24-.75-2.21-1.83-2.88-3.24-.68-1.41-1.02-3.05-1.02-4.94,0-2.92.73-5.2,2.2-6.83,1.46-1.63,3.49-2.44,6.09-2.44s4.51.83,5.99,2.5c1.48,1.67,2.22,3.92,2.22,6.77ZM403,146.45c0,2.29.46,4.03,1.37,5.23s2.26,1.8,4.05,1.8,3.13-.6,4.05-1.79,1.38-2.94,1.38-5.24-.46-4.01-1.38-5.19c-.92-1.18-2.28-1.77-4.09-1.77s-3.12.58-4.03,1.75c-.91,1.17-1.36,2.9-1.36,5.21Z"/>
+</g>
+<path className="lw" d="M132.19,46.99h25.62c1.71,0,3.09,1.39,3.09,3.09v25.62c0,1.71-1.39,3.09-3.09,3.09h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M170.36,46.99h25.62c1.71,0,3.1,1.39,3.1,3.1v25.62c0,1.71-1.39,3.09-3.09,3.09h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M170.36,123.34h25.62c1.71,0,3.1,1.39,3.1,3.1v25.62c0,1.71-1.39,3.1-3.1,3.1h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M122.73,113.86c0,1.71-1.38,3.09-3.1,3.09h-25.62c-1.71,0-3.1-1.39-3.1-3.09v-25.62c0-1.71,1.39-3.1,3.1-3.1h25.62c1.71,0,3.1,1.39,3.1,3.1v25.62Z"/>
+<path className="lw" d="M132.19,85.14h25.62c1.71,0,3.09,1.39,3.09,3.09v25.62c0,1.71-1.39,3.1-3.1,3.1h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M94.01,123.34h25.62c1.71,0,3.1,1.39,3.1,3.1v25.62c0,1.71-1.39,3.1-3.1,3.1h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M132.19,123.34h25.62c1.71,0,3.09,1.39,3.09,3.09v25.62c0,1.71-1.39,3.1-3.1,3.1h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.1,3.1-3.1Z"/>
+<path className="lw" d="M94.01,161.56h25.62c1.71,0,3.1,1.39,3.1,3.1v25.62c0,1.71-1.39,3.09-3.09,3.09h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M132.19,161.56h25.62c1.71,0,3.09,1.39,3.09,3.09v25.62c0,1.71-1.39,3.09-3.09,3.09h-25.62c-1.71,0-3.1-1.39-3.1-3.1v-25.62c0-1.71,1.39-3.09,3.09-3.09Z"/>
+<path className="lw" d="M124.36,62.92c0,9.66-7.83,17.48-17.49,17.48s-17.49-7.83-17.49-17.48,7.83-17.49,17.49-17.49,17.49,7.83,17.49,17.49"/>
+<g>
+<path className="lw" d="M232.34,172.52c-2.52,0-4.5.84-5.96,2.51s-2.18,3.96-2.18,6.87.7,5.3,2.1,6.93c1.4,1.63,3.4,2.45,6,2.45,1.6,0,3.42-.29,5.46-.86v2.33c-1.59.59-3.54.89-5.87.89-3.37,0-5.97-1.02-7.8-3.06-1.83-2.04-2.75-4.94-2.75-8.7,0-2.35.44-4.42,1.32-6.19.88-1.77,2.15-3.13,3.82-4.09,1.66-.96,3.62-1.44,5.88-1.44,2.4,0,4.5.44,6.29,1.31l-1.13,2.28c-1.73-.81-3.46-1.22-5.2-1.22Z"/>
+<path className="lw" d="M252.92,193.32l-.52-2.44h-.12c-.86,1.07-1.71,1.8-2.56,2.18-.85.38-1.91.57-3.19.57-1.7,0-3.03-.44-4-1.31s-1.45-2.12-1.45-3.73c0-3.46,2.77-5.27,8.31-5.44l2.91-.09v-1.06c0-1.34-.29-2.34-.87-2.98s-1.51-.96-2.78-.96c-1.43,0-3.05.44-4.85,1.31l-.8-1.98c.85-.46,1.77-.82,2.78-1.08,1.01-.26,2.02-.39,3.03-.39,2.04,0,3.56.45,4.55,1.36.99.91,1.48,2.36,1.48,4.36v11.69h-1.93ZM247.05,191.49c1.62,0,2.89-.44,3.81-1.33.92-.88,1.39-2.12,1.39-3.72v-1.55l-2.6.11c-2.07.07-3.56.39-4.47.96-.91.57-1.37,1.45-1.37,2.65,0,.94.28,1.65.85,2.14.57.49,1.36.73,2.39.73Z"/>
+<path className="lw" d="M282.06,193.32v-11.14c0-1.36-.29-2.39-.88-3.07-.58-.68-1.49-1.02-2.72-1.02-1.62,0-2.81.46-3.58,1.39-.77.93-1.16,2.35-1.16,4.28v9.56h-2.6v-11.14c0-1.36-.29-2.39-.88-3.07-.58-.68-1.5-1.02-2.74-1.02-1.63,0-2.82.49-3.58,1.46-.76.97-1.13,2.57-1.13,4.79v8.98h-2.6v-17.12h2.11l.42,2.34h.12c.49-.83,1.18-1.48,2.07-1.95.89-.47,1.89-.7,3-.7,2.68,0,4.43.97,5.26,2.91h.12c.51-.9,1.25-1.6,2.22-2.12.97-.52,2.08-.78,3.32-.78,1.94,0,3.39.5,4.36,1.49.97,1,1.45,2.59,1.45,4.77v11.17h-2.6Z"/>
+<path className="lw" d="M298,193.63c-1.12,0-2.14-.21-3.06-.62s-1.7-1.04-2.32-1.9h-.19c.13,1,.19,1.95.19,2.84v7.05h-2.6v-24.81h2.11l.36,2.34h.13c.67-.94,1.45-1.61,2.33-2.03.89-.42,1.9-.62,3.05-.62,2.27,0,4.03.78,5.27,2.33,1.24,1.55,1.85,3.73,1.85,6.53s-.63,5-1.89,6.55c-1.26,1.56-3,2.34-5.24,2.34ZM297.62,178.09c-1.75,0-3.02.48-3.8,1.45s-1.18,2.51-1.21,4.62v.58c0,2.41.4,4.13,1.21,5.16.8,1.04,2.09,1.55,3.87,1.55,1.48,0,2.64-.6,3.48-1.8.84-1.2,1.26-2.85,1.26-4.95s-.42-3.77-1.26-4.91-2.02-1.71-3.54-1.71Z"/>
+<path className="lw" d="M312.1,176.2v11.11c0,1.4.32,2.44.96,3.12.64.69,1.63,1.03,2.99,1.03,1.79,0,3.11-.49,3.94-1.47.83-.98,1.24-2.58,1.24-4.8v-9h2.6v17.12h-2.14l-.38-2.3h-.14c-.53.84-1.27,1.49-2.21,1.94-.94.45-2.02.67-3.23.67-2.09,0-3.65-.49-4.69-1.48-1.04-.99-1.56-2.57-1.56-4.75v-11.2h2.63Z"/>
+<path className="lw" d="M340.4,188.65c0,1.59-.59,2.82-1.78,3.69-1.19.87-2.86,1.3-5.01,1.3-2.27,0-4.05-.36-5.32-1.08v-2.41c.82.42,1.71.75,2.65.98.94.24,1.85.36,2.73.36,1.36,0,2.4-.22,3.13-.65.73-.43,1.1-1.09,1.1-1.98,0-.67-.29-1.24-.87-1.71-.58-.47-1.71-1.03-3.39-1.68-1.6-.59-2.73-1.11-3.4-1.55-.67-.44-1.17-.95-1.5-1.51-.33-.56-.49-1.23-.49-2.02,0-1.4.57-2.5,1.71-3.3,1.14-.81,2.7-1.21,4.68-1.21,1.85,0,3.65.38,5.42,1.12l-.92,2.11c-1.72-.71-3.28-1.06-4.68-1.06-1.23,0-2.16.19-2.79.58-.63.39-.94.92-.94,1.59,0,.46.12.85.35,1.17.23.32.61.63,1.13.92.52.29,1.52.71,3.01,1.27,2.03.74,3.41,1.48,4.12,2.23s1.07,1.69,1.07,2.83Z"/>
+<path className="lw" d="M353.34,193.32v-22.84h2.66v20.44h10.1v2.41h-12.76Z"/>
+<path className="lw" d="M372.03,176.2v11.11c0,1.4.32,2.44.96,3.12.64.69,1.63,1.03,2.99,1.03,1.79,0,3.11-.49,3.94-1.47.83-.98,1.24-2.58,1.24-4.8v-9h2.6v17.12h-2.14l-.38-2.3h-.14c-.53.84-1.27,1.49-2.21,1.94-.94.45-2.02.67-3.23.67-2.09,0-3.65-.49-4.69-1.48-1.04-.99-1.56-2.57-1.56-4.75v-11.2h2.63Z"/>
+<path className="lw" d="M396.12,193.63c-2.48,0-4.41-.76-5.77-2.29-1.36-1.53-2.04-3.68-2.04-6.48s.69-5.08,2.07-6.64c1.38-1.56,3.35-2.34,5.91-2.34.82,0,1.65.09,2.47.27.82.18,1.47.39,1.94.62l-.8,2.2c-.57-.23-1.2-.42-1.88-.57-.68-.15-1.28-.23-1.8-.23-3.48,0-5.23,2.22-5.23,6.66,0,2.1.42,3.72,1.28,4.84s2.11,1.69,3.78,1.69c1.43,0,2.9-.31,4.4-.92v2.3c-1.15.59-2.59.89-4.34.89Z"/>
+<path className="lw" d="M415.07,193.32l-.52-2.44h-.12c-.86,1.07-1.71,1.8-2.56,2.18-.85.38-1.91.57-3.19.57-1.7,0-3.03-.44-4-1.31s-1.45-2.12-1.45-3.73c0-3.46,2.77-5.27,8.31-5.44l2.91-.09v-1.06c0-1.34-.29-2.34-.87-2.98s-1.51-.96-2.78-.96c-1.43,0-3.05.44-4.85,1.31l-.8-1.98c.85-.46,1.77-.82,2.78-1.08,1.01-.26,2.02-.39,3.03-.39,2.04,0,3.56.45,4.55,1.36.99.91,1.48,2.36,1.48,4.36v11.69h-1.93ZM409.2,191.49c1.62,0,2.89-.44,3.81-1.33.92-.88,1.39-2.12,1.39-3.72v-1.55l-2.6.11c-2.07.07-3.56.39-4.47.96-.91.57-1.37,1.45-1.37,2.65,0,.94.28,1.65.85,2.14.57.49,1.36.73,2.39.73Z"/>
+<path className="lw" d="M433.42,188.65c0,1.59-.59,2.82-1.78,3.69-1.19.87-2.86,1.3-5.01,1.3-2.27,0-4.05-.36-5.32-1.08v-2.41c.82.42,1.71.75,2.65.98.94.24,1.85.36,2.73.36,1.36,0,2.4-.22,3.13-.65.73-.43,1.1-1.09,1.1-1.98,0-.67-.29-1.24-.87-1.71-.58-.47-1.71-1.03-3.39-1.68-1.6-.59-2.73-1.11-3.4-1.55-.67-.44-1.17-.95-1.5-1.51-.33-.56-.49-1.23-.49-2.02,0-1.4.57-2.5,1.71-3.3,1.14-.81,2.7-1.21,4.68-1.21,1.85,0,3.65.38,5.42,1.12l-.92,2.11c-1.72-.71-3.28-1.06-4.68-1.06-1.23,0-2.16.19-2.79.58-.63.39-.94.92-.94,1.59,0,.46.12.85.35,1.17.23.32.61.63,1.13.92.52.29,1.52.71,3.01,1.27,2.03.74,3.41,1.48,4.12,2.23s1.07,1.69,1.07,2.83Z"/>
+<path className="lw" d="M457.65,191.02h-.14c-1.2,1.74-3,2.61-5.38,2.61-2.24,0-3.99-.77-5.24-2.3-1.25-1.53-1.87-3.71-1.87-6.53s.63-5.02,1.88-6.58,2.99-2.34,5.23-2.34,4.11.84,5.35,2.53h.2l-.11-1.23-.06-1.2v-6.97h2.6v24.31h-2.11l-.34-2.3ZM452.45,191.46c1.77,0,3.06-.48,3.86-1.45.8-.96,1.2-2.52,1.2-4.66v-.55c0-2.43-.4-4.16-1.21-5.2-.81-1.04-2.1-1.55-3.87-1.55-1.52,0-2.69.59-3.5,1.77-.81,1.18-1.21,2.85-1.21,5.01s.4,3.84,1.21,4.95c.8,1.12,1.98,1.67,3.54,1.67Z"/>
+<path className="lw" d="M480.42,184.74c0,2.79-.7,4.97-2.11,6.54-1.41,1.57-3.35,2.35-5.84,2.35-1.53,0-2.9-.36-4.08-1.08-1.19-.72-2.11-1.75-2.75-3.09s-.97-2.92-.97-4.72c0-2.79.7-4.97,2.1-6.52,1.4-1.56,3.34-2.34,5.82-2.34s4.31.8,5.72,2.39c1.41,1.59,2.12,3.75,2.12,6.47ZM467.35,184.74c0,2.19.44,3.85,1.31,5,.88,1.15,2.17,1.72,3.87,1.72s2.99-.57,3.87-1.71,1.32-2.81,1.32-5.01-.44-3.83-1.32-4.96c-.88-1.13-2.18-1.7-3.91-1.7s-2.98.56-3.85,1.67c-.87,1.12-1.3,2.78-1.3,4.98Z"/>
+<path className="lw" d="M496.36,183.82v9.5h-2.66v-22.84h6.28c2.81,0,4.88.54,6.22,1.61,1.34,1.07,2.01,2.69,2.01,4.84,0,3.02-1.53,5.06-4.6,6.12l6.21,10.27h-3.15l-5.54-9.5h-4.77ZM496.36,181.54h3.65c1.88,0,3.26-.37,4.13-1.12.88-.74,1.31-1.86,1.31-3.35s-.45-2.6-1.34-3.27c-.89-.67-2.32-1-4.3-1h-3.46v8.73Z"/>
+<path className="lw" d="M512.9,171.56c0-.59.15-1.03.44-1.3.29-.28.66-.41,1.1-.41s.78.14,1.08.42.45.71.45,1.3-.15,1.02-.45,1.3c-.3.29-.66.43-1.08.43-.44,0-.8-.14-1.1-.43-.29-.29-.44-.72-.44-1.3ZM515.72,193.32h-2.6v-17.12h2.6v17.12Z"/>
+<path className="lw" d="M536.03,184.74c0,2.79-.7,4.97-2.11,6.54-1.41,1.57-3.35,2.35-5.84,2.35-1.53,0-2.9-.36-4.08-1.08-1.19-.72-2.11-1.75-2.75-3.09s-.97-2.92-.97-4.72c0-2.79.7-4.97,2.1-6.52,1.4-1.56,3.34-2.34,5.82-2.34s4.31.8,5.72,2.39c1.41,1.59,2.12,3.75,2.12,6.47ZM522.96,184.74c0,2.19.44,3.85,1.31,5,.88,1.15,2.17,1.72,3.87,1.72s2.99-.57,3.87-1.71,1.32-2.81,1.32-5.01-.44-3.83-1.32-4.96c-.88-1.13-2.18-1.7-3.91-1.7s-2.98.56-3.85,1.67c-.87,1.12-1.3,2.78-1.3,4.98Z"/>
+<path className="lw" d="M562.37,170.48h2.86l-8.25,22.84h-2.63l-8.2-22.84h2.82l5.26,14.78c.6,1.7,1.08,3.35,1.44,4.95.38-1.69.87-3.37,1.47-5.05l5.23-14.69Z"/>
+<path className="lw" d="M575.24,193.63c-2.54,0-4.54-.77-6-2.31-1.47-1.54-2.2-3.68-2.2-6.42s.68-4.95,2.04-6.58c1.36-1.62,3.19-2.44,5.49-2.44,2.15,0,3.85.71,5.1,2.12,1.25,1.41,1.88,3.27,1.88,5.59v1.64h-11.82c.05,2.01.56,3.54,1.53,4.58.97,1.04,2.32,1.56,4.08,1.56,1.85,0,3.67-.38,5.48-1.16v2.31c-.92.4-1.79.68-2.61.85-.82.17-1.81.26-2.97.26ZM574.54,178.06c-1.38,0-2.48.45-3.29,1.34-.82.9-1.3,2.14-1.45,3.72h8.97c0-1.63-.37-2.89-1.1-3.76-.73-.87-1.77-1.3-3.13-1.3Z"/>
+<path className="lw" d="M593.8,175.88c.76,0,1.45.06,2.05.19l-.36,2.41c-.71-.16-1.34-.23-1.88-.23-1.39,0-2.57.56-3.56,1.69-.99,1.12-1.48,2.53-1.48,4.2v9.19h-2.6v-17.12h2.14l.3,3.17h.13c.64-1.11,1.4-1.97,2.3-2.58.9-.6,1.88-.91,2.96-.91Z"/>
+<path className="lw" d="M610.74,191.02h-.14c-1.2,1.74-3,2.61-5.38,2.61-2.24,0-3.99-.77-5.24-2.3-1.25-1.53-1.87-3.71-1.87-6.53s.63-5.02,1.88-6.58,2.99-2.34,5.23-2.34,4.11.84,5.35,2.53h.2l-.11-1.23-.06-1.2v-6.97h2.6v24.31h-2.11l-.34-2.3ZM605.54,191.46c1.77,0,3.06-.48,3.86-1.45.8-.96,1.2-2.52,1.2-4.66v-.55c0-2.43-.4-4.16-1.21-5.2-.81-1.04-2.1-1.55-3.87-1.55-1.52,0-2.69.59-3.5,1.77-.81,1.18-1.21,2.85-1.21,5.01s.4,3.84,1.21,4.95c.8,1.12,1.98,1.67,3.54,1.67Z"/>
+<path className="lw" d="M625.95,193.63c-2.54,0-4.54-.77-6-2.31-1.47-1.54-2.2-3.68-2.2-6.42s.68-4.95,2.04-6.58c1.36-1.62,3.19-2.44,5.49-2.44,2.15,0,3.85.71,5.1,2.12,1.25,1.41,1.88,3.27,1.88,5.59v1.64h-11.82c.05,2.01.56,3.54,1.53,4.58.97,1.04,2.32,1.56,4.08,1.56,1.85,0,3.67-.38,5.48-1.16v2.31c-.92.4-1.79.68-2.61.85-.82.17-1.81.26-2.97.26ZM625.25,178.06c-1.38,0-2.48.45-3.29,1.34-.82.9-1.3,2.14-1.45,3.72h8.97c0-1.63-.37-2.89-1.1-3.76-.73-.87-1.77-1.3-3.13-1.3Z"/>
+</g>
+</svg>
+);
+
+/* ── Mini ícones ── */
+const IcoMenu=()=><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const IcoX=()=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+const IcoPlus=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
+const IcoDown=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="6 9 12 15 18 9"/></svg>;
+const IcoUp=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="18 15 12 9 6 15"/></svg>;
+const IcoSearch=()=><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+
+/* ── Tabs ── */
+const TABS=[
+  {id:"visao",label:"Visão Geral"},
+  {id:"legislacao",label:"Marco Legal"},
+  {id:"fluxo",label:"Fluxo do PEI"},
+  {id:"necessidades",label:"Necessidades Educacionais"},
+  {id:"estrategias",label:"Estratégias Pedagógicas"},
+  {id:"elaboracao",label:"Elaborando o PEI"},
+  {id:"registros",label:"Registros e Relatórios"},
+  {id:"alertas",label:"Alertas e Ética"},
+  {id:"recursos",label:"Recursos e Pesquisa"},
+  {id:"sintese",label:"Síntese Prática"},
+];
+
+/* ── Componentes base ── */
+const Alert=({type="info",children})=>{
+  const m={info:{bg:"#EBF5FB",b:"#2196F3",i:"💡",c:"#1565C0"},warning:{bg:"#FFF8E1",b:"#F59E0B",i:"⚠️",c:"#92400E"},danger:{bg:"#FEF2F2",b:"#EF4444",i:"🚫",c:"#991B1B"},success:{bg:"#F0FDF4",b:"#22C55E",i:"✅",c:"#166534"},ethics:{bg:"#F5F3FF",b:"#8B5CF6",i:"🤝",c:"#5B21B6"}}[type];
+  return <div style={{padding:"13px 16px",borderRadius:9,background:m.bg,borderLeft:`4px solid ${m.b}`,marginBottom:14,fontSize:15,lineHeight:1.7,color:m.c}}><span style={{marginRight:7}}>{m.i}</span>{children}</div>;
+};
+
+const Acc=({title,children,open0=false,color=G})=>{
+  const [o,sO]=useState(open0);
+  return(
+    <div style={{marginBottom:10,borderRadius:10,border:`1px solid ${color}30`,overflow:"hidden",background:"white"}}>
+      <button onClick={()=>sO(!o)} style={{width:"100%",padding:"14px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",background:o?`${color}0F`:"white",border:"none",cursor:"pointer",fontSize:15,fontWeight:600,color,textAlign:"left",gap:10}}>
+        <span>{title}</span>{o?<IcoUp/>:<IcoDown/>}
+      </button>
+      {o&&<div style={{padding:"4px 16px 16px",fontSize:14.5,lineHeight:1.75,color:"#222"}}>{children}</div>}
+    </div>
+  );
+};
+
+const Card=({title,children,onClick,active,idx=0})=>{
+  const tones=["#1B6B45","#24885A","#1A7A50","#155C3A","#20A066","#197348"];
+  const bg=tones[idx%tones.length];
+  return(
+    <div onClick={onClick} style={{borderRadius:12,overflow:"hidden",cursor:"pointer",position:"relative",background:bg,boxShadow:active?"0 6px 24px rgba(27,107,69,0.5)":"0 2px 8px rgba(0,0,0,0.12)",transition:"all 0.2s",transform:active?"translateY(-3px)":"none",border:active?"2px solid rgba(255,255,255,0.3)":"2px solid transparent"}}>
+      <div style={{position:"absolute",top:12,right:12,width:30,height:30,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",color:bg}}><IcoPlus/></div>
+      <div style={{padding:"18px 16px 14px",color:"white"}}><h4 style={{margin:0,fontSize:15,fontWeight:700,lineHeight:1.3,paddingRight:36}}>{title}</h4></div>
+      {active&&<div style={{padding:"0 16px 16px",color:"rgba(255,255,255,0.92)",fontSize:13.5,lineHeight:1.7,borderTop:"1px solid rgba(255,255,255,0.2)",paddingTop:10}}>{children}</div>}
+    </div>
+  );
+};
+
+/* ── Dados ── */
+const FLOW=[
+  {n:1,t:"Identificação",w:"O estudante é identificado no ato da matrícula, de forma espontânea (pelo próprio estudante, pais ou responsáveis) ou por observação institucional (docentes, TAEs ou rede de serviços).",d:"Registro no cadastro estudantil",r:"Art. 4º"},
+  {n:2,t:"Acolhimento",w:"A CAES realiza entrevista de acolhimento com o estudante e a família para levantar histórico educacional, condições de saúde, laudos, diagnósticos e necessidades de tecnologia assistiva.",d:"Relatório de Acolhimento (Anexo I)",r:"Arts. 6º e 8º"},
+  {n:3,t:"Abertura de Processo",w:"A CAES abre processo formal, anexa o Relatório de Acolhimento e tramita às Coordenações de Curso e à Diretoria/Departamento de Ensino do campus.",d:"Processo com Relatório de Acolhimento",r:"Art. 9º, II"},
+  {n:4,t:"Reunião Deliberativa",w:"A Diretoria de Ensino convoca reunião com todos os envolvidos. O Relatório de Acolhimento é apresentado e delibera-se pela necessidade ou não de elaboração do PEI.",d:"Ata de reunião com deliberação",r:"Art. 9º, III"},
+  {n:5,t:"Elaboração do PEI",w:"Cada docente elabora o PEI para seu componente curricular, contendo: dados pessoais, histórico, necessidades, adaptações, objetivos, conteúdos, metodologia, avaliação e resultados esperados.",d:"PEI (Anexo II) para cada componente",r:"Art. 9º, IV e V"},
+  {n:6,t:"Execução e Acompanhamento",w:"O PEI é executado pelo docente e avaliado continuamente. O desempenho é acompanhado nos conselhos de classe. O plano pode ser reavaliado e reformulado conforme necessidade.",d:"Relatório Bimestral de Avaliação (Anexo III)",r:"Art. 9º, VI"},
+  {n:7,t:"Arquivamento",w:"Todas as adaptações razoáveis documentadas ao longo do curso são arquivadas na pasta do estudante na Secretaria Escolar.",d:"Pasta do estudante com PEIs e Relatórios",r:"Art. 12"},
+];
+
+const NECS=[
+  {cat:"Deficiências",color:"#1B6B45",items:[
+    {n:"Deficiência Física",d:"Alteração completa ou parcial de um ou mais segmentos do corpo humano que compromete a função física.",s:["Dificuldade de locomoção","Necessidade de cadeira de rodas, muletas ou órteses","Limitação para escrita manual","Fadiga motora"],imp:["Acesso físico a laboratórios pode ser limitado","Tempo adicional para atividades manuais"],sup:["Acessibilidade arquitetônica","Tecnologia assistiva","Flexibilização de tempo"],p:"O foco pedagógico deve recair sobre a eliminação de barreiras de acesso, não sobre a limitação física em si."},
+    {n:"Deficiência Auditiva",d:"Perda bilateral, parcial ou total, de 41 dB ou mais nas frequências de 500Hz a 3.000Hz.",s:["Dificuldade em acompanhar aulas sem apoio visual","Possível uso de aparelho auditivo","Fluência em Libras como língua preferencial"],imp:["Barreiras em aulas expositivas orais","Dificuldade com materiais em áudio sem legenda"],sup:["Intérprete de Libras","Material visual de apoio","Avaliação em Libras"],p:"A surdez é uma diferença linguística. Estudantes surdos sinalizantes têm a Libras como L1 e o português como L2."},
+    {n:"Deficiência Visual",d:"Compreende cegueira, baixa visão, campo visual ≤ 60° e visão monocular.",s:["Aproximação excessiva de materiais","Dificuldade com projeções","Uso de bengala ou leitor de tela"],imp:["Materiais impressos padrão são inacessíveis","Atividades visuais requerem adaptação tátil"],sup:["Material em Braille ou digital acessível","Leitor de tela e audiodescrição","Maquetes táteis"],p:"A adaptação para deficiência visual exige antecedência no planejamento."},
+    {n:"Deficiência Intelectual",d:"Funcionamento intelectual significativamente inferior à média, com manifestação antes dos 18 anos.",s:["Ritmo de aprendizagem mais lento","Dificuldade com abstrações","Necessidade de repetição e concretude"],imp:["Conteúdos abstratos são desafiadores","Avaliações tradicionais podem não captar o aprendizado real"],sup:["Flexibilização curricular","Materiais concretos e manipuláveis","Fragmentação de tarefas"],p:"O foco deve ser na funcionalidade: o que o estudante precisa aprender para sua vida e autonomia."},
+    {n:"Deficiência Múltipla",d:"Associação de duas ou mais deficiências que gera necessidades específicas que vão além da soma das deficiências individuais.",s:["Combinação de sinais de duas ou mais deficiências","Necessidades complexas e interconectadas"],imp:["Barreiras multiplicadas e interconectadas"],sup:["Plano altamente individualizado","CAA quando necessário","Reavaliações periódicas"],p:"Não existem fórmulas prontas. Cada PEI será único e construído caso a caso."},
+  ]},
+  {cat:"Transtorno do Espectro Autista (TEA)",color:"#0D3B6E",items:[
+    {n:"Transtorno do Espectro Autista",d:"Condição do neurodesenvolvimento caracterizada por dificuldades na comunicação e interação social e por padrões restritos e repetitivos de comportamento.",s:["Dificuldade com comunicação verbal e/ou não verbal","Interesses restritos e intensos","Sensibilidade sensorial","Rigidez com rotinas"],imp:["Trabalhos em grupo podem ser desafiadores","Ambientes ruidosos podem gerar sobrecarga sensorial"],sup:["Rotina previsível","Instruções claras e literais","Aproveitamento pedagógico dos interesses restritos"],p:"O TEA é um espectro: cada pessoa autista é única. O PEI deve ser construído a partir da escuta do próprio estudante."},
+  ]},
+  {cat:"Transtornos Funcionais Específicos",color:"#6A1B9A",items:[
+    {n:"Dislexia",d:"Transtorno específico de aprendizagem que afeta a precisão, fluência e compreensão da leitura.",s:["Leitura lenta com trocas ou inversões","Dificuldade de compreensão de textos longos"],imp:["Provas escritas extensas são desproporcionalmente difíceis"],sup:["Tempo adicional","Enunciados curtos","Avaliações orais como alternativa"],p:"O estudante com dislexia geralmente tem inteligência preservada. A barreira está no canal da leitura/escrita."},
+    {n:"TDAH",d:"Transtorno do neurodesenvolvimento caracterizado por padrão persistente de desatenção e/ou hiperatividade-impulsividade.",s:["Dificuldade de manter atenção em tarefas longas","Esquecimento frequente de materiais e prazos","Inquietação motora"],imp:["Provas longas são especialmente desafiadoras","Organização de trabalhos e prazos é sistematicamente difícil"],sup:["Fragmentar tarefas em etapas menores","Lembretes visuais e checklists","Tempo adicional"],p:"Estudantes com TDAH não escolhem não prestar atenção. Estratégias de organização externa compensam a dificuldade de organização interna."},
+    {n:"Disgrafia",d:"Transtorno que afeta a qualidade da escrita manual, incluindo legibilidade, organização espacial e velocidade.",s:["Letra ilegível","Lentidão excessiva na escrita","Cansaço e dor ao escrever"],imp:["Provas escritas longas são extenuantes"],sup:["Permitir uso de computador/tablet","Tempo adicional","Não avaliar caligrafia quando o objetivo é o conteúdo"],p:"A disgrafia é sobre o gesto motor da escrita, não sobre o pensamento."},
+    {n:"Discalculia",d:"Transtorno específico que afeta a aquisição de habilidades matemáticas.",s:["Dificuldade persistente com operações básicas","Confusão com sinais e sequências numéricas","Ansiedade diante de atividades matemáticas"],imp:["Disciplinas com carga quantitativa são desproporcionalmente difíceis"],sup:["Uso de calculadora em avaliações","Material concreto e visual","Fórmulas e tabelas de referência disponíveis"],p:"Materiais concretos, representações visuais e contextualização prática são estratégias fundamentais."},
+    {n:"Dislalia",d:"Dificuldade na articulação de fonemas, resultando em trocas, omissões ou distorções de sons na fala.",s:["Trocas de sons na fala","Dificuldade de inteligibilidade por ouvintes"],imp:["Apresentações orais podem gerar ansiedade extrema"],sup:["Não corrigir a fala publicamente","Oferecer alternativas para avaliações orais","Acompanhamento fonoaudiológico via CAES"],p:"A dislalia é uma condição de fala, não de pensamento."},
+    {n:"Disortografia",d:"Dificuldade específica na escrita ortográfica, envolvendo trocas, omissões e acréscimos de letras.",s:["Erros ortográficos persistentes e atípicos","Trocas fonológicas na escrita"],imp:["Produção textual pode ser avaliada injustamente se critério for ortografia"],sup:["Corretor ortográfico digital","Avaliação centrada no conteúdo, não na ortografia"],p:"Em componentes que não são de língua portuguesa, a ortografia não deve ser critério determinante."},
+  ]},
+  {cat:"Altas Habilidades / Superdotação",color:"#B45309",items:[
+    {n:"Altas Habilidades / Superdotação",d:"Estudantes que demonstram potencial elevado em áreas isoladas ou combinadas: intelectual, acadêmica, liderança, psicomotricidade, artes.",s:["Aprendizagem rápida e profunda","Pensamento criativo e divergente","Possível tédio com atividades repetitivas"],imp:["Desengajamento por falta de desafio"],sup:["Enriquecimento curricular","Projetos de pesquisa e extensão","Mentoria"],p:"O PEI para superdotação não busca facilitar, mas enriquecer."},
+  ]},
+  {cat:"Outras Condições Limitantes",color:"#B91C1C",items:[
+    {n:"Condições Crônicas de Saúde",d:"Condições de saúde que exigem tratamentos prolongados e resultam em afastamentos frequentes.",s:["Faltas frequentes por tratamento","Fadiga ou efeitos colaterais de medicação"],imp:["Descontinuidade no acompanhamento das aulas"],sup:["Flexibilização de prazos e formas de avaliação","Material digitalizado para acompanhamento remoto"],p:"O PEI deve ser flexível para se adaptar aos ciclos de tratamento."},
+    {n:"Transtornos de Saúde Mental",d:"Inclui depressão, transtorno de ansiedade, síndrome do pânico, transtorno bipolar e outros transtornos psicológicos.",s:["Mudança abrupta de comportamento ou rendimento","Isolamento social progressivo","Crises de ansiedade em ambiente escolar"],imp:["A capacidade de aprender fica diretamente afetada"],sup:["Acompanhamento psicológico via CAES","Flexibilização de prazos durante crises","Ambiente acolhedor e previsível"],p:"O PEI deve ser revisado com mais frequência, acompanhando a evolução do quadro clínico."},
+  ]},
+];
+
+const NORMAS=[
+  {ref:"Portaria MEC nº 421/2026",desc:"PNEEI e Reneei — regulamenta o Decreto 12.686/2025",url:"https://www.in.gov.br/web/dou/-/portaria-mec-n-421-de-15-de-maio-de-2026-706292988"},
+  {ref:"Decreto nº 12.686/2025",desc:"Política Nacional de Educação Especial Inclusiva — PEI obrigatório (Art. 12)",url:"https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12686.htm"},
+  {ref:"Decreto nº 12.773/2025",desc:"Reforça obrigatoriedade do PEI e amplia formação docente",url:"https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12773.htm"},
+  {ref:"Lei nº 14.254/2021",desc:"Acompanhamento integral para dislexia, TDAH e outros transtornos",url:"https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14254.htm"},
+  {ref:"IN Conjunta 2/2023",desc:"Norma operacional que regulamenta o PEI no IFMT",url:"#"},
+  {ref:"Lei nº 13.146/2015 (LBI)",desc:"Lei Brasileira de Inclusão da Pessoa com Deficiência",url:"https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm"},
+  {ref:"Lei nº 12.764/2012",desc:"Política Nacional de Proteção dos Direitos da Pessoa com TEA",url:"https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm"},
+  {ref:"NT 04/2014 MEC",desc:"Dispensa de laudo para início de encaminhamentos",url:"http://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=15898-nott04-secadi-dpee-23012014&Itemid=30192"},
+];
+
+const CADERNOS=[
+  {t:"Educação Inclusiva e Tecnologia Assistiva",v:"Vol. 5",u:"https://www.gov.br/mec/pt-br/pneei/CADERMECEDUInclusivaVol5.pdf"},
+  {t:"Práticas Inclusivas e Estudantes Autistas",v:"Vol. 6",u:"https://www.gov.br/mec/pt-br/pneei/CADERMECVol.6.pdf"},
+  {t:"Infâncias e Educação Especial Inclusiva",v:"Vol. 9",u:"https://www.gov.br/mec/pt-br/pneei/2026155CADERMECVol.9.pdf"},
+  {t:"Práticas Inclusivas em Alfabetização e Letramento",v:"Vol. 10",u:"https://www.gov.br/mec/pt-br/pneei/2026155CADERMECVol.10.pdf"},
+];
+
+/* ── Páginas ── */
+const PgVisao=()=>{
+  const [ac,sAc]=useState(null);
+  const cards=[
+    {id:"pei",t:"O que é o PEI?",c:"Instrumento de planejamento pedagógico que formaliza adaptações curriculares para estudantes com necessidades educacionais específicas. Direito garantido por lei e regulamentado pela IN Conjunta 2/2023 e pelo Decreto Federal 12.686/2025."},
+    {id:"quem",t:"Quem tem direito?",c:"Estudantes com deficiência física, auditiva, visual, intelectual ou múltipla; TEA; transtornos funcionais (dislexia, disgrafia, discalculia, dislalia, disortografia, TDAH); altas habilidades; e condições limitantes transitórias ou permanentes."},
+    {id:"base",t:"Base Legal",c:"Portaria MEC 421/2026 · Decretos 12.686 e 12.773/2025 · Lei 14.254/2021 · IN Conjunta 2/2023 · Res. CONSUP 88/2022 · Lei 13.146/2015 (LBI) · Lei 12.764/2012 · NT 04/2014 MEC · Lei 13.234/2015"},
+    {id:"p",t:"Princípio Fundamental",c:"O PEI adapta os meios de acesso ao currículo, não necessariamente o nível de exigência. A adaptação de objetivos e conteúdos só ocorre quando estritamente necessário, após análise da equipe envolvida."},
+    {id:"ob",t:"PEI Obrigatório desde 2025",c:"O Decreto 12.686/2025 tornou o PEI um documento obrigatório (Art. 12), com atualização contínua, integrado ao projeto político-pedagógico da instituição de ensino."},
+    {id:"d",t:"Diagnóstico ≠ Necessidade Pedagógica",c:"O diagnóstico informa, mas não define. Dois estudantes com o mesmo diagnóstico podem precisar de PEIs completamente diferentes."},
+  ];
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Visão Geral — PEI</h2>
+      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Bem-vindo ao guia completo do PEI para educadores do IFMT Campus Lucas do Rio Verde. Clique nos cards para explorar cada tema.</p>
+      <Alert type="warning"><strong>Atualização 2025–2026:</strong> O Decreto 12.686/2025 e a Portaria MEC 421/2026 tornaram o PEI <strong>legalmente obrigatório</strong>.</Alert>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:12,margin:"20px 0"}}>
+        {cards.map((c,i)=><Card key={c.id} title={c.t} onClick={()=>sAc(ac===c.id?null:c.id)} active={ac===c.id} idx={i}>{c.c}</Card>)}
+      </div>
+      <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Base Normativa</h3>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:9}}>
+        {NORMAS.map((n,i)=>(
+          <div key={i} style={{padding:"10px 13px",borderRadius:8,background:"white",borderLeft:`3px solid ${G}`,fontSize:13}}>
+            <strong style={{color:"#0D2B1A",display:"block",marginBottom:2}}>{n.ref}</strong>
+            <span style={{color:"#666"}}>{n.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const PgLegislacao=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Marco Legal Atualizado (2021–2026)</h2>
+    <Alert type="warning">O Decreto 12.686/2025 tornou o PEI <strong>legalmente obrigatório</strong> em toda a rede de ensino nacional (Art. 12).</Alert>
+    <div style={{marginBottom:20}}>
+      <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
+        <span style={{padding:"3px 11px",borderRadius:16,background:"#E65100",color:"white",fontSize:12,fontWeight:700}}>MAI/2026</span>
+        <h3 style={{margin:0,fontSize:17,fontWeight:700,color:"#BF360C"}}>Portaria MEC nº 421/2026</h3>
+      </div>
+      <Acc title="O que regulamenta a Portaria MEC 421/2026?" open0 color="#BF360C">
+        <p style={{fontSize:14.5,lineHeight:1.7,color:"#444",marginBottom:12}}>Dispõe sobre a <strong>Política Nacional de Educação Especial Inclusiva (PNEEI)</strong> e sobre a <strong>Rede Nacional de Educação Especial Inclusiva (Reneei)</strong>, regulamentando o Decreto nº 12.686/2025.</p>
+        <Alert type="info">Acesse o texto completo na seção <strong>Recursos e Pesquisa</strong>.</Alert>
+      </Acc>
+    </div>
+    <div style={{marginBottom:20}}>
+      <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
+        <span style={{padding:"3px 11px",borderRadius:16,background:"#6A1B9A",color:"white",fontSize:12,fontWeight:700}}>2025</span>
+        <h3 style={{margin:0,fontSize:17,fontWeight:700,color:"#4A148C"}}>Decretos nº 12.686/2025 e nº 12.773/2025</h3>
+      </div>
+      <Acc title="Principais disposições" open0 color="#4A148C">
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9}}>
+          {[{a:"Art. 12",t:"PEI OBRIGATÓRIO",d:"Documento obrigatório, individualizado, de natureza pedagógica, com atualização contínua. Integra o PPP da instituição."},{a:"Art. 11",t:"Estudo de caso",d:"Metodologia obrigatória que precede o PEI: identificação de barreiras, análise do contexto, potencialidades e estratégias."},{a:"Art. 11, §7º",t:"Sem exigência de diagnóstico",d:"A oferta do AEE e do PEI não pode ser condicionada a diagnóstico ou laudo médico."},{a:"Art. 12, §2º",t:"Finalidades do PEI",d:"Orienta: trabalho em sala comum; AEE; atividades colaborativas; articulação intersetorial."},{a:"Art. 13",t:"Formação docente",d:"Formação continuada para professor do AEE elevada para mínimo de 360h."},{a:"Art. 14",t:"Profissional de apoio",d:"Oferta avaliada pelo estudo de caso, sem necessidade de laudo médico."}].map((x,i)=>(
+            <div key={i} style={{padding:12,borderRadius:9,background:"#F3E5F5",border:"1px solid #CE93D8"}}>
+              <div style={{fontSize:11,fontWeight:700,color:"#4A148C",marginBottom:2}}>{x.a}</div>
+              <h5 style={{margin:"0 0 4px",fontSize:13,color:"#4A148C",fontWeight:700}}>{x.t}</h5>
+              <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>{x.d}</p>
+            </div>
+          ))}
+        </div>
+      </Acc>
+    </div>
+    <div>
+      <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
+        <span style={{padding:"3px 11px",borderRadius:16,background:"#0077B6",color:"white",fontSize:12,fontWeight:700}}>2021</span>
+        <h3 style={{margin:0,fontSize:17,fontWeight:700,color:"#01579B"}}>Lei nº 14.254/2021</h3>
+      </div>
+      <Acc title="Acompanhamento integral para dislexia, TDAH e outros transtornos" color="#01579B">
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9}}>
+          {[{a:"Art. 1º",t:"Programa integral",d:"Identificação precoce, encaminhamento para diagnóstico, apoio educacional e terapêutico especializado."},{a:"Art. 3º",t:"Acompanhamento precoce",d:"Educandos com alterações no desenvolvimento devem ter acompanhamento específico o mais precoce possível."},{a:"Art. 4º",t:"Parceria ensino–saúde",d:"Necessidades específicas atendidas pelos profissionais da rede de ensino em parceria com a rede de saúde."},{a:"Art. 5º",t:"Formação continuada",d:"Os sistemas de ensino devem garantir formação continuada para identificação precoce dos sinais de transtornos."}].map((x,i)=>(
+            <div key={i} style={{padding:12,borderRadius:9,background:"#E3F2FD",border:"1px solid #90CAF9"}}>
+              <div style={{fontSize:11,fontWeight:700,color:"#01579B",marginBottom:2}}>{x.a}</div>
+              <h5 style={{margin:"0 0 4px",fontSize:13,color:"#01579B",fontWeight:700}}>{x.t}</h5>
+              <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>{x.d}</p>
+            </div>
+          ))}
+        </div>
+      </Acc>
+    </div>
+  </div>
+);
+
+const PgFluxo=()=>{
+  const [as,sAs]=useState(null);
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Fluxo Completo do Processo PEI</h2>
+      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Clique em cada etapa para ver os detalhes completos.</p>
+      <div style={{margin:"16px 0"}}>
+        {FLOW.map((s,i)=>(
+          <div key={i} style={{display:"flex",gap:12,marginBottom:0}}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:44,flexShrink:0}}>
+              <div onClick={()=>sAs(as===i?null:i)} style={{width:40,height:40,borderRadius:"50%",background:G,border:`3px solid ${G}`,color:"white",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:15,cursor:"pointer",boxShadow:"0 2px 8px rgba(27,107,69,0.5)",transition:"transform 0.15s",transform:as===i?"scale(1.12)":"scale(1)"}}>{s.n}</div>
+              {i<FLOW.length-1&&<div style={{width:3,flex:1,minHeight:24,background:G,margin:"2px 0"}}/>}
+            </div>
+            <div onClick={()=>sAs(as===i?null:i)} style={{flex:1,padding:"11px 15px",borderRadius:11,marginBottom:8,background:as===i?"#F0FDF4":"white",border:`1.5px solid ${as===i?G:"#e0e0e0"}`,cursor:"pointer",transition:"all 0.2s"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:as===i?8:0}}>
+                <h4 style={{margin:0,fontSize:15,color:"#0D2B1A",fontWeight:700}}>{s.t}</h4>
+                <span style={{padding:"2px 8px",borderRadius:4,background:"#1B6B4515",color:G,fontSize:11,fontWeight:600}}>{s.r}</span>
+              </div>
+              {as===i&&(
+                <div>
+                  <p style={{margin:"0 0 8px",fontSize:14,color:"#444",lineHeight:1.7}}>{s.w}</p>
+                  <div style={{fontSize:12,color:"#666"}}><strong>Documento:</strong> {s.d}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <Alert type="info"><strong>Recusa legítima:</strong> O estudante tem direito de recusar o apoio mediante assinatura da Declaração de Recusa (Anexo IV), conforme Art. 7º e Lei 13.146/15.</Alert>
+    </div>
+  );
+};
+
+const PgNecessidades=()=>{
+  const [q,sQ]=useState("");
+  const [ec,sEc]=useState(null);
+  const filt=NECS.map(c=>({...c,items:c.items.filter(x=>x.n.toLowerCase().includes(q.toLowerCase())||x.d.toLowerCase().includes(q.toLowerCase()))})).filter(c=>c.items.length>0);
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Necessidades Educacionais Específicas</h2>
+      <div style={{position:"relative",marginBottom:16}}>
+        <input value={q} onChange={e=>sQ(e.target.value)} placeholder="Buscar condição, transtorno ou necessidade..."
+          style={{width:"100%",padding:"10px 14px 10px 36px",borderRadius:9,border:"1.5px solid #ddd",fontSize:14,outline:"none",boxSizing:"border-box"}}/>
+        <div style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",color:"#999"}}><IcoSearch/></div>
+      </div>
+      {filt.map((cat,ci)=>(
+        <div key={ci} style={{marginBottom:18}}>
+          <div onClick={()=>sEc(ec===ci?null:ci)} style={{display:"flex",alignItems:"center",gap:9,padding:"11px 14px",borderRadius:10,background:`${cat.color}0F`,cursor:"pointer",marginBottom:6,border:`1.5px solid ${cat.color}30`}}>
+            <div style={{width:9,height:9,borderRadius:"50%",background:cat.color,flexShrink:0}}/>
+            <h3 style={{margin:0,fontSize:16,fontWeight:700,color:cat.color,flex:1}}>{cat.cat}</h3>
+            <span style={{fontSize:12,color:"#999"}}>{cat.items.length} condição(ões)</span>
+            {ec===ci?<IcoUp/>:<IcoDown/>}
+          </div>
+          {(ec===ci||q.length>0)&&cat.items.map((item,ii)=>(
+            <Acc key={ii} title={item.n} color={cat.color} open0={q.length>0}>
+              <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>{item.d}</p>
+              <strong style={{fontSize:12,color:"#555",textTransform:"uppercase",letterSpacing:0.5,display:"block",margin:"8px 0 5px"}}>🔍 Sinais de Atenção</strong>
+              <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:10}}>
+                {item.s.map((s,si)=><span key={si} style={{display:"inline-flex",gap:4,padding:"3px 9px",borderRadius:5,background:"#f5f5f5",fontSize:13,color:"#444"}}><span style={{color:cat.color,fontWeight:700}}>›</span>{s}</span>)}
+              </div>
+              <strong style={{fontSize:12,color:"#555",textTransform:"uppercase",letterSpacing:0.5,display:"block",margin:"8px 0 5px"}}>📉 Impactos</strong>
+              {item.imp.map((x,i)=><div key={i} style={{display:"flex",gap:6,marginBottom:3,fontSize:13.5,color:"#555"}}><span style={{color:"#B91C1C",fontWeight:700}}>•</span>{x}</div>)}
+              <strong style={{fontSize:12,color:"#555",textTransform:"uppercase",letterSpacing:0.5,display:"block",margin:"8px 0 5px"}}>🛠 Apoios Necessários</strong>
+              {item.sup.map((x,i)=><div key={i} style={{display:"flex",gap:6,marginBottom:3,fontSize:13.5,color:"#555"}}><span style={{color:G,fontWeight:700}}>✓</span>{x}</div>)}
+              <div style={{padding:"11px 14px",borderRadius:9,background:`${cat.color}08`,borderLeft:`3px solid ${cat.color}`,marginTop:8}}>
+                <h5 style={{margin:"0 0 4px",fontSize:12,color:cat.color,fontWeight:700}}>🎓 Orientação Pedagógica</h5>
+                <p style={{margin:0,fontSize:13.5,lineHeight:1.7,color:"#444"}}>{item.p}</p>
+              </div>
+            </Acc>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const PgEstrategias=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Estratégias Pedagógicas e Adaptações</h2>
+    <Acc title="🎯 Adaptações de Metodologia e Ensino" open0 color={G}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:10}}>
+        {[{t:"Múltiplas Representações",d:"Apresente o mesmo conteúdo por diferentes canais: visual (slides, mapas, vídeos), auditivo (explicação oral, podcasts), tátil/concreto (maquetes, materiais manipuláveis)."},{t:"Fragmentação e Sequenciamento",d:"Divida tarefas complexas em etapas menores com instruções claras. Use checklists visuais."},{t:"Antecipação e Previsibilidade",d:"Compartilhe o roteiro da aula no início. Avise sobre mudanças com antecedência."},{t:"Ritmo Flexível",d:"Permita tempos diferentes de processamento. Tenha atividades complementares para quem termina antes ou depois."},{t:"Apoio Visual Permanente",d:"Mantenha disponíveis: vocabulário-chave, roteiro da atividade, fórmulas de referência, passos de procedimentos."},{t:"Tutoria por Pares",d:"Organize duplas ou trios estratégicos. Um colega de referência pode ajudar na organização e na compreensão."}].map((s,i)=>(
+          <div key={i} style={{padding:13,borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13,color:"#0D2B1A",fontWeight:700}}>{s.t}</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>{s.d}</p>
+          </div>
+        ))}
+      </div>
+    </Acc>
+    <Acc title="📝 Adaptações de Avaliação" color="#6A1B9A">
+      <Alert type="info"><strong>Art. 10 da IN 2/2023:</strong> A avaliação deve ser entendida como avaliação do processo e não apenas de desempenho.</Alert>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:10}}>
+        {[{t:"Diversificação de Instrumentos",d:"Provas orais, seminários, portfólios, projetos práticos, mapas conceituais, vídeos, apresentações em Libras."},{t:"Tempo Adicional",d:"Geralmente 25% a 50% de tempo adicional. Para alguns estudantes, sala separada com menos estímulos é tão importante quanto o tempo."},{t:"Adaptação de Formato",d:"Provas com fonte maior, espaçamento ampliado, enunciados simplificados, questões objetivas quando o subjetivo é barreira."},{t:"Avaliação Processual",d:"Registre a evolução ao longo do tempo. O Relatório Bimestral (Anexo III) é o instrumento para isso."},{t:"Recursos de Apoio",d:"Calculadora, tabelas, fórmulas, dicionário, software de leitura, intérprete de Libras. Cada recurso deve ser especificado no PEI."},{t:"Critérios Explícitos",d:"Quando o PEI define objetivos específicos, os critérios de avaliação devem ser coerentes com esses objetivos."}].map((s,i)=>(
+          <div key={i} style={{padding:13,borderRadius:9,background:"#F5F3FF",border:"1px solid #DDD6FE"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13,color:"#4A148C",fontWeight:700}}>{s.t}</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>{s.d}</p>
+          </div>
+        ))}
+      </div>
+    </Acc>
+    <Acc title="🏗 Acessibilidade e Recursos" color="#B45309">
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:10}}>
+        {[{t:"Tecnologia Assistiva",d:"Leitores de tela (NVDA, JAWS), ampliadores, softwares de voz para texto, teclados e mouses adaptados."},{t:"CAA",d:"Comunicação Aumentativa e Alternativa: pranchas de comunicação, aplicativos de CAA, símbolos pictográficos."},{t:"Material Acessível",d:"Documentos em formato acessível, vídeos com legendas e audiodescrição, material em Braille ou fonte ampliada."},{t:"Ambiente Físico",d:"Rampas, elevadores, mobiliário adaptado, sinalização tátil e visual, iluminação adequada, sala silenciosa para avaliações."}].map((s,i)=>(
+          <div key={i} style={{padding:13,borderRadius:9,background:"#FFFBEB",border:"1px solid #FDE68A"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13,color:"#92400E",fontWeight:700}}>{s.t}</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>{s.d}</p>
+          </div>
+        ))}
+      </div>
+    </Acc>
+  </div>
+);
+
+const PgElaboracao=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Elaborando o PEI na Prática</h2>
+    <Alert type="success"><strong>Lembre-se:</strong> O PEI é elaborado pelo docente, com suporte da Coordenação de Curso, equipe pedagógica, CAES e equipe multiprofissional (Art. 9º, V).</Alert>
+    <div style={{marginBottom:16,padding:15,borderRadius:12,background:"linear-gradient(135deg,#E8F5E9,#F1F8E9)",border:"2px solid #66BB6A",display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
+      <div style={{fontSize:24}}>📋</div>
+      <div style={{flex:1,minWidth:180}}>
+        <h4 style={{margin:"0 0 2px",fontSize:14,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
+        <p style={{margin:0,fontSize:12,color:"#555"}}>Campus Lucas do Rio Verde · Ano Letivo atual · Acesso restrito.</p>
+      </div>
+      <a href="https://docs.google.com/spreadsheets/d/1QH2oxwGwsOecuaGDghzTfZ0OS2iPY1RvjkRSc3vptWU/edit?usp=sharing" target="_blank" style={{flexShrink:0,display:"inline-flex",alignItems:"center",gap:5,padding:"7px 14px",borderRadius:9,background:"#2E7D32",color:"white",fontSize:12.5,fontWeight:700,textDecoration:"none"}}>Acessar Planilha →</a>
+    </div>
+    <div style={{marginBottom:22,padding:16,borderRadius:12,background:"linear-gradient(135deg,#E3F2FD,#E8F5E9)",border:"2px solid #42A5F5"}}>
+      <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:12}}>
+        <span style={{fontSize:18}}>🖥️</span>
+        <h3 style={{margin:0,fontSize:15,fontWeight:700,color:"#0D47A1"}}>Como criar o PEI no SUAP</h3>
+      </div>
+      <div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:4,marginBottom:14}}>
+        {["Documentos / Processos","Documentos","Documentos de Texto","Adicionar Documento de Texto"].map((p,i,a)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",gap:4}}>
+            <div style={{padding:"3px 10px",borderRadius:14,background:"#0D47A1",color:"white",fontSize:11.5,fontWeight:700,whiteSpace:"nowrap"}}>{p}</div>
+            {i<a.length-1&&<span style={{color:"#0D47A1",fontWeight:700,fontSize:14}}>›</span>}
+          </div>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:8}}>
+        {[{c:"Tipo de Documento",v:"Planos"},{c:"Modelo",v:"Plano Educacional Individualizado"},{c:"Assunto",v:"PEI — [Nome do estudante / Disciplina]"},{c:"Nível de Acesso",v:"Restrito"},{c:"Hipótese Legal",v:"Informação Pessoal"}].map((x,i)=>(
+          <div key={i} style={{padding:"8px 12px",borderRadius:8,background:"white",border:"1px solid #90CAF9"}}>
+            <span style={{fontSize:10.5,fontWeight:700,color:"#1565C0",textTransform:"uppercase",letterSpacing:0.5,display:"block"}}>{x.c}</span>
+            <span style={{fontSize:13,color:"#0D1B2A",fontWeight:x.c==="Nível de Acesso"||x.c==="Hipótese Legal"?700:400}}>{x.v}</span>
+          </div>
+        ))}
+      </div>
+      <p style={{margin:"10px 0 0",fontSize:11.5,color:"#555"}}>⚠️ Nível <strong>Restrito</strong> + Hipótese Legal <strong>Informação Pessoal</strong> garantem o sigilo dos dados conforme a LGPD (Lei 13.709/2018).</p>
+    </div>
+    {[{c:"(01) Dados Pessoais",o:"Preencha com os dados atualizados do estudante: nome, filiação, contato, data de nascimento, curso, ano/semestre, componente curricular e nome do docente responsável.",e:null},{c:"(02) Histórico",o:"Baseie-se no Relatório de Acolhimento (Anexo I). Descreva brevemente: tipo de deficiência/necessidade, tempo de manifestação e acessibilidade já ofertada em instituições anteriores.",e:"Estudante com diagnóstico de TDAH tipo combinado desde os 8 anos. Na escola anterior, recebia tempo adicional em provas e posição preferencial em sala."},{c:"(03) Necessidades Educacionais Específicas",o:"Detalhe as condições do estudante e o que ele necessita. Seja específico e funcional.",e:"Estudante com TDAH tipo combinado. Apresenta dificuldade significativa de atenção sustentada, inquietação motora e dificuldade de organização. Necessita de: fragmentação de tarefas, lembretes visuais, posição estratégica em sala, tempo adicional em avaliações."},{c:"(04) Conhecimentos, Habilidades, Capacidades, Interesses",o:"Identifique o que o estudante JÁ SABE e JÁ CONSEGUE fazer, seus pontos fortes e interesses.",e:"Estudante demonstra excelente raciocínio lógico e interesse particular por atividades práticas de laboratório. Aprende melhor quando o conteúdo é contextualizado."},{c:"(05) Dificuldades Apresentadas",o:"Descreva as dificuldades observadas em relação ao componente curricular específico. Seja descritivo e evite julgamentos de valor.",e:"Dificuldade em acompanhar aulas expositivas longas. Tendência a não concluir atividades escritas extensas. Esquecimento frequente de materiais e prazos."},{c:"(06-07) Adaptações Razoáveis e Objetivos Específicos",o:"Defina as adaptações que serão implementadas e os objetivos para o estudante, derivados dos objetivos do componente curricular.",e:"ADAPTAÇÕES: Aulas com roteiro prévio; atividades divididas em etapas de até 15 minutos; avaliações em sala separada com 50% de tempo adicional."},{c:"(08-09) Conteúdos e Metodologia",o:"Liste os conteúdos programáticos priorizados e descreva as metodologias e recursos didáticos que serão utilizados.",e:"CONTEÚDOS: Hidrocarbonetos, Funções oxigenadas, Isomeria plana. METODOLOGIA: Slides estruturados com roteiro impresso; modelos moleculares 3D; vídeos curtos."},{c:"(10) Avaliação",o:"Descreva os instrumentos avaliativos, como serão aplicados e quais critérios serão utilizados.",e:"Prova escrita em sala separada com 50% de tempo adicional (Peso 3). Mapa conceitual (Peso 2). Relatório de atividade experimental em dupla (Peso 2)."},{c:"(11) Resultados Esperados",o:"Descreva o que se espera que o estudante alcance ao final do período letivo com as adaptações propostas.",e:"Espera-se que o estudante seja capaz de identificar e nomear os principais grupos funcionais da Química Orgânica e participar ativamente das atividades práticas."},{c:"(12-14) Bibliografias e Assinaturas",o:"Inclua a bibliografia básica e complementar do componente curricular. O PEI deve ser assinado pelo docente, pela coordenação de curso e pelo diretor/chefe do departamento de ensino.",e:null}].map((x,i)=>(
+      <Acc key={i} title={x.c} color={G} open0={i===0}>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>{x.o}</p>
+        {x.e&&<div style={{padding:"11px 14px",borderRadius:9,background:"#F0FDF4",borderLeft:"3px solid #1B6B45",fontSize:13,lineHeight:1.7,color:"#333"}}>
+          <strong style={{color:G,fontSize:11,display:"block",marginBottom:3}}>📝 EXEMPLO</strong>{x.e}
+        </div>}
+      </Acc>
+    ))}
+  </div>
+);
+
+const PgRegistros=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Registros, Relatórios e Documentação</h2>
+    <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>A documentação comprova as ações de acessibilidade realizadas e permite o acompanhamento longitudinal do estudante.</p>
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Relatório Bimestral de Avaliação (Anexo III)</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:9,marginBottom:16}}>
+      {[{t:"Dificuldades Apresentadas",d:"Descreva as dificuldades observadas no período, com fatos concretos"},{t:"Evolução",d:"Relate a evolução em relação aos objetivos e conteúdos propostos no PEI"},{t:"Desempenho Geral",d:"Instrumentos avaliativos, objetivos funcionais, relações interpessoais, autonomia"},{t:"Adequações Avaliativas",d:"Observações sobre os critérios e instrumentos de avaliação utilizados"},{t:"Competências Desenvolvidas",d:"Habilidades profissionais e acadêmicas desenvolvidas pelo estudante"},{t:"Resultado Final",d:"Conceito ou nota no componente curricular do período"}].map((x,i)=>(
+        <div key={i} style={{padding:11,borderRadius:9,background:"white",border:`1.5px solid ${G}25`}}>
+          <h5 style={{margin:"0 0 3px",fontSize:12.5,color:"#0D2B1A",fontWeight:700}}>{x.t}</h5>
+          <p style={{margin:0,fontSize:12,color:"#666",lineHeight:1.5}}>{x.d}</p>
+        </div>
+      ))}
+    </div>
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Trechos-Modelo para Relatórios</h3>
+    {[{t:"Evolução Positiva",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros.",c:"#166534"},{t:"Dificuldades Persistentes",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI.",c:"#B45309"},{t:"Adequações nos Critérios de Avaliação",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual.",c:"#1565C0"},{t:"Registro de Competências Profissionais",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever].",c:"#5B21B6"}].map((m,i)=>(
+      <div key={i} style={{marginBottom:12,padding:"13px 16px",borderRadius:11,background:`${m.c}08`,borderLeft:`3px solid ${m.c}`}}>
+        <h5 style={{margin:"0 0 5px",fontSize:13.5,color:m.c,fontWeight:700}}>{m.t}</h5>
+        <p style={{margin:0,fontSize:12.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
+      </div>
+    ))}
+    <Alert type="warning"><strong>Atenção:</strong> Relatórios devem ser descritivos e baseados em observações concretas. Descreva comportamentos observáveis, não julgamentos de caráter.</Alert>
+  </div>
+);
+
+const PgAlertas=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Alertas, Erros Comuns e Cuidados Éticos</h2>
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"0 0 12px"}}>🚫 Erros Comuns e Correções</h3>
+    {[{e:"Exigir laudo para iniciar qualquer adaptação",c:"A NT 04/2014/MEC dispensa laudo para início de encaminhamentos. O laudo só é obrigatório para quem ingressou por reserva de vagas PcD."},{e:"Elaborar o PEI sem participação do estudante e da família",c:"A IN determina que a elaboração deve incluir a família e, sempre que possível, o próprio estudante (Art. 9º)."},{e:"Fazer um PEI genérico, igual para todos os componentes",c:"Cada docente deve elaborar o PEI para seu componente curricular específico (Art. 9º, V)."},{e:"Reduzir o PEI a 'dar nota sem critério'",c:"O PEI adapta meios e, quando necessário, objetivos. A avaliação deve registrar a evolução real do estudante."},{e:"Tratar o PEI como documento burocrático estático",c:"O PEI é um instrumento vivo, que deve ser reavaliado e reformulado continuamente (Art. 9º, §1º)."},{e:"Não arquivar os documentos do PEI",c:"Todos os PEIs e relatórios bimestrais devem ser arquivados na pasta do estudante na Secretaria Escolar (Art. 12)."}].map((x,i)=>(
+      <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 1fr",marginBottom:6,borderRadius:10,overflow:"hidden",border:"1px solid #e0e0e0"}}>
+        <div style={{padding:"11px 14px",background:"#FEF2F2",fontSize:13,lineHeight:1.6}}>
+          <strong style={{color:"#991B1B",fontSize:11,display:"block",marginBottom:2}}>❌ ERRO</strong>
+          <span style={{color:"#555"}}>{x.e}</span>
+        </div>
+        <div style={{padding:"11px 14px",background:"#F0FDF4",fontSize:13,lineHeight:1.6}}>
+          <strong style={{color:"#166534",fontSize:11,display:"block",marginBottom:2}}>✅ CORREÇÃO</strong>
+          <span style={{color:"#555"}}>{x.c}</span>
+        </div>
+      </div>
+    ))}
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 12px"}}>🤝 Cuidados Éticos Essenciais</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:10,marginBottom:18}}>
+      {[{t:"Sigilo e Privacidade",d:"As informações sobre a condição do estudante são sigilosas. Não exponha diagnósticos em sala de aula ou conversas informais.",i:"🔒"},{t:"Linguagem Respeitosa",d:"Use 'pessoa com deficiência' (não 'deficiente'), 'pessoa com TEA' (não 'autista' como rótulo).",i:"💬"},{t:"Autonomia do Estudante",d:"O estudante tem direito de participar das decisões sobre seu PEI e até de recusar o apoio (Anexo IV). Nada sobre ele sem ele.",i:"🙋"},{t:"Não Rotular",d:"O diagnóstico é uma informação, não uma identidade. Evite expectativas fixas baseadas em rótulos.",i:"🏷️"},{t:"Não Comparar",d:"Cada estudante tem sua trajetória. Comparar o desempenho de um estudante com PEI ao de outros é inadequado.",i:"⚖️"},{t:"Formação Contínua",d:"A educação inclusiva é um campo em constante evolução. Busque formação e não hesite em pedir apoio à equipe multiprofissional.",i:"📖"}].map((c,i)=>(
+        <div key={i} style={{padding:14,borderRadius:10,background:"#F5F3FF",border:"1px solid #DDD6FE"}}>
+          <div style={{fontSize:20,marginBottom:4}}>{c.i}</div>
+          <h5 style={{margin:"0 0 4px",fontSize:13,color:"#5B21B6",fontWeight:700}}>{c.t}</h5>
+          <p style={{margin:0,fontSize:12,lineHeight:1.6,color:"#555"}}>{c.d}</p>
+        </div>
+      ))}
+    </div>
+    <Alert type="danger"><strong>NUNCA:</strong> Exponha o diagnóstico do estudante publicamente. Tome decisões sobre o PEI sozinho, sem consultar a equipe.</Alert>
+    <Alert type="ethics"><strong>SEMPRE:</strong> Trate o estudante com dignidade e respeito. Consulte a equipe antes de tomar decisões. Documente todas as ações. Ouça o estudante e a família.</Alert>
+  </div>
+);
+
+const PgRecursos=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Recursos e Pesquisa</h2>
+    <div style={{marginBottom:22,padding:16,borderRadius:12,background:"linear-gradient(135deg,#FFF8E1,#FFF3E0)",border:"2px solid #FFB300"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+        <span style={{fontSize:10.5,background:"#FF6F00",color:"white",padding:"2px 8px",borderRadius:4,fontWeight:700}}>MAI/2026</span>
+        <h3 style={{margin:0,fontSize:15,fontWeight:700,color:"#E65100"}}>Portaria MEC nº 421, de 15 de maio de 2026</h3>
+      </div>
+      <p style={{margin:"0 0 10px",fontSize:13,lineHeight:1.7,color:"#555"}}>Dispõe sobre a <strong>PNEEI</strong> e a <strong>Reneei</strong>, regulamentando o Decreto nº 12.686/2025.</p>
+      <a href="https://www.in.gov.br/web/dou/-/portaria-mec-n-421-de-15-de-maio-de-2026-706292988" target="_blank" style={{display:"inline-flex",alignItems:"center",gap:5,padding:"6px 13px",borderRadius:8,background:"#E65100",color:"white",fontSize:12.5,fontWeight:700,textDecoration:"none"}}>Acessar no Diário Oficial →</a>
+    </div>
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"0 0 10px"}}>📚 Cadernos Pedagógicos MEC — PNEEI</h3>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:13,marginBottom:26}}>
+      {CADERNOS.map((c,i)=>(
+        <div key={i} style={{borderRadius:12,background:"white",border:`1.5px solid ${G}30`,overflow:"hidden",display:"flex",flexDirection:"column"}}>
+          <div style={{padding:"12px 14px 0"}}><span style={{fontSize:11,fontWeight:700,color:G,background:"#F0FDF4",padding:"2px 8px",borderRadius:4}}>{c.v}</span></div>
+          <div style={{padding:"8px 14px 12px",flex:1}}><h4 style={{margin:"6px 0 10px",fontSize:13.5,fontWeight:700,color:"#0D2B1A",lineHeight:1.3}}>{c.t}</h4></div>
+          <div style={{padding:"0 14px 12px"}}><a href={c.u} target="_blank" style={{display:"inline-flex",alignItems:"center",gap:5,padding:"6px 12px",borderRadius:8,background:G,color:"white",fontSize:12,fontWeight:700,textDecoration:"none"}}>Baixar PDF →</a></div>
+        </div>
+      ))}
+    </div>
+    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"0 0 10px"}}>⚖️ Legislação Federal</h3>
+    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      {NORMAS.map((l,i)=>(
+        <div key={i} style={{padding:"11px 14px",borderRadius:10,background:"white",border:"1px solid #e0e0e0",display:"flex",alignItems:"flex-start",gap:11,borderLeft:`4px solid ${G}`}}>
+          <div style={{flex:1}}>
+            <strong style={{fontSize:13,color:"#0D2B1A",display:"block",marginBottom:2}}>{l.ref}</strong>
+            <p style={{margin:0,fontSize:12,lineHeight:1.6,color:"#666"}}>{l.desc}</p>
+          </div>
+          {l.url&&l.url!=="&num;"&&l.url!=="#"&&<a href={l.url} target="_blank" style={{flexShrink:0,padding:"5px 10px",borderRadius:7,background:G,color:"white",fontSize:11.5,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Acessar →</a>}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const PgSintese=()=>(
+  <div>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Síntese Prática</h2>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))",gap:13,marginBottom:20}}>
+      {[{t:"👀 O que Observar",c:"#0D3B6E",bg:"#EFF6FF",b:"#BFDBFE",i:["Mudanças no comportamento ou rendimento","Dificuldade persistente que destoa do padrão","Sinais de sobrecarga sensorial ou emocional","Discrepância entre capacidade oral e escrita","Desempenho flutuante sem causa aparente"]},{t:"📋 Como Planejar",c:G,bg:"#F0FDF4",b:"#BBF7D0",i:["Consulte o Relatório de Acolhimento antes de elaborar","Defina objetivos específicos a partir do currículo","Diversifique métodos e recursos didáticos","Preveja múltiplas formas de avaliação","Converse com a CAES e a equipe pedagógica"]},{t:"📝 Como Registrar",c:"#5B21B6",bg:"#F5F3FF",b:"#DDD6FE",i:["Preencha o PEI (Anexo II) para seu componente","Elabore o Relatório Bimestral (Anexo III)","Descreva fatos observáveis, não julgamentos","Registre adaptações implementadas e resultados","Entregue documentação para arquivamento"]},{t:"🤝 Quem Acompanha",c:"#B45309",bg:"#FFFBEB",b:"#FDE68A",i:["Docente: elabora e executa o PEI","Coordenação de Curso: orienta e acompanha","Diretoria de Ensino: supervisiona","CAES: acolhe, encaminha e dá suporte","Estudante: protagonista do processo"]}].map((q,i)=>(
+        <div key={i} style={{padding:16,borderRadius:12,background:q.bg,border:`1.5px solid ${q.b}`}}>
+          <h4 style={{margin:"0 0 10px",fontSize:14,color:q.c,fontWeight:700}}>{q.t}</h4>
+          {q.i.map((x,ii)=><div key={ii} style={{display:"flex",gap:6,marginBottom:5,fontSize:13,lineHeight:1.5,color:"#333"}}><span style={{color:q.c,fontWeight:700}}>›</span>{x}</div>)}
+        </div>
+      ))}
+    </div>
+    <div style={{padding:20,borderRadius:14,background:`linear-gradient(135deg,${G}10,${G}05)`,border:`1.5px solid ${G}40`,textAlign:"center"}}>
+      <p style={{margin:0,fontSize:14,lineHeight:1.8,color:"#0D2B1A",fontStyle:"italic"}}>"Incluir não é apenas garantir a matrícula. É garantir que cada estudante tenha condições reais de aprender, participar e se desenvolver plenamente."</p>
+      <p style={{margin:"8px 0 0",fontSize:11,color:"#666"}}>IN Conjunta 2/2023 · IFMT Campus Lucas do Rio Verde · Diretoria de Ensino · Educação Especial Inclusiva</p>
+    </div>
+  </div>
+);
+
+const PAGES={visao:<PgVisao/>,legislacao:<PgLegislacao/>,fluxo:<PgFluxo/>,necessidades:<PgNecessidades/>,estrategias:<PgEstrategias/>,elaboracao:<PgElaboracao/>,registros:<PgRegistros/>,alertas:<PgAlertas/>,recursos:<PgRecursos/>,sintese:<PgSintese/>};
+
+/* ── App ── */
+function App(){
+  const [tab,sTab]=useState("visao");
+  const [drawer,sDrawer]=useState(false);
+  const ref=useRef(null);
+  useEffect(()=>{if(ref.current)ref.current.scrollTop=0;},[tab]);
+
+  return(
+    <div style={{fontFamily:"system-ui,-apple-system,sans-serif",background:"#F4F6F4",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+
+      {/* Barra azul */}
+      <div style={{background:"#0D1B2A",padding:"0 31px",display:"flex",alignItems:"center",justifyContent:"space-between",height:118,position:"sticky",top:0,zIndex:200,boxShadow:"0 2px 8px rgba(0,0,0,0.3)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:26}}>
+          <button onClick={()=>sDrawer(true)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,background:"none",border:"none",cursor:"pointer",color:"white",padding:"13px 18px",borderRadius:6}}>
+            <IcoMenu/>
+            <span style={{fontSize:22,fontWeight:700,letterSpacing:3}}>MENU</span>
+          </button>
+          <div style={{width:1,height:65,background:"rgba(255,255,255,0.2)"}}/>
+          <Logo h={80}/>
+        </div>
+        <span style={{color:"rgba(255,255,255,0.85)",fontSize:22,fontWeight:500}}>
+          Campus Lucas do Rio Verde · Diretoria de Ensino · Educação Especial Inclusiva
+        </span>
+      </div>
+
+      {/* Drawer */}
+      {drawer&&(
+        <div style={{position:"fixed",inset:0,zIndex:300,display:"flex"}}>
+          <div className="slide" style={{width:320,background:"#0D1B2A",padding:"16px 12px",display:"flex",flexDirection:"column",gap:6,overflowY:"auto"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,padding:"0 4px"}}>
+              <Logo h={44}/>
+              <button onClick={()=>sDrawer(false)} style={{background:"rgba(255,255,255,0.1)",border:"none",cursor:"pointer",color:"white",borderRadius:7,padding:"6px 8px",display:"flex",alignItems:"center"}}><IcoX/></button>
+            </div>
+            {TABS.map(t=>(
+              <button key={t.id} onClick={()=>{sTab(t.id);sDrawer(false);}}
+                style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",border:"none",borderRadius:8,background:tab===t.id?G:"rgba(255,255,255,0.05)",cursor:"pointer",fontSize:14,color:"white",fontWeight:tab===t.id?700:400,textAlign:"left",transition:"all 0.15s"}}>
+                {t.label}
+                <div style={{width:22,height:22,borderRadius:"50%",border:"2px solid rgba(255,255,255,0.5)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><IcoPlus/></div>
+              </button>
+            ))}
+          </div>
+          <div onClick={()=>sDrawer(false)} style={{flex:1,background:"rgba(0,0,0,0.5)",cursor:"pointer"}}/>
+        </div>
+      )}
+
+      {/* Breadcrumb */}
+      <div style={{background:G,padding:"9px 24px",display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+        {["IFMT","Campus Lucas do Rio Verde","Diretoria de Ensino","Educação Especial Inclusiva"].map((item,i,arr)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{fontSize:15.6,color:i===arr.length-1?"#A7F3D0":"rgba(255,255,255,0.7)",fontWeight:i===arr.length-1?600:400}}>{item}</span>
+            {i<arr.length-1&&<span style={{color:"rgba(255,255,255,0.4)",fontSize:15.6}}>›</span>}
+          </div>
+        ))}
+      </div>
+
+      {/* Título */}
+      <div style={{background:"linear-gradient(135deg,#0D2B1A,#1B6B45)",padding:"18px 24px",color:"white"}}>
+        <h1 style={{margin:"0 0 4px",fontSize:"clamp(22px,3.5vw,31px)",fontWeight:800,letterSpacing:-0.3}}>Plano Educacional Individualizado</h1>
+        <p style={{margin:0,fontSize:16.25,opacity:0.75}}>Guia completo para educadores · IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT)</p>
+      </div>
+
+      {/* Tabs */}
+      <div className="tabs-bar">
+        {TABS.map(t=>(
+          <button key={t.id} onClick={()=>sTab(t.id)} style={{display:"flex",alignItems:"center",padding:"13px 18px",border:"none",background:"transparent",cursor:"pointer",fontSize:16.25,color:tab===t.id?G:"#666",fontWeight:tab===t.id?700:400,whiteSpace:"nowrap",borderBottom:tab===t.id?`3px solid ${G}`:"3px solid transparent",transition:"all 0.15s"}}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Conteúdo */}
+      <main ref={ref} style={{flex:1,padding:"22px 24px 48px",maxWidth:980,width:"100%",margin:"0 auto"}}>
+        <div className="fade" key={tab}>{PAGES[tab]||<PgVisao/>}</div>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>,document.getElementById("root"));
+</script>
+</body>
+</html>
