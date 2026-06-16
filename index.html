@@ -8,8 +8,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:15px}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4;color:#1a1a1a;min-height:100vh}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:#1B6B4540;border-radius:3px}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
@@ -18,12 +19,94 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4}
 .slide{animation:slideIn 0.2s ease}
 .tabs-bar{display:flex;overflow-x:auto;padding:0 16px;background:white;border-bottom:2px solid #1B6B4520}
 .tabs-bar::-webkit-scrollbar{height:3px}
+
+/* PEI Form styles */
+:root{
+  --green:#1B6B45;--green2:#155535;--green3:#F0FDF4;--green4:#BBF7D0;
+  --amber:#b45309;--amber-lt:#fff8e7;--amber-bd:#e8d6a8;
+  --bd:#e0ddd5;--muted:#5a6b52;
+}
+.pei-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:12px}
+.pei-card-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:13px}
+.pei-grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.pei-grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.pei-fld{display:flex;flex-direction:column;gap:4px}
+.pei-label{font-size:11px;font-weight:700;color:var(--green)}
+.pei-input{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;transition:border .15s;color:#1a1a1a}
+.pei-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
+.pei-textarea{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;resize:vertical;line-height:1.55;transition:border .15s;color:#1a1a1a}
+.pei-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
+
+/* Transtorno cards */
+.t-card{border:2px solid #e0e0e0;border-radius:8px;padding:11px;cursor:pointer;transition:all .15s;background:#fff;min-height:80px}
+.t-card:hover{border-color:#BBF7D0}
+.t-card.sel{border-color:var(--green);background:var(--green3)}
+.t-short{font-size:13px;font-weight:700;margin-bottom:3px;color:#1a1a1a}
+.t-name{font-size:10px;color:var(--muted);line-height:1.3;margin-bottom:5px}
+.t-cid{display:none}
+
+/* Field blocks */
+.field-block{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #e0e0e0}
+.field-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.field-num{font-size:10px;font-weight:700;color:var(--green);background:var(--green3);padding:1px 7px;border-radius:4px;margin-right:5px}
+.field-lbl{font-size:14px;font-weight:700;color:#1a1a1a}
+.field-sub{font-size:11px;color:var(--muted);margin-left:4px}
+.field-guide{font-size:11px;color:var(--muted);font-style:italic;line-height:1.45;margin-bottom:7px}
+.field-row{display:grid;grid-template-columns:1fr 290px;gap:14px;align-items:start}
+
+/* Suggestions */
+.sugg-wrap{border:1px solid #BBF7D0;border-radius:7px;background:#f4f8ee;overflow:hidden}
+.sugg-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;cursor:pointer;font-size:12px;font-weight:700;color:var(--green);user-select:none}
+.sugg-hdr:hover{background:#eaf1e0}
+.sugg-note{padding:0 11px 5px;font-size:10px;color:var(--muted);font-style:italic;line-height:1.4}
+.sugg-list{padding:0 9px 9px;display:flex;flex-direction:column;gap:5px}
+.sugg-btn{background:#fff;border:1px solid #dde8d4;border-radius:5px;padding:7px 9px;font-size:11.5px;color:#1a1a1a;cursor:pointer;text-align:left;line-height:1.4;transition:all .15s;display:flex;gap:6px;align-items:flex-start;width:100%}
+.sugg-btn:hover{background:#fffbf0;border-color:var(--amber)}
+.sugg-plus{color:var(--green);font-weight:900;font-size:14px;flex-shrink:0;line-height:1.3}
+.sugg-btn:hover .sugg-plus{color:var(--amber)}
+
+/* Bimestre */
+.bim-row{display:flex;gap:8px;flex-wrap:wrap}
+.bim-btn{padding:9px 18px;border:2px solid #e0e0e0;border-radius:7px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--muted);min-height:42px}
+.bim-btn.sel{border-color:var(--green);background:var(--green3);color:var(--green)}
+
+/* Checkboxes */
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:7px}
+.ck-btn{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;text-align:left;min-height:42px;width:100%}
+.ck-btn:hover{border-color:#BBF7D0}
+.ck-btn.on{border-color:var(--green);background:var(--green3);color:var(--green);font-weight:600}
+.ck-box{width:18px;height:18px;border:2px solid #bbb;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ck-btn.on .ck-box{background:var(--green);border-color:var(--green)}
+.ck-tick{color:#fff;font-size:11px;font-weight:900}
+.sect-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--green);margin:12px 0 4px}
+
+/* Action row */
+.act-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0}
+.dl-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;min-height:46px}
+.dl-btn:hover{background:var(--green2)}
+
+/* Warn */
+.pei-warn{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:9px 12px;font-size:12px;color:#7c5a14;display:flex;align-items:center;gap:7px;margin-bottom:12px}
+.t-badge{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:7px 11px;font-size:12px;color:#7c5a14;margin-bottom:12px}
+
+/* Alert boxes */
+.alert{padding:13px 16px;border-radius:9px;margin-bottom:14px;font-size:14.5px;line-height:1.7}
+.alert-warning{background:#FFF8E1;border-left:4px solid #F59E0B;color:#92400E}
+.alert-info{background:#EBF5FB;border-left:4px solid #2196F3;color:#1565C0}
+.alert-danger{background:#FEF2F2;border-left:4px solid #EF4444;color:#991B1B}
+.alert-success{background:#F0FDF4;border-left:4px solid #22C55E;color:#166534}
+.alert-ethics{background:#F5F3FF;border-left:4px solid #8B5CF6;color:#5B21B6}
+
+@media(max-width:600px){
+  .pei-grid2,.pei-grid4{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const {useState,useRef,useEffect}=React;
+const {useState,useRef,useEffect,useCallback}=React;
 const G="#1B6B45";
 
 /* ── Logo SVG oficial completo ── */
@@ -96,7 +179,6 @@ const Logo=({h=80})=>(
 </svg>
 );
 
-/* ── Mini ícones ── */
 const IcoMenu=()=><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
 const IcoX=()=><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
 const IcoPlus=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
@@ -104,7 +186,6 @@ const IcoDown=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" st
 const IcoUp=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="18 15 12 9 6 15"/></svg>;
 const IcoSearch=()=><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
 
-/* ── Tabs ── */
 const TABS=[
   {id:"visao",label:"Visão Geral"},
   {id:"legislacao",label:"Marco Legal"},
@@ -118,10 +199,139 @@ const TABS=[
   {id:"sintese",label:"Síntese Prática"},
 ];
 
-/* ── Componentes base ── */
+// ── Transtornos ──
+const TR={
+  TDAH:{label:"TDAH — Transtorno de Déficit de Atenção/Hiperatividade",short:"TDAH"},
+  AHSD:{label:"Altas Habilidades / Superdotação",short:"AH/SD"},
+  TEA:{label:"TEA — Transtorno do Espectro Autista",short:"TEA"},
+  TOD:{label:"TOD — Transtorno Opositivo Desafiador",short:"TOD"},
+  DISL:{label:"Dislexia — Transtorno Específico de Aprendizagem",short:"Dislexia"},
+  DISG:{label:"Disgrafia — Transtorno da Expressão Escrita",short:"Disgrafia"},
+  ANSI:{label:"Transtorno de Ansiedade",short:"Ansiedade"}
+};
+
+// ── Campos PEI ──
+const PEI_FIELDS=[
+  {k:"historico",n:"02",t:"Histórico",sub:"(anterior, em instituição de origem até a atualidade)",g:"Breve descrição da trajetória: tipo de deficiência/transtorno, necessidades específicas, tempo de manifestação, acessibilidades já ofertadas e atualmente necessárias, condições socioeconômicas e quadro clínico. Base: Relatório de Acolhimento (Anexo I)."},
+  {k:"necessidades",n:"03",t:"Necessidades Educacionais Específicas",g:"Detalhar as condições do estudante e o que ele necessita para acessar o currículo. Fundamento das estratégias metodológicas."},
+  {k:"conhecimentos",n:"04",t:"Conhecimentos, Habilidades, Capacidades, Interesses, Necessidades",g:"Expectativas e interesses pessoais do estudante relacionados às disciplinas do curso. O que sabe sobre o curso? Do que gosta?"},
+  {k:"dificuldades",n:"05",t:"Dificuldades Apresentadas",g:"Dificuldades observadas no contexto pedagógico do componente curricular."},
+  {k:"adaptacoes",n:"06",t:"Adaptações Razoáveis e/ou Acessibilidades Curriculares",g:"Conjunto das adaptações a serem implementadas: objetivos, temporalidade flexível, conteúdo, metodologia e avaliação."},
+  {k:"objetivos",n:"07",t:"Objetivos Específicos",g:"Objetivos específicos para o estudante, foco das adaptações, a partir dos objetivos previstos para o componente curricular."},
+  {k:"conteudos",n:"08",t:"Conteúdos Programáticos",g:"O que é possível priorizar ou substituir a partir da especificidade do estudante, avaliado junto ao corpo docente e equipe de apoio."},
+  {k:"metodologia",n:"09",t:"Metodologia",g:"Como o trabalho será realizado para alcançar os objetivos específicos? Recursos didáticos e estratégias diferenciadas em sala e nos horários de atendimento."},
+  {k:"avaliacao",n:"10",t:"Avaliação",g:"Quais instrumentos? Como serão aplicados? Oportunizar diversas formas de expressão da aprendizagem: projetos, seminários, debates, provas individuais ou em duplas."},
+  {k:"resultados",n:"11",t:"Resultados Esperados",g:"O que se espera que o estudante alcance ao final da vigência do PEI."},
+  {k:"bibBasica",n:"12",t:"Bibliografia Básica",g:"Conforme o Plano de Ensino do componente curricular."},
+  {k:"bibCompl",n:"13",t:"Bibliografia Complementar",g:"Conforme o Plano de Ensino, com possíveis complementações."}
+];
+
+// ── Sugestões por transtorno ──
+const SG={
+  TDAH:{
+    necessidades:["Atenção sustentada limitada em tarefas de esforço cognitivo prolongado, com necessidade de fracionamento das atividades em blocos menores.","Dificuldade de autorregulação executiva (planejamento, organização e monitoramento), com necessidade de apoio externo via cronograma visual e checklists.","Hiperatividade e/ou impulsividade que demandam pausas regulatórias e ambiente com menos distratores visuais e sonoros.","Memória de trabalho reduzida, exigindo que instruções complexas sejam fragmentadas e reapresentadas visualmente."],
+    conhecimentos:["Bom desempenho em atividades curtas, dinâmicas e com retorno imediato.","Interesse e engajamento elevados quando há variação de estímulos e elementos lúdicos.","Capacidade criativa e de pensamento divergente em situações abertas e exploratórias."],
+    dificuldades:["Dificuldade em sustentar atenção em atividades longas, com tendência a iniciar várias tarefas sem concluí-las.","Organização do material e cumprimento de prazos requerem apoio externo (lembretes, cronograma).","Tendência a respostas impulsivas em avaliações, sem leitura cuidadosa dos enunciados.","Variabilidade significativa de desempenho entre dias, mesmo em tarefas semelhantes."],
+    adaptacoes:["Permitir tempo adicional de 25% a 50% em avaliações escritas, conforme a complexidade da prova.","Fracionar avaliações longas em blocos com pausas regulatórias de 5 a 10 minutos.","Organizar o ambiente avaliativo com baixo estímulo visual e sonoro, podendo ocorrer em sala separada quando necessário.","Disponibilizar cronograma visual da aula com marcação do tempo previsto para cada etapa.","Utilizar instruções curtas, em frases simples, confirmando a compreensão antes do início da tarefa.","Permitir uso de marcador de texto ou régua para destacar comandos durante avaliações."],
+    objetivos:["Desenvolver, com apoio externo, habilidades de planejamento e autorregulação no contexto das atividades do componente.","Atingir os objetivos curriculares essenciais do componente, com adaptações no tempo, no formato avaliativo e no fracionamento das tarefas."],
+    conteudos:["Manutenção dos conteúdos essenciais do componente curricular, com priorização dos conceitos estruturantes no primeiro contato.","Apresentação dos conteúdos em sequência fragmentada, com retomadas frequentes e ancoragens visuais."],
+    metodologia:["Variar estímulos pedagógicos na aula (exposição dialogada, vídeo curto, atividade prática, discussão), evitando longos períodos de uma única modalidade.","Utilizar checklists impressos para acompanhamento das etapas das atividades.","Empregar estratégias de gamificação e reforço positivo imediato após cumprimento das etapas.","Organizar trabalhos em duplas estruturadas, com papéis bem definidos para cada estudante.","Disponibilizar resumos visuais (mapas mentais, esquemas) antes de aulas conceituais densas."],
+    avaliacao:["Aplicar avaliações fracionadas em blocos menores, distribuídos em dias ou tempos diferentes.","Permitir oralidade complementar à escrita para evidências de aprendizagem em questões dissertativas.","Adotar enunciados curtos, diretos, com destaque visual para o comando principal.","Disponibilizar avaliações em ambiente individualizado quando o nível de distratibilidade for elevado.","Considerar instrumentos avaliativos contínuos (portfólio, observação) como complemento às provas pontuais."],
+    resultados:["Espera-se que o estudante alcance os objetivos curriculares essenciais do componente, com evolução observável em autorregulação, sustentação atencional e cumprimento de prazos."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["Estudante apresentou evolução na sustentação atencional em tarefas curtas, ainda com dificuldade em atividades mais longas.","Verificou-se melhora no cumprimento de prazos quando utilizado cronograma visual semanal.","Persistem dificuldades de organização do material e de iniciativa em tarefas com múltiplas etapas."],
+    relObsAdeq:["O fracionamento da avaliação em blocos menores mostrou-se eficaz, com aumento da consistência das respostas.","O tempo adicional concedido em avaliações foi utilizado de forma produtiva, contribuindo para leitura mais cuidadosa dos enunciados.","Recomenda-se manter o uso de instruções escritas curtas e a aplicação em ambiente individualizado quando necessário."]
+  },
+  AHSD:{
+    necessidades:["Necessidade de enriquecimento curricular vertical (aprofundamento) e horizontal (ampliação para áreas correlatas).","Demanda por desafios cognitivos compatíveis com seu ritmo acelerado de aprendizagem, evitando ociosidade e desmotivação.","Espaço para produção autoral e desenvolvimento de projetos de interesse pessoal articulados ao componente.","Suporte socioemocional para perfeccionismo, assincronia entre desenvolvimentos e relação com pares."],
+    conhecimentos:["Capacidade de aprendizagem acelerada e raciocínio abstrato avançado para a faixa etária.","Interesse intenso e aprofundado em temas específicos da área do componente.","Capacidade de estabelecer conexões entre áreas distintas do conhecimento."],
+    dificuldades:["Tendência ao tédio e à desmotivação quando as atividades estão aquém do seu nível de proficiência.","Perfeccionismo que pode gerar bloqueio em produções abertas.","Assincronia entre desenvolvimento cognitivo e socioemocional, podendo gerar dificuldades de relação com pares."],
+    adaptacoes:["Enriquecimento curricular intraclasse, com atividades de aprofundamento simultâneas às propostas regulares.","Enriquecimento extraclasse via projetos de pesquisa, extensão ou iniciação científica.","Substituição parcial de atividades já dominadas por desafios cognitivos compatíveis com o nível de proficiência.","Produção autoral (artigos, ensaios, vídeos educacionais) como atividade do componente."],
+    objetivos:["Aprofundar os conteúdos do componente além do nível esperado para a série, articulando-os com áreas correlatas.","Desenvolver autonomia investigativa e capacidade de produção autoral no campo do componente."],
+    conteudos:["Conteúdos do componente curricular, com aprofundamentos verticais nos temas de maior interesse do estudante.","Inclusão de conteúdos complementares articulados a áreas de fronteira ou aplicações avançadas."],
+    metodologia:["Aprendizagem baseada em projetos e em problemas abertos, com múltiplas soluções possíveis.","Mentoria com docentes pesquisadores e/ou profissionais da área.","Peer teaching: o estudante prepara e ministra mini-aulas ou seminários sobre tópicos aprofundados.","Estímulo à pesquisa autônoma em fontes primárias (artigos científicos, dados originais)."],
+    avaliacao:["Produções autorais como instrumentos avaliativos: artigos, projetos de pesquisa, ensaios, protótipos.","Apresentações públicas (seminários, bancas, eventos científicos) com avaliação por profundidade conceitual.","Portfólio de aprofundamento com produções desenvolvidas ao longo do bimestre."],
+    resultados:["Espera-se que o estudante alcance e supere os objetivos curriculares do componente, com produção autoral relevante e engajamento em projetos de aprofundamento."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante demonstrou domínio dos conteúdos previstos e aprofundamento em temas de seu interesse específico.","Apresentou produção autoral compatível com nível superior ao da série, evidenciando capacidade investigativa."],
+    relObsAdeq:["As atividades de enriquecimento curricular foram efetivas para manter o engajamento do estudante.","A substituição parcial de avaliações tradicionais por produções autorais permitiu evidenciar com maior fidelidade o nível de aprendizagem."]
+  },
+  TEA:{
+    necessidades:["Rotina previsível e antecipação de mudanças (alterações de cronograma, professores substitutos, atividades não regulares).","Comunicação clara, literal e objetiva, evitando metáforas, ironias e implícitos.","Ambiente sensorialmente regulado, com baixo nível de ruído e estímulos visuais excessivos.","Apoio visual permanente (pictogramas, organizadores gráficos, cronogramas).","Tempo adicional para processamento de instruções e elaboração de respostas."],
+    conhecimentos:["Atenção sustentada e aprofundada em temas de interesse específico.","Memória visual e factual desenvolvidas.","Capacidade de sistematização e organização de informações em estruturas lógicas."],
+    dificuldades:["Sobrecarga sensorial em ambientes com muito estímulo (ruído, luminosidade, aglomeração).","Dificuldade com mudanças não anunciadas na rotina ou no cronograma.","Interpretação literal de comandos, com dificuldade em inferências implícitas e linguagem figurada."],
+    adaptacoes:["Disponibilizar com antecedência o cronograma das aulas e avaliações, comunicando qualquer alteração com a maior antecedência possível.","Apresentar instruções escritas paralelamente à instrução oral, com linguagem objetiva e literal.","Utilizar pictogramas, organizadores gráficos e mapas conceituais como suporte visual.","Permitir tempo adicional em avaliações (25% a 50%), conforme a demanda de processamento.","Considerar a realização de avaliações em ambiente com baixo estímulo sensorial."],
+    objetivos:["Atingir os objetivos curriculares essenciais do componente com adaptações comunicacionais, sensoriais e de suporte visual.","Desenvolver, com apoio, habilidades de organização da rotina escolar e cumprimento de prazos."],
+    conteudos:["Manutenção integral dos conteúdos do componente, com apresentação mais visual, mais fragmentada e mais literal.","Quando possível, ancorar conteúdos novos nos interesses específicos do estudante."],
+    metodologia:["Apresentar conteúdos por meio de instruções escritas e visuais simultaneamente à exposição oral.","Quebrar tarefas complexas em etapas menores, com instruções explícitas para cada etapa.","Garantir pausas reguladoras quando houver sinais de sobrecarga sensorial."],
+    avaliacao:["Elaborar enunciados em linguagem objetiva, literal, sem duplo sentido ou suposições implícitas.","Permitir respostas em formatos alternativos: esquemas, listas, fluxogramas, quando o conteúdo permitir.","Conceder tempo adicional para leitura, processamento e resposta."],
+    resultados:["Espera-se que o estudante alcance os objetivos curriculares essenciais do componente, com participação efetiva em sala e cumprimento das atividades avaliativas adaptadas."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante apresentou bom desempenho nas atividades com instruções escritas e suporte visual.","Manteve participação consistente em aulas com rotina previsível e baixo nível de estímulos sensoriais."],
+    relObsAdeq:["A apresentação de avaliações com enunciados literais e formato visualmente organizado mostrou-se eficaz.","O tempo adicional concedido contribuiu para o processamento adequado das questões."]
+  },
+  TOD:{
+    necessidades:["Estabelecimento prévio e explícito de regras, combinados e consequências, com clareza e previsibilidade.","Relação docente-estudante baseada em respeito mútuo, previsibilidade e evitação de confrontos públicos.","Espaço para negociação estruturada de demandas, dentro de limites previamente pactuados."],
+    conhecimentos:["Capacidade de argumentação e contestação que, quando bem mediada, pode ser canalizada para debates e análises críticas.","Senso aguçado de justiça e de coerência interna nas regras.","Engajamento em atividades em que percebe protagonismo e autonomia."],
+    dificuldades:["Padrão recorrente de oposição a figuras de autoridade, com tendência a contestar regras e instruções.","Reatividade emocional elevada diante de frustrações, podendo escalar para confrontos diretos.","Dificuldade de aceitar correções, especialmente quando feitas em público."],
+    adaptacoes:["Pactuar previamente os combinados pedagógicos do componente, preferencialmente por escrito, com clareza sobre prazos e formatos avaliativos.","Oferecer escolhas estruturadas dentro de limites pré-definidos (autonomia controlada).","Evitar confrontos diretos em público; retomar a conversa em momento e espaço reservados.","Estabelecer um contrato pedagógico com o estudante no início do bimestre, revisado periodicamente."],
+    objetivos:["Atingir os objetivos curriculares essenciais do componente, com adaptações no manejo relacional e na pactuação dos combinados avaliativos.","Desenvolver, com apoio, habilidades de autorregulação emocional e cumprimento de combinados no contexto escolar."],
+    conteudos:["Manutenção integral dos conteúdos do componente, com possibilidade de o estudante eleger temas ou ângulos de aprofundamento dentro do escopo previsto."],
+    metodologia:["Apresentar os objetivos e regras de cada aula no início, com clareza.","Oferecer escolhas dentro do planejamento (tema do trabalho, ordem das atividades, papel em trabalhos em grupo).","Evitar exposição pública de erros ou comportamentos inadequados; tratar individualmente."],
+    avaliacao:["Combinar previamente, por escrito, os critérios e formatos avaliativos, evitando alterações de última hora.","Focar a avaliação no produto e na evidência de aprendizagem, separando-a de eventuais conflitos comportamentais."],
+    resultados:["Espera-se que o estudante alcance os objetivos curriculares essenciais do componente, com evolução observável no cumprimento de combinados e na autorregulação emocional."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante demonstrou maior cumprimento de combinados quando estes foram pactuados previamente e por escrito.","Verificou-se redução de episódios de oposição quando oferecidas escolhas estruturadas dentro do planejamento."],
+    relObsAdeq:["O contrato pedagógico inicial mostrou-se efetivo na previsibilidade dos critérios avaliativos.","Recomenda-se manter o manejo individual de conflitos e a prática do reforço positivo dos comportamentos colaborativos."]
+  },
+  DISL:{
+    necessidades:["Dificuldade persistente na decodificação de palavras e fluência leitora, exigindo tempo adicional para leitura de textos e enunciados.","Dificuldade de memória fonológica que impacta a leitura de palavras desconhecidas e a compreensão de textos longos.","Necessidade de acesso a textos em formato digital com recurso de leitura em voz alta (TTS).","Necessidade de enunciados de avaliação curtos, com linguagem objetiva e sem dupla negação."],
+    conhecimentos:["Compreensão oral e raciocínio preservados — a barreira está no canal da leitura/escrita, não na capacidade cognitiva.","Boa memória semântica e capacidade de aprendizagem por rotas auditivas e visuais.","Frequentemente demonstra criatividade e habilidade de resolução de problemas por caminhos alternativos."],
+    dificuldades:["Lentidão na leitura de enunciados extensos, podendo comprometer o tempo disponível para responder avaliações.","Trocas, omissões e inversões de letras/sílabas na escrita espontânea.","Dificuldade em reter sequências ortográficas de palavras irregulares.","Cansaço cognitivo elevado em atividades que exigem leitura e escrita simultâneas e prolongadas."],
+    adaptacoes:["Conceder tempo adicional de 25% a 50% em avaliações escritas.","Permitir uso de leitor de tela ou leitura do enunciado em voz alta pelo docente ou por colega designado.","Elaborar enunciados curtos, objetivos e com destaque visual para o comando principal.","Aceitar respostas orais como complemento ou alternativa às respostas escritas.","Não penalizar erros ortográficos em componentes que não avaliem ortografia como conteúdo-fim.","Disponibilizar material didático em formato digital com recurso de acessibilidade."],
+    objetivos:["Atingir os objetivos curriculares essenciais do componente com adaptações no formato de acesso aos textos e nas condições de avaliação.","Desenvolver estratégias compensatórias de leitura e compreensão com apoio de recursos tecnológicos."],
+    conteudos:["Manutenção integral dos conteúdos do componente curricular, com apresentação em formatos diversificados (oral, visual, digital).","Priorização dos conceitos estruturantes em atividades iniciais, com gradual ampliação da complexidade textual."],
+    metodologia:["Privilegiar exposição oral e visual dos conteúdos, com slides limpos e de fácil leitura (fonte sans-serif, tamanho mínimo 14pt, alto contraste).","Disponibilizar gravações de aula ou resumos em áudio como material complementar.","Utilizar mapas conceituais, infográficos e esquemas visuais para organização dos conteúdos.","Evitar cópia extensa do quadro; preferir material impresso ou digital disponibilizado previamente.","Utilizar textos de extensão graduada, começando com trechos mais curtos e ampliando progressivamente."],
+    avaliacao:["Aplicar avaliações com tempo adicional (mínimo 25%) e em ambiente tranquilo.","Permitir leitura dos enunciados em voz alta pelo docente ou por tecnologia assistiva.","Aceitar resposta oral em substituição à escrita dissertativa quando pertinente.","Avaliar o conteúdo conceitual, desvinculando a nota de eventuais erros ortográficos.","Considerar portfólio e atividades práticas como instrumentos complementares às provas escritas."],
+    resultados:["Espera-se que o estudante acesse os conteúdos do componente e demonstre sua aprendizagem por meio de formatos avaliativos adaptados, evidenciando compreensão conceitual independentemente das barreiras no canal leitura/escrita."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante demonstrou compreensão dos conteúdos quando os enunciados foram lidos em voz alta ou disponibilizados em formato digital.","Verificou-se melhora no desempenho avaliativo com o uso do tempo adicional concedido.","Persistem dificuldades com textos longos e questões dissertativas extensas; mantida a estratégia de enunciados curtos e respostas orais como complemento."],
+    relObsAdeq:["O tempo adicional concedido em avaliações mostrou-se eficaz para equalizar as condições de acesso ao conteúdo.","A leitura dos enunciados em voz alta contribuiu significativamente para a compreensão e a qualidade das respostas.","Recomenda-se manter a não penalização de erros ortográficos e o uso de formatos digitais com suporte de acessibilidade."]
+  },
+  DISG:{
+    necessidades:["Dificuldade no controle motor fino para a escrita manual, resultando em letra de difícil legibilidade e lentidão gráfica.","Cansaço físico e cognitivo elevado em atividades de escrita prolongada, comprometendo a qualidade e a quantidade do que é produzido.","Necessidade de alternativas à escrita manual: uso de computador, tablet ou ditado para transcrição.","Necessidade de tempo adicional em avaliações que exijam produção escrita."],
+    conhecimentos:["Capacidade de expressão oral e raciocínio preservados — a barreira está no gesto motor da escrita, não no pensamento.","Frequentemente demonstra boa organização de ideias quando pode expressá-las oralmente ou por meio digital.","Desempenho potencialmente superior ao revelado pela escrita manual quando avaliado por formatos alternativos."],
+    dificuldades:["Letra ilegível ou de difícil leitura, podendo comprometer a correção das avaliações escritas.","Lentidão na escrita manual que reduz a quantidade produzida em avaliações com tempo fixo.","Dor, tensão muscular ou cansaço ao escrever por períodos prolongados.","Dificuldade em organizar espacialmente o texto no papel (margens, espaçamento, alinhamento)."],
+    adaptacoes:["Permitir o uso de computador, tablet ou smartphone para produção escrita em avaliações e atividades.","Conceder tempo adicional de 25% a 50% em avaliações escritas.","Aceitar respostas orais com registro por transcrição (pelo docente ou colega designado) quando necessário.","Não avaliar a qualidade gráfica da escrita (caligrafia, organização espacial) como critério de nota em componentes que não tenham esse objetivo específico.","Disponibilizar avaliações impressas com espaço ampliado para resposta.","Permitir uso de gravador de voz como recurso auxiliar para registro de anotações em aula."],
+    objetivos:["Atingir os objetivos curriculares essenciais do componente com adaptações nas condições de produção escrita.","Demonstrar domínio dos conteúdos por meio de formatos alternativos à escrita manual quando necessário."],
+    conteudos:["Manutenção integral dos conteúdos do componente curricular, sem supressão de tópicos em função da dificuldade motora.","Apresentação dos conteúdos em formatos que minimizem a necessidade de cópia extensa."],
+    metodologia:["Disponibilizar material didático impresso ou digital, evitando cópia extensiva do quadro.","Aceitar registros de atividades em formato digital (digitado) como equivalente ao manuscrito.","Organizar atividades com etapas bem delimitadas para reduzir a sobrecarga de escrita contínua.","Utilizar fichas de atividade com espaços estruturados para resposta.","Permitir que o estudante fotografe o quadro ou utilize slides como alternativa às anotações manuscritas."],
+    avaliacao:["Aceitar respostas digitadas ou ditadas como equivalentes às manuscritas.","Conceder tempo adicional e ambiente confortável para minimizar o impacto da lentidão gráfica.","Avaliar o conteúdo das respostas, desvinculando a nota da legibilidade e da organização gráfica.","Considerar apresentações orais ou vídeos como instrumentos avaliativos complementares.","Evitar avaliações que dependam exclusivamente da escrita manual extensa."],
+    resultados:["Espera-se que o estudante demonstre sua aprendizagem dos conteúdos do componente por meio de formatos avaliativos adaptados, evidenciando domínio conceitual independentemente das barreiras motoras na escrita manual."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante demonstrou maior fluência e qualidade nas atividades realizadas em formato digital, em comparação com as atividades manuscritas.","O tempo adicional concedido em avaliações contribuiu para a conclusão das questões com menor cansaço físico.","Persistem dificuldades com a escrita manual prolongada; mantida a estratégia de uso do computador/tablet como recurso principal."],
+    relObsAdeq:["A substituição da escrita manual pelo formato digital mostrou-se eficaz para equalizar as condições de demonstração de aprendizagem.","A não penalização da caligrafia e da organização gráfica como critério de avaliação permitiu uma análise mais fiel do domínio conceitual do estudante.","Recomenda-se manter o uso de tecnologia assistiva e o tempo adicional em todas as avaliações do componente."]
+  },
+  ANSI:{
+    necessidades:["Elevação significativa da ansiedade em situações de avaliação, apresentação oral ou cobrança de desempenho, podendo comprometer o acesso ao conteúdo aprendido.","Necessidade de ambiente previsível, com antecipação clara dos critérios e formatos avaliativos.","Necessidade de flexibilização de prazos e formatos de avaliação em períodos de agudização dos sintomas.","Necessidade de ambiência acolhedora, sem exposição pública a erros ou situações de julgamento coletivo.","Possibilidade de acesso a atendimento psicológico via encaminhamento da Coordenação de Assistência Estudantil e Inclusão."],
+    conhecimentos:["Geralmente apresenta bom nível de conhecimento acumulado — a barreira está no acesso ao desempenho sob pressão, não na capacidade de aprender.","Desempenho frequentemente superior em atividades processuais e projetos, em comparação com avaliações pontuais e cronometradas.","Boa capacidade de organização e planejamento quando o ambiente é seguro e os critérios são claros."],
+    dificuldades:["Bloqueio parcial ou total de conteúdos aprendidos durante situações de alta pressão, como provas e apresentações orais.","Sintomas físicos que podem surgir em contextos avaliativos: taquicardia, tremores, sudorese, náusea ou dificuldade de respiração.","Dificuldade de concentração causada por pensamentos antecipativos negativos sobre o desempenho.","Evitação de participação oral espontânea por medo de errar publicamente.","Oscilação de desempenho entre períodos de estável e períodos de agudização da ansiedade."],
+    adaptacoes:["Comunicar os critérios e formatos de avaliação com a maior antecipação possível, evitando alterações de última hora.","Permitir que o estudante realize avaliações em ambiente separado, com menos estímulos e menor pressão de observação coletiva.","Conceder tempo adicional de 25% a 50% em avaliações escritas.","Oferecer avaliação substitutiva ou complementar quando o estudante apresentar crise de ansiedade na data da prova, com reagendamento acordado previamente.","Não expor o estudante a situações de leitura oral ou resposta espontânea em público sem consentimento prévio.","Substituir ou complementar apresentações orais coletivas por formatos alternativos: vídeo gravado, portfólio, relatório escrito.","Flexibilizar prazos de entrega em períodos de agudização documentada dos sintomas."],
+    objetivos:["Atingir os objetivos curriculares essenciais do componente com adaptações nas condições e formatos de avaliação que reduzam o impacto da ansiedade sobre o desempenho.","Desenvolver, com apoio especializado, estratégias de autorregulação emocional para uso em contextos de avaliação escolar."],
+    conteudos:["Manutenção integral dos conteúdos do componente curricular, sem supressão de tópicos.","Apresentação dos conteúdos com roteiro claro e antecipado, reduzindo a imprevisibildade que pode potencializar a ansiedade."],
+    metodologia:["Apresentar o planejamento da aula no início, incluindo o que será feito e em quanto tempo.","Criar cultura de sala de aula que valorize o erro como parte do processo de aprendizagem, reduzindo o medo do julgamento.","Evitar sortear alunos aleatoriamente para responder perguntas orais; preferir participação voluntária.","Utilizar atividades em duplas ou grupos pequenos como espaço de prática antes de exposições maiores.","Oferecer feedback individual e privado, evitando correcções públicas que possam ampliar a ansiedade social.","Disponibilizar material de apoio (resumos, esquemas) com antecedência para que o estudante chegue às aulas mais seguro."],
+    avaliacao:["Diversificar os instrumentos avaliativos, reduzindo o peso de uma única prova pontual no cómputo final.","Aplicar avaliações em ambiente com menos estímulos e menor densidade de estudantes quando necessário.","Oferecer ao estudante a opção de avaliação oral individual em substituição à prova escrita coletiva, quando o formato escrito for o principal gerador de ansiedade.","Permitir o uso de técnicas de regulação durante a avaliação (pausas breves, respiração).","Reagendar avaliações em casos de crise documentada, sem penalização.","Considerar portfólio, projetos e avaliação processual como instrumentos principais ou complementares."],
+    resultados:["Espera-se que o estudante acesse os conteúdos do componente e demonstre sua aprendizagem em condições avaliativas adequadas à sua necessidade, com redução progressiva do impacto da ansiedade sobre o desempenho escolar."],
+    bibBasica:[],bibCompl:[],historico:[],
+    relObsEst:["O estudante demonstrou domínio dos conteúdos em atividades processuais e em formatos avaliativos com menor carga ansiogêica.","Verificou-se redução dos sintomas de ansiedade em avaliações aplicadas em ambiente separado com tempo adicional.","Persistem dificuldades em situações de apresentação oral coletiva; mantida a estratégia de formatos alternativos.","Oscilação de desempenho observada em períodos de maior carga ansiosa; registrada e comunicada à Coordenação de Assistência Estudantil e Inclusão."],
+    relObsAdeq:["A antecipação dos critérios e formatos avaliativos mostrou-se eficaz na redução da ansiedade antecipatória.","O ambiente de avaliação separado contribuiu para melhor expresso do conhecimento do estudante.","Recomenda-se manter a flexibilização de formatos e o acesso a instrumentos avaliativos diversificados, com continuidade do acompanhamento psicológico."]
+  }
+};
+
+// ── Componentes base ──
 const Alert=({type="info",children})=>{
   const m={info:{bg:"#EBF5FB",b:"#2196F3",i:"💡",c:"#1565C0"},warning:{bg:"#FFF8E1",b:"#F59E0B",i:"⚠️",c:"#92400E"},danger:{bg:"#FEF2F2",b:"#EF4444",i:"🚫",c:"#991B1B"},success:{bg:"#F0FDF4",b:"#22C55E",i:"✅",c:"#166534"},ethics:{bg:"#F5F3FF",b:"#8B5CF6",i:"🤝",c:"#5B21B6"}}[type];
-  return <div style={{padding:"13px 16px",borderRadius:9,background:m.bg,borderLeft:`4px solid ${m.b}`,marginBottom:14,fontSize:15,lineHeight:1.7,color:m.c}}><span style={{marginRight:7}}>{m.i}</span>{children}</div>;
+  return <div style={{padding:"13px 16px",borderRadius:9,background:m.bg,borderLeft:`4px solid ${m.b}`,marginBottom:14,fontSize:14.5,lineHeight:1.7,color:m.c}}><span style={{marginRight:7}}>{m.i}</span>{children}</div>;
 };
 
 const Acc=({title,children,open0=false,color=G})=>{
@@ -148,24 +358,391 @@ const Card=({title,children,onClick,active,idx=0})=>{
   );
 };
 
-/* ── Dados ── */
+// ── SuggPanel ──
+const SuggPanel=({suggs,transKey,onInsert})=>{
+  const [open,setOpen]=useState(true);
+  if(!suggs||suggs.length===0)return null;
+  return(
+    <div className="sugg-wrap">
+      <div className="sugg-hdr" onClick={()=>setOpen(!open)}>
+        <span>✦ Sugestões — {TR[transKey]?.short||transKey}</span>
+        <span>{open?"▲":"▼"}</span>
+      </div>
+      {open&&(
+        <>
+          <div className="sugg-note">Clique para inserir no campo, depois personalize para o seu estudante.</div>
+          <div className="sugg-list">
+            {suggs.map((s,i)=>(
+              <button key={i} className="sugg-btn" onClick={()=>onInsert(s)}>
+                <span className="sugg-plus">+</span>
+                <span>{s}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// ── Dados compartilhados entre abas ──
+// Usamos um objeto global simples para compartilhar estado sem Context
+const SHARED={};
+
+// ── Aba Elaborando o PEI ──
+const PgElaboracao=()=>{
+  const [trans,setTrans]=useState(SHARED.trans||"TDAH");
+  const [fields,setFields]=useState(SHARED.peiFields||{});
+  const [ident,setIdent]=useState(SHARED.ident||{nome:"",resp:"",tel:"",curso:"",ano:"2026/1",vig:"",doc:"",comp:"",ch:""});
+  const [saved,setSaved]=useState(false);
+
+  const updIdent=(k,v)=>{
+    const next={...ident,[k]:v};
+    setIdent(next);
+    SHARED.ident=next;
+  };
+  const updField=(k,v)=>{
+    const next={...fields,[k]:v};
+    setFields(next);
+    SHARED.peiFields=next;
+  };
+  const appendField=(k,txt)=>{
+    const cur=fields[k]||"";
+    const next={...fields,[k]:cur+(cur&&!cur.endsWith("\n")?"\n":"")+txt};
+    setFields(next);
+    SHARED.peiFields=next;
+  };
+  const selTrans=(k)=>{setTrans(k);SHARED.trans=k;};
+
+  const downloadPEI=()=>{
+    const d={...ident,...fields};
+    const ti=TR[trans];
+    const esc=(s)=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const nl=(s)=>String(s||"").replace(/\n/g,"<br/>");
+    const secRow=(n,t)=>`<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">(${n}) ${esc(t)}</td></tr>`;
+    const fullRow=(v)=>`<tr><td colspan="2" style="min-height:40pt;padding:7pt">${nl(esc(v))}</td></tr>`;
+    const dataRow=(l,v)=>`<tr><td style="font-weight:bold;width:36%;border:1px solid #000;padding:5pt 7pt">${esc(l)}</td><td style="border:1px solid #000;padding:5pt 7pt">${nl(esc(v))}</td></tr>`;
+    const body=`
+<div style="text-align:center;margin-bottom:14pt">
+<p style="margin:0;line-height:1.3"><strong>MINISTÉRIO DA EDUCAÇÃO</strong></p>
+<p style="margin:0;line-height:1.3">Secretaria de Educação Profissional e Tecnológica</p>
+<p style="margin:0;line-height:1.3">Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso</p>
+<p style="margin:0;line-height:1.3"><strong>Campus Lucas do Rio Verde</strong></p>
+<p style="margin-top:12pt"><strong>ANEXO II</strong></p>
+</div>
+<h1 style="text-align:center;font-size:12pt;margin:0 0 8pt">PLANO EDUCACIONAL INDIVIDUALIZADO (PEI)</h1>
+<p style="font-size:10pt;text-align:justify;margin:0 0 10pt">Documento elaborado e registrado conforme Instrução Normativa Conjunta nº 2/2023 — RTR-DSAE/RTR/IFMT, constituindo instrumento estruturante para o acompanhamento pedagógico do estudante.</p>
+<table style="border-collapse:collapse;width:100%">
+<tr><td colspan="2" style="background:#1B6B45;color:#fff;font-weight:bold;text-align:center;font-size:12pt;padding:6pt 7pt">PLANO EDUCACIONAL INDIVIDUALIZADO (PEI)</td></tr>
+${secRow("01","DADOS PESSOAIS")}
+${dataRow("Nome do Estudante:",ident.nome)}
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Curso:<br/>Ano — Semestre:<br/>Vigência:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.curso)}<br/>${esc(ident.ano)}<br/>${esc(ident.vig)}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Componente Curricular:<br/>Docente Responsável:<br/>Carga Horária:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.comp)}<br/>${esc(ident.doc)}<br/>${esc(ident.ch)}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Necessidade Educacional Específica:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ti.label)}</td></tr>
+${secRow("02","HISTÓRICO (ANTERIOR, EM INSTITUIÇÃO DE ORIGEM ATÉ A ATUALIDADE)")}${fullRow(fields.historico)}
+${secRow("03","NECESSIDADES EDUCACIONAIS ESPECÍFICAS")}${fullRow(fields.necessidades)}
+${secRow("04","CONHECIMENTOS, HABILIDADES, CAPACIDADES, INTERESSES, NECESSIDADES")}${fullRow(fields.conhecimentos)}
+${secRow("05","DIFICULDADES APRESENTADAS")}${fullRow(fields.dificuldades)}
+${secRow("06","ADAPTAÇÕES RAZOÁVEIS E/OU ACESSIBILIDADES CURRICULARES")}${fullRow(fields.adaptacoes)}
+${secRow("07","OBJETIVOS ESPECÍFICOS")}${fullRow(fields.objetivos)}
+${secRow("08","CONTEÚDOS PROGRAMÁTICOS")}${fullRow(fields.conteudos)}
+${secRow("09","METODOLOGIA")}${fullRow(fields.metodologia)}
+${secRow("10","AVALIAÇÃO")}${fullRow(fields.avaliacao)}
+${secRow("11","RESULTADOS ESPERADOS")}${fullRow(fields.resultados)}
+${secRow("12","BIBLIOGRAFIA BÁSICA")}${fullRow(fields.bibBasica)}
+${secRow("13","BIBLIOGRAFIA COMPLEMENTAR")}${fullRow(fields.bibCompl)}
+${secRow("14","ASSINATURAS")}
+<tr><td colspan="2" style="padding:16pt 7pt">
+<div style="margin-top:20pt;text-align:center"><p>________________________________________________</p><p>Assinatura do(a) Docente &nbsp;&nbsp;&nbsp; Data: ___ / ___ / ______</p></div>
+<div style="margin-top:24pt;text-align:center"><p>________________________________________________</p><p>Assinatura da Coordenação de Curso &nbsp;&nbsp;&nbsp; Data: ___ / ___ / ______</p></div>
+<div style="margin-top:24pt;text-align:center"><p>________________________________________________</p><p>Assinatura da Diretoria/Departamento de Ensino &nbsp;&nbsp;&nbsp; Data: ___ / ___ / ______</p></div>
+</td></tr>
+</table>
+<p style="font-size:9pt;text-align:right;margin-top:14pt;color:#555">Lucas do Rio Verde-MT, _____ de _________________ de __________.</p>
+<p style="font-size:8pt;text-align:center;margin-top:10pt;color:#777">Nível de Acesso: RESTRITO — Hipótese Legal: Informação Pessoal (LGPD — Lei 13.709/2018)</p>`;
+    const html=`<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="UTF-8"><title>PEI</title><style>@page{size:A4;margin:2.5cm 2cm 2cm 2cm}body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#000}table{border-collapse:collapse;width:100%}td{border:1px solid #000;padding:5pt 7pt;vertical-align:top;font-size:11pt}</style></head><body>${body}</body></html>`;
+    dlDoc("PEI_"+(ident.nome||"Estudante").replace(/\s+/g,"_")+"_"+(ident.comp||"Componente").replace(/\s+/g,"_"),html);
+    setSaved(true);setTimeout(()=>setSaved(false),2500);
+  };
+
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Elaborando o PEI na Prática</h2>
+      <Alert type="success"><strong>Lembre-se:</strong> O PEI é elaborado pelo docente, com suporte da Coordenação de Curso, equipe pedagógica, Coordenação de Assistência Estudantil e Inclusão e equipe multiprofissional (Art. 9º, V).</Alert>
+
+      <div style={{marginBottom:16,padding:14,borderRadius:12,background:"linear-gradient(135deg,#E8F5E9,#F1F8E9)",border:"2px solid #66BB6A"}}>
+        <h4 style={{margin:"0 0 4px",fontSize:14,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
+        <p style={{margin:0,fontSize:12,color:"#2E7D32",lineHeight:1.5}}>Campus Lucas do Rio Verde - Ano Letivo 2026 · Verifique e-mail enviado pela Diretoria de Ensino.</p>
+      </div>
+
+      {/* IDENTIFICAÇÃO */}
+      <div className="pei-card">
+        <div className="pei-card-title">👤 Identificação do Estudante</div>
+        <div className="pei-grid2">
+          <div className="pei-fld"><label className="pei-label">Nome do Estudante</label><input className="pei-input" type="text" value={ident.nome} onChange={e=>updIdent("nome",e.target.value)} placeholder="Nome completo"/></div>
+          <div className="pei-fld"><label className="pei-label">Curso</label><input className="pei-input" type="text" value={ident.curso} onChange={e=>updIdent("curso",e.target.value)} placeholder="ex.: Técnico Integrado em Informática"/></div>
+          <div className="pei-fld"><label className="pei-label">Ano — Semestre</label><input className="pei-input" type="text" value={ident.ano} onChange={e=>updIdent("ano",e.target.value)}/></div>
+          <div className="pei-fld"><label className="pei-label">Vigência</label><input className="pei-input" type="text" value={ident.vig} onChange={e=>updIdent("vig",e.target.value)} placeholder="ex.: 01/03/2026 a 20/12/2026"/></div>
+        </div>
+      </div>
+
+      {/* DOCENTE */}
+      <div className="pei-card">
+        <div className="pei-card-title">📋 Docente e Componente Curricular</div>
+        <div className="pei-grid2">
+          <div className="pei-fld"><label className="pei-label">Nome do(a) Docente</label><input className="pei-input" type="text" value={ident.doc} onChange={e=>updIdent("doc",e.target.value)} placeholder="Nome completo"/></div>
+          <div className="pei-fld"><label className="pei-label">Componente Curricular</label><input className="pei-input" type="text" value={ident.comp} onChange={e=>updIdent("comp",e.target.value)} placeholder="ex.: Química Orgânica"/></div>
+          <div className="pei-fld"><label className="pei-label">Carga Horária</label><input className="pei-input" type="text" value={ident.ch} onChange={e=>updIdent("ch",e.target.value)} placeholder="ex.: 80h"/></div>
+        </div>
+      </div>
+
+      {/* NECESSIDADE */}
+      <div className="pei-card">
+        <div className="pei-card-title">⚠️ Necessidade Educacional Específica</div>
+        <p style={{fontSize:12,color:"#5a6b52",marginBottom:11}}>Selecione o transtorno para ativar o banco de sugestões pedagógicas em todos os campos.</p>
+        <div className="pei-grid4">
+          {Object.keys(TR).map(k=>(
+            <div key={k} className={`t-card${trans===k?" sel":""}`} onClick={()=>selTrans(k)}>
+              <div className="t-short">{TR[k].short}</div>
+              <div className="t-name">{TR[k].label.replace(TR[k].short+" — ","")}</div>
+              
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CAMPOS 02-13 */}
+      <div className="pei-card">
+        <div className="t-badge">🎯 Sugestões ativas para: <strong>{TR[trans]?.short}</strong> — clique em + para inserir no campo, depois personalize.</div>
+        {PEI_FIELDS.map(f=>{
+          const suggs=(SG[trans]||{})[f.k]||[];
+          const rows=["bibBasica","bibCompl"].includes(f.k)?3:5;
+          return(
+            <div key={f.k} className="field-block">
+              <div style={{marginBottom:6}}>
+                <span className="field-num">{f.n}</span>
+                <span className="field-lbl">{f.t}</span>
+                {f.sub&&<span className="field-sub">{f.sub}</span>}
+              </div>
+              <div className="field-guide">{f.g}</div>
+              {suggs.length>0?(
+                <div className="field-row">
+                  <textarea className="pei-textarea" rows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+                  <SuggPanel suggs={suggs} transKey={trans} onInsert={txt=>appendField(f.k,txt)}/>
+                </div>
+              ):(
+                <textarea className="pei-textarea" rows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite..."/>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="act-row">
+        <span style={{fontSize:11,color:"#5a6b52"}}>Dados mantidos durante a sessão. Gere o documento ao finalizar.</span>
+        <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          {saved&&<span style={{fontSize:12,color:G,fontWeight:600}}>✓ Download iniciado!</span>}
+          <button className="dl-btn" onClick={downloadPEI}>⬇ Baixar PEI — Anexo II (.doc)</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Aba Registros e Relatórios ──
+const PgRegistros=()=>{
+  const [bim,setBim]=useState("1");
+  const [checks,setChecks]=useState({});
+  const [relObs,setRelObs]=useState("");
+  const [relAdeq,setRelAdeq]=useState("");
+  const [relNota,setRelNota]=useState("");
+  const [saved,setSaved]=useState(false);
+  const trans=SHARED.trans||"TDAH";
+
+  const toggleCk=(k)=>setChecks(p=>({...p,[k]:!p[k]}));
+  const appendObs=(txt)=>setRelObs(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);
+  const appendAdeq=(txt)=>setRelAdeq(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);
+
+  const ident=SHARED.ident||{};
+
+  const downloadRel=()=>{
+    const esc=(s)=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const nl=(s)=>String(s||"").replace(/\n/g,"<br/>");
+    const cb=(k)=>checks[k]?"☒":"☐";
+    const ti=TR[trans]||TR.TDAH;
+    const body=`
+<div style="text-align:center;margin-bottom:14pt">
+<p style="margin:0;line-height:1.3"><strong>MINISTÉRIO DA EDUCAÇÃO</strong></p>
+<p style="margin:0;line-height:1.3">Secretaria de Educação Profissional e Tecnológica</p>
+<p style="margin:0;line-height:1.3">Instituto Federal de Educação, Ciência e Tecnologia de Mato Grosso</p>
+<p style="margin:0;line-height:1.3"><strong>Campus Lucas do Rio Verde</strong></p>
+<p style="margin-top:12pt"><strong>ANEXO III</strong></p>
+</div>
+<h1 style="text-align:center;font-size:12pt;margin:0 0 8pt">RELATÓRIO BIMESTRAL DE AVALIAÇÃO DO PEI</h1>
+<p style="font-size:10pt;text-align:justify;margin:0 0 10pt">Relatório bimestral do(a) docente, em cumprimento ao Art. 11 da Instrução Normativa Conjunta nº 2/2023 — RTR-DSAE/RTR/IFMT. A ser anexado ao processo original no SUAP.</p>
+<table style="border-collapse:collapse;width:100%">
+<tr><td colspan="2" style="background:#1B6B45;color:#fff;font-weight:bold;text-align:center;font-size:12pt;padding:6pt 7pt">RELATÓRIO BIMESTRAL DE AVALIAÇÃO — ${esc(bim)}º BIMESTRE</td></tr>
+<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">IDENTIFICAÇÃO</td></tr>
+<tr><td style="font-weight:bold;width:36%;border:1px solid #000;padding:5pt 7pt">Estudante:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.nome||"")}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Curso / Ano:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.curso||"")} — ${esc(ident.ano||"")}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Componente Curricular:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.comp||"")}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Docente:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ident.doc||"")}</td></tr>
+<tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Necessidade Educacional Específica:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ti.label)}</td></tr>
+<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">TIPOS DE AVALIAÇÕES APLICADAS</td></tr>
+<tr><td colspan="2" style="padding:7pt;border:1px solid #000">
+<strong>Projetos educacionais:</strong><br/>
+${cb("projEnsino")} Ensino &nbsp;&nbsp; ${cb("projPesquisa")} Pesquisa &nbsp;&nbsp; ${cb("projExtensao")} Extensão<br/><br/>
+<strong>Atividades diferenciadas:</strong><br/>
+${cb("seminarios")} Seminários &nbsp;&nbsp; ${cb("debates")} Debates<br/>
+${cb("provaEscInd")} Provas escritas individuais &nbsp;&nbsp; ${cb("provaEscDup")} Provas escritas em dupla/grupo<br/>
+${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")} Provas orais em dupla/grupo
+</td></tr>
+<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">OBSERVAÇÕES SOBRE O/A ESTUDANTE</td></tr>
+<tr><td colspan="2" style="padding:7pt;border:1px solid #000"><em style="color:#555;font-size:10pt">Dificuldades apresentadas, evolução quanto aos objetivos e conteúdos propostos, competências e habilidades profissionais desenvolvidas.</em><br/><br/>${nl(esc(relObs))}</td></tr>
+<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">OBSERVAÇÕES SOBRE AS ADEQUAÇÕES NOS CRITÉRIOS DE AVALIAÇÃO</td></tr>
+<tr><td colspan="2" style="padding:7pt;border:1px solid #000"><em style="color:#555;font-size:10pt">Desempenho geral do estudante quanto à(s) forma(s) de avaliação, relacionamento interpessoal, exercício da autonomia.</em><br/><br/>${nl(esc(relAdeq))}</td></tr>
+<tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">CONCEITO / NOTA</td></tr>
+<tr><td colspan="2" style="padding:7pt;border:1px solid #000">${nl(esc(relNota))}</td></tr>
+</table>
+<div style="margin-top:28pt;text-align:center"><p>________________________________________________</p><p>Assinatura do(a) Docente &nbsp;&nbsp;&nbsp; Data: ___ / ___ / ______</p></div>
+<p style="font-size:9pt;text-align:right;margin-top:14pt;color:#555">Lucas do Rio Verde-MT, _____ de _________________ de __________.</p>
+<p style="font-size:8pt;text-align:center;margin-top:10pt;color:#777">Nível de Acesso: RESTRITO — Hipótese Legal: Informação Pessoal (LGPD — Lei 13.709/2018)</p>`;
+    const html=`<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="UTF-8"><title>Relatório</title><style>@page{size:A4;margin:2.5cm 2cm 2cm 2cm}body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#000}table{border-collapse:collapse;width:100%}td{border:1px solid #000;padding:5pt 7pt;vertical-align:top;font-size:11pt}</style></head><body>${body}</body></html>`;
+    dlDoc("Relatorio_"+bim+"B_"+(ident.nome||"Estudante").replace(/\s+/g,"_"),html);
+    setSaved(true);setTimeout(()=>setSaved(false),2500);
+  };
+
+  const CK_ITEMS=[
+    {sect:"Projetos educacionais",items:[{k:"projEnsino",l:"Ensino"},{k:"projPesquisa",l:"Pesquisa"},{k:"projExtensao",l:"Extensão"}]},
+    {sect:"Atividades diferenciadas",items:[{k:"seminarios",l:"Seminários"},{k:"debates",l:"Debates"},{k:"provaEscInd",l:"Provas escritas individuais"},{k:"provaEscDup",l:"Provas escritas em dupla/grupo"},{k:"provaOralInd",l:"Provas orais individuais"},{k:"provaOralDup",l:"Provas orais em dupla/grupo"}]},
+  ];
+
+  const relObsEstSuggs=(SG[trans]||{}).relObsEst||[];
+  const relObsAdeqSuggs=(SG[trans]||{}).relObsAdeq||[];
+
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Registros, Relatórios e Documentação</h2>
+      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>A documentação comprova as ações de acessibilidade realizadas e permite o acompanhamento longitudinal do estudante.</p>
+
+      {ident.nome&&(
+        <div style={{padding:"10px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:14,fontSize:13,color:G}}>
+          <strong>Estudante:</strong> {ident.nome} &nbsp;|&nbsp; <strong>Componente:</strong> {ident.comp||"—"} &nbsp;|&nbsp; <strong>Docente:</strong> {ident.doc||"—"}
+          <span style={{fontSize:11,color:"#5a6b52",display:"block",marginTop:3}}>Dados propagados da aba "Elaborando o PEI".</span>
+        </div>
+      )}
+
+      {/* BIMESTRE */}
+      <div className="pei-card">
+        <div className="pei-card-title">📅 Bimestre Avaliado</div>
+        <div className="bim-row">
+          {["1","2","3","4"].map(b=>(
+            <button key={b} className={`bim-btn${bim===b?" sel":""}`} onClick={()=>setBim(b)}>{b}º Bimestre</button>
+          ))}
+        </div>
+      </div>
+
+      {/* TIPOS DE AVALIAÇÃO */}
+      <div className="pei-card">
+        <div className="pei-card-title">✅ Tipos de Avaliações Aplicadas</div>
+        {CK_ITEMS.map((sec,si)=>(
+          <div key={si}>
+            <div className="sect-lbl">{sec.sect}</div>
+            <div className="ck-grid">
+              {sec.items.map(item=>(
+                <button key={item.k} className={`ck-btn${checks[item.k]?" on":""}`} onClick={()=>toggleCk(item.k)}>
+                  <div className="ck-box">{checks[item.k]&&<span className="ck-tick">✓</span>}</div>
+                  {item.l}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* OBS ESTUDANTE */}
+      <div className="pei-card">
+        <div className="pei-card-title">📝 Observações sobre o/a Estudante</div>
+        <div className="t-badge">🎯 Sugestões ativas para: <strong>{TR[trans]?.short}</strong></div>
+        <div className="field-row">
+          <div>
+            <div className="field-guide">Dificuldades apresentadas, evolução quanto aos objetivos e conteúdos propostos, competências e habilidades profissionais desenvolvidas pelo/a estudante.</div>
+            <textarea className="pei-textarea" rows={5} value={relObs} onChange={e=>setRelObs(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+          </div>
+          <SuggPanel suggs={relObsEstSuggs} transKey={trans} onInsert={appendObs}/>
+        </div>
+      </div>
+
+      {/* OBS ADEQUAÇÕES */}
+      <div className="pei-card">
+        <div className="pei-card-title">📊 Observações sobre as Adequações nos Critérios de Avaliação</div>
+        <div className="field-row">
+          <div>
+            <div className="field-guide">Desempenho geral do estudante quanto à(s) forma(s) de avaliação, relacionamento interpessoal, exercício da autonomia.</div>
+            <textarea className="pei-textarea" rows={5} value={relAdeq} onChange={e=>setRelAdeq(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+          </div>
+          <SuggPanel suggs={relObsAdeqSuggs} transKey={trans} onInsert={appendAdeq}/>
+        </div>
+      </div>
+
+      {/* NOTA */}
+      <div className="pei-card">
+        <div className="pei-card-title">🎓 Conceito / Nota</div>
+        <input className="pei-input" type="text" value={relNota} onChange={e=>setRelNota(e.target.value)} placeholder="ex.: 7,5 (sete e meio) — conceito B"/>
+      </div>
+
+      {/* TRECHOS MODELO */}
+      <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Trechos-Modelo para Relatórios</h3>
+      {[{t:"Evolução Positiva",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros.",c:"#166534"},{t:"Dificuldades Persistentes",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI.",c:"#B45309"},{t:"Adequações nos Critérios de Avaliação",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual.",c:"#1565C0"},{t:"Registro de Competências Profissionais",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever].",c:"#5B21B6"}].map((m,i)=>(
+        <div key={i} style={{marginBottom:12,padding:"13px 16px",borderRadius:11,background:`${m.c}08`,borderLeft:`3px solid ${m.c}`}}>
+          <h5 style={{margin:"0 0 5px",fontSize:13.5,color:m.c,fontWeight:700}}>{m.t}</h5>
+          <p style={{margin:0,fontSize:12.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
+        </div>
+      ))}
+
+      <div className="act-row">
+        <span style={{fontSize:11,color:"#5a6b52"}}>Dados de identificação propagados da aba "Elaborando o PEI".</span>
+        <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          {saved&&<span style={{fontSize:12,color:G,fontWeight:600}}>✓ Download iniciado!</span>}
+          <button className="dl-btn" onClick={downloadRel}>⬇ Baixar Relatório — Anexo III (.doc)</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Download helper ──
+function dlDoc(fname,html){
+  try{
+    const blob=new Blob(["\ufeff"+html],{type:"application/msword;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download=fname+".doc";
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(e){
+    const w=window.open("","_blank");
+    if(w){w.document.write(html);w.document.close();}
+  }
+}
+
+// ── Dados estáticos ──
 const FLOW=[
   {n:1,t:"Identificação",w:"O estudante é identificado no ato da matrícula, de forma espontânea (pelo próprio estudante, pais ou responsáveis) ou por observação institucional (docentes, TAEs ou rede de serviços).",d:"Registro no cadastro estudantil",r:"Art. 4º"},
-  {n:2,t:"Acolhimento",w:"A CAES realiza entrevista de acolhimento com o estudante e a família para levantar histórico educacional, condições de saúde, laudos, diagnósticos e necessidades de tecnologia assistiva.",d:"Relatório de Acolhimento (Anexo I)",r:"Arts. 6º e 8º"},
-  {n:3,t:"Abertura de Processo",w:"A CAES abre processo formal, anexa o Relatório de Acolhimento e tramita às Coordenações de Curso e à Diretoria/Departamento de Ensino do campus.",d:"Processo com Relatório de Acolhimento",r:"Art. 9º, II"},
+  {n:2,t:"Acolhimento",w:"A Coordenação de Assistência Estudantil e Inclusão realiza entrevista de acolhimento com o estudante e a família para levantar histórico educacional, condições de saúde, laudos, diagnósticos e necessidades de tecnologia assistiva.",d:"Relatório de Acolhimento (Anexo I)",r:"Arts. 6º e 8º"},
+  {n:3,t:"Abertura de Processo",w:"A Coordenação de Assistência Estudantil e Inclusão abre processo formal, anexa o Relatório de Acolhimento e tramita às Coordenações de Curso e à Diretoria/Departamento de Ensino do campus.",d:"Processo com Relatório de Acolhimento",r:"Art. 9º, II"},
   {n:4,t:"Reunião Deliberativa",w:"A Diretoria de Ensino convoca reunião com todos os envolvidos. O Relatório de Acolhimento é apresentado e delibera-se pela necessidade ou não de elaboração do PEI.",d:"Ata de reunião com deliberação",r:"Art. 9º, III"},
   {n:5,t:"Elaboração do PEI",w:"Cada docente elabora o PEI para seu componente curricular, contendo: dados pessoais, histórico, necessidades, adaptações, objetivos, conteúdos, metodologia, avaliação e resultados esperados.",d:"PEI (Anexo II) para cada componente",r:"Art. 9º, IV e V"},
   {n:6,t:"Execução e Acompanhamento",w:"O PEI é executado pelo docente e avaliado continuamente. O desempenho é acompanhado nos conselhos de classe. O plano pode ser reavaliado e reformulado conforme necessidade.",d:"Relatório Bimestral de Avaliação (Anexo III)",r:"Art. 9º, VI"},
   {n:7,t:"Arquivamento",w:"Todas as adaptações razoáveis documentadas ao longo do curso são arquivadas na pasta do estudante na Secretaria Escolar.",d:"Pasta do estudante com PEIs e Relatórios",r:"Art. 12"},
 ];
-
 const NECS=[
   {cat:"Deficiências",color:"#1B6B45",items:[
     {n:"Deficiência Física",d:"Alteração completa ou parcial de um ou mais segmentos do corpo humano que compromete a função física.",s:["Dificuldade de locomoção","Necessidade de cadeira de rodas, muletas ou órteses","Limitação para escrita manual","Fadiga motora"],imp:["Acesso físico a laboratórios pode ser limitado","Tempo adicional para atividades manuais"],sup:["Acessibilidade arquitetônica","Tecnologia assistiva","Flexibilização de tempo"],p:"O foco pedagógico deve recair sobre a eliminação de barreiras de acesso, não sobre a limitação física em si."},
     {n:"Deficiência Auditiva",d:"Perda bilateral, parcial ou total, de 41 dB ou mais nas frequências de 500Hz a 3.000Hz.",s:["Dificuldade em acompanhar aulas sem apoio visual","Possível uso de aparelho auditivo","Fluência em Libras como língua preferencial"],imp:["Barreiras em aulas expositivas orais","Dificuldade com materiais em áudio sem legenda"],sup:["Intérprete de Libras","Material visual de apoio","Avaliação em Libras"],p:"A surdez é uma diferença linguística. Estudantes surdos sinalizantes têm a Libras como L1 e o português como L2."},
     {n:"Deficiência Visual",d:"Compreende cegueira, baixa visão, campo visual ≤ 60° e visão monocular.",s:["Aproximação excessiva de materiais","Dificuldade com projeções","Uso de bengala ou leitor de tela"],imp:["Materiais impressos padrão são inacessíveis","Atividades visuais requerem adaptação tátil"],sup:["Material em Braille ou digital acessível","Leitor de tela e audiodescrição","Maquetes táteis"],p:"A adaptação para deficiência visual exige antecedência no planejamento."},
     {n:"Deficiência Intelectual",d:"Funcionamento intelectual significativamente inferior à média, com manifestação antes dos 18 anos.",s:["Ritmo de aprendizagem mais lento","Dificuldade com abstrações","Necessidade de repetição e concretude"],imp:["Conteúdos abstratos são desafiadores","Avaliações tradicionais podem não captar o aprendizado real"],sup:["Flexibilização curricular","Materiais concretos e manipuláveis","Fragmentação de tarefas"],p:"O foco deve ser na funcionalidade: o que o estudante precisa aprender para sua vida e autonomia."},
-    {n:"Deficiência Múltipla",d:"Associação de duas ou mais deficiências que gera necessidades específicas que vão além da soma das deficiências individuais.",s:["Combinação de sinais de duas ou mais deficiências","Necessidades complexas e interconectadas"],imp:["Barreiras multiplicadas e interconectadas"],sup:["Plano altamente individualizado","CAA quando necessário","Reavaliações periódicas"],p:"Não existem fórmulas prontas. Cada PEI será único e construído caso a caso."},
+    {n:"Deficiência Múltipla",d:"Associação de duas ou mais deficiências que gera necessidades específicas além da soma das deficiências individuais.",s:["Combinação de sinais de duas ou mais deficiências","Necessidades complexas e interconectadas"],imp:["Barreiras multiplicadas e interconectadas"],sup:["Plano altamente individualizado","CAA quando necessário","Reavaliações periódicas"],p:"Não existem fórmulas prontas. Cada PEI será único e construído caso a caso."},
   ]},
   {cat:"Transtorno do Espectro Autista (TEA)",color:"#0D3B6E",items:[
     {n:"Transtorno do Espectro Autista",d:"Condição do neurodesenvolvimento caracterizada por dificuldades na comunicação e interação social e por padrões restritos e repetitivos de comportamento.",s:["Dificuldade com comunicação verbal e/ou não verbal","Interesses restritos e intensos","Sensibilidade sensorial","Rigidez com rotinas"],imp:["Trabalhos em grupo podem ser desafiadores","Ambientes ruidosos podem gerar sobrecarga sensorial"],sup:["Rotina previsível","Instruções claras e literais","Aproveitamento pedagógico dos interesses restritos"],p:"O TEA é um espectro: cada pessoa autista é única. O PEI deve ser construído a partir da escuta do próprio estudante."},
@@ -175,7 +752,7 @@ const NECS=[
     {n:"TDAH",d:"Transtorno do neurodesenvolvimento caracterizado por padrão persistente de desatenção e/ou hiperatividade-impulsividade.",s:["Dificuldade de manter atenção em tarefas longas","Esquecimento frequente de materiais e prazos","Inquietação motora"],imp:["Provas longas são especialmente desafiadoras","Organização de trabalhos e prazos é sistematicamente difícil"],sup:["Fragmentar tarefas em etapas menores","Lembretes visuais e checklists","Tempo adicional"],p:"Estudantes com TDAH não escolhem não prestar atenção. Estratégias de organização externa compensam a dificuldade de organização interna."},
     {n:"Disgrafia",d:"Transtorno que afeta a qualidade da escrita manual, incluindo legibilidade, organização espacial e velocidade.",s:["Letra ilegível","Lentidão excessiva na escrita","Cansaço e dor ao escrever"],imp:["Provas escritas longas são extenuantes"],sup:["Permitir uso de computador/tablet","Tempo adicional","Não avaliar caligrafia quando o objetivo é o conteúdo"],p:"A disgrafia é sobre o gesto motor da escrita, não sobre o pensamento."},
     {n:"Discalculia",d:"Transtorno específico que afeta a aquisição de habilidades matemáticas.",s:["Dificuldade persistente com operações básicas","Confusão com sinais e sequências numéricas","Ansiedade diante de atividades matemáticas"],imp:["Disciplinas com carga quantitativa são desproporcionalmente difíceis"],sup:["Uso de calculadora em avaliações","Material concreto e visual","Fórmulas e tabelas de referência disponíveis"],p:"Materiais concretos, representações visuais e contextualização prática são estratégias fundamentais."},
-    {n:"Dislalia",d:"Dificuldade na articulação de fonemas, resultando em trocas, omissões ou distorções de sons na fala.",s:["Trocas de sons na fala","Dificuldade de inteligibilidade por ouvintes"],imp:["Apresentações orais podem gerar ansiedade extrema"],sup:["Não corrigir a fala publicamente","Oferecer alternativas para avaliações orais","Acompanhamento fonoaudiológico via CAES"],p:"A dislalia é uma condição de fala, não de pensamento."},
+    {n:"Dislalia",d:"Dificuldade na articulação de fonemas, resultando em trocas, omissões ou distorções de sons na fala.",s:["Trocas de sons na fala","Dificuldade de inteligibilidade por ouvintes"],imp:["Apresentações orais podem gerar ansiedade extrema"],sup:["Não corrigir a fala publicamente","Oferecer alternativas para avaliações orais","Acompanhamento fonoaudiológico via Coordenação de Assistência Estudantil e Inclusão"],p:"A dislalia é uma condição de fala, não de pensamento."},
     {n:"Disortografia",d:"Dificuldade específica na escrita ortográfica, envolvendo trocas, omissões e acréscimos de letras.",s:["Erros ortográficos persistentes e atípicos","Trocas fonológicas na escrita"],imp:["Produção textual pode ser avaliada injustamente se critério for ortografia"],sup:["Corretor ortográfico digital","Avaliação centrada no conteúdo, não na ortografia"],p:"Em componentes que não são de língua portuguesa, a ortografia não deve ser critério determinante."},
   ]},
   {cat:"Altas Habilidades / Superdotação",color:"#B45309",items:[
@@ -183,10 +760,9 @@ const NECS=[
   ]},
   {cat:"Outras Condições Limitantes",color:"#B91C1C",items:[
     {n:"Condições Crônicas de Saúde",d:"Condições de saúde que exigem tratamentos prolongados e resultam em afastamentos frequentes.",s:["Faltas frequentes por tratamento","Fadiga ou efeitos colaterais de medicação"],imp:["Descontinuidade no acompanhamento das aulas"],sup:["Flexibilização de prazos e formas de avaliação","Material digitalizado para acompanhamento remoto"],p:"O PEI deve ser flexível para se adaptar aos ciclos de tratamento."},
-    {n:"Transtornos de Saúde Mental",d:"Inclui depressão, transtorno de ansiedade, síndrome do pânico, transtorno bipolar e outros transtornos psicológicos.",s:["Mudança abrupta de comportamento ou rendimento","Isolamento social progressivo","Crises de ansiedade em ambiente escolar"],imp:["A capacidade de aprender fica diretamente afetada"],sup:["Acompanhamento psicológico via CAES","Flexibilização de prazos durante crises","Ambiente acolhedor e previsível"],p:"O PEI deve ser revisado com mais frequência, acompanhando a evolução do quadro clínico."},
+    {n:"Transtornos de Saúde Mental",d:"Inclui depressão, transtorno de ansiedade, síndrome do pânico, transtorno bipolar e outros transtornos psicológicos.",s:["Mudança abrupta de comportamento ou rendimento","Isolamento social progressivo","Crises de ansiedade em ambiente escolar"],imp:["A capacidade de aprender fica diretamente afetada"],sup:["Acompanhamento psicológico via Coordenação de Assistência Estudantil e Inclusão","Flexibilização de prazos durante crises","Ambiente acolhedor e previsível"],p:"O PEI deve ser revisado com mais frequência, acompanhando a evolução do quadro clínico."},
   ]},
 ];
-
 const NORMAS=[
   {ref:"Portaria MEC nº 421/2026",desc:"PNEEI e Reneei — regulamenta o Decreto 12.686/2025",url:"https://www.in.gov.br/web/dou/-/portaria-mec-n-421-de-15-de-maio-de-2026-706292988"},
   {ref:"Decreto nº 12.686/2025",desc:"Política Nacional de Educação Especial Inclusiva — PEI obrigatório (Art. 12)",url:"https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12686.htm"},
@@ -197,7 +773,6 @@ const NORMAS=[
   {ref:"Lei nº 12.764/2012",desc:"Política Nacional de Proteção dos Direitos da Pessoa com TEA",url:"https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm"},
   {ref:"NT 04/2014 MEC",desc:"Dispensa de laudo para início de encaminhamentos",url:"http://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=15898-nott04-secadi-dpee-23012014&Itemid=30192"},
 ];
-
 const CADERNOS=[
   {t:"Educação Inclusiva e Tecnologia Assistiva",v:"Vol. 5",u:"https://www.gov.br/mec/pt-br/pneei/CADERMECEDUInclusivaVol5.pdf"},
   {t:"Práticas Inclusivas e Estudantes Autistas",v:"Vol. 6",u:"https://www.gov.br/mec/pt-br/pneei/CADERMECVol.6.pdf"},
@@ -205,11 +780,11 @@ const CADERNOS=[
   {t:"Práticas Inclusivas em Alfabetização e Letramento",v:"Vol. 10",u:"https://www.gov.br/mec/pt-br/pneei/2026155CADERMECVol.10.pdf"},
 ];
 
-/* ── Páginas ── */
+// ── Páginas estáticas ──
 const PgVisao=()=>{
   const [ac,sAc]=useState(null);
   const cards=[
-    {id:"pei",t:"O que é o PEI?",c:"Instrumento de planejamento pedagógico que formaliza adaptações curriculares para estudantes com necessidades educacionais específicas. Direito garantido por lei e regulamentado pela IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT)e pelo Decreto Federal 12.686/2025."},
+    {id:"pei",t:"O que é o PEI?",c:"Instrumento de planejamento pedagógico que formaliza adaptações curriculares para estudantes com necessidades educacionais específicas. Direito garantido por lei e regulamentado pela IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT) e pelo Decreto Federal 12.686/2025."},
     {id:"quem",t:"Quem tem direito?",c:"Estudantes com deficiência física, auditiva, visual, intelectual ou múltipla; TEA; transtornos funcionais (dislexia, disgrafia, discalculia, dislalia, disortografia, TDAH); altas habilidades; e condições limitantes transitórias ou permanentes."},
     {id:"base",t:"Base Legal",c:"Portaria MEC 421/2026 · Decretos 12.686 e 12.773/2025 · Lei 14.254/2021 · IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT) · Res. CONSUP 88/2022 · Lei 13.146/2015 (LBI) · Lei 12.764/2012 · NT 04/2014 MEC · Lei 13.234/2015"},
     {id:"p",t:"Princípio Fundamental",c:"O PEI adapta os meios de acesso ao currículo, não necessariamente o nível de exigência. A adaptação de objetivos e conteúdos só ocorre quando estritamente necessário, após análise da equipe envolvida."},
@@ -239,7 +814,7 @@ const PgVisao=()=>{
 
 const PgLegislacao=()=>(
   <div>
-    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Marco Legal Atualizado (2021–2026)</h2>
+    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Marco Legal</h2>
     <Alert type="warning">O Decreto 12.686/2025 tornou o PEI <strong>legalmente obrigatório</strong> em toda a rede de ensino nacional (Art. 12).</Alert>
     <div style={{marginBottom:20}}>
       <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
@@ -401,76 +976,6 @@ const PgEstrategias=()=>(
   </div>
 );
 
-const PgElaboracao=()=>(
-  <div>
-    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Elaborando o PEI na Prática</h2>
-    <Alert type="success"><strong>Lembre-se:</strong> O PEI é elaborado pelo docente, com suporte da Coordenação de Curso, equipe pedagógica, CAES e equipe multiprofissional (Art. 9º, V).</Alert>
-    <div style={{marginBottom:16,padding:15,borderRadius:12,background:"linear-gradient(135deg,#E8F5E9,#F1F8E9)",border:"2px solid #66BB6A",display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
-      <div style={{fontSize:24}}>📋</div>
-      <div style={{flex:1,minWidth:180}}>
-        <h4 style={{margin:"0 0 2px",fontSize:14,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
-        <p style={{margin:0,fontSize:12,color:"#555"}}>Campus Lucas do Rio Verde · Ano Letivo 2026 · Consulte o e-mail enviado pela Diretoria de Ensino.</p>
-      </div>
-
-    </div>
-    <div style={{marginBottom:22,padding:16,borderRadius:12,background:"linear-gradient(135deg,#E3F2FD,#E8F5E9)",border:"2px solid #42A5F5"}}>
-      <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:12}}>
-        <span style={{fontSize:18}}>🖥️</span>
-        <h3 style={{margin:0,fontSize:15,fontWeight:700,color:"#0D47A1"}}>Como criar o PEI no SUAP</h3>
-      </div>
-      <div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:4,marginBottom:14}}>
-        {["Documentos / Processos","Documentos","Documentos de Texto","Adicionar Documento de Texto"].map((p,i,a)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:4}}>
-            <div style={{padding:"3px 10px",borderRadius:14,background:"#0D47A1",color:"white",fontSize:11.5,fontWeight:700,whiteSpace:"nowrap"}}>{p}</div>
-            {i<a.length-1&&<span style={{color:"#0D47A1",fontWeight:700,fontSize:14}}>›</span>}
-          </div>
-        ))}
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:8}}>
-        {[{c:"Tipo de Documento",v:"Planos"},{c:"Modelo",v:"Plano Educacional Individualizado"},{c:"Assunto",v:"PEI — [Nome do estudante / Disciplina]"},{c:"Nível de Acesso",v:"Restrito"},{c:"Hipótese Legal",v:"Informação Pessoal"}].map((x,i)=>(
-          <div key={i} style={{padding:"8px 12px",borderRadius:8,background:"white",border:"1px solid #90CAF9"}}>
-            <span style={{fontSize:10.5,fontWeight:700,color:"#1565C0",textTransform:"uppercase",letterSpacing:0.5,display:"block"}}>{x.c}</span>
-            <span style={{fontSize:13,color:"#0D1B2A",fontWeight:x.c==="Nível de Acesso"||x.c==="Hipótese Legal"?700:400}}>{x.v}</span>
-          </div>
-        ))}
-      </div>
-      <p style={{margin:"10px 0 0",fontSize:11.5,color:"#555"}}>⚠️ Nível <strong>Restrito</strong> + Hipótese Legal <strong>Informação Pessoal</strong> garantem o sigilo dos dados conforme a LGPD (Lei 13.709/2018).</p>
-    </div>
-    {[{c:"(01) Dados Pessoais",o:"Preencha com os dados atualizados do estudante: nome, filiação, contato, data de nascimento, curso, ano/semestre, componente curricular e nome do docente responsável.",e:null},{c:"(02) Histórico",o:"Baseie-se no Relatório de Acolhimento (Anexo I). Descreva brevemente: tipo de deficiência/necessidade, tempo de manifestação e acessibilidade já ofertada em instituições anteriores.",e:"Estudante com diagnóstico de TDAH tipo combinado desde os 8 anos. Na escola anterior, recebia tempo adicional em provas e posição preferencial em sala."},{c:"(03) Necessidades Educacionais Específicas",o:"Detalhe as condições do estudante e o que ele necessita. Seja específico e funcional.",e:"Estudante com TDAH tipo combinado. Apresenta dificuldade significativa de atenção sustentada, inquietação motora e dificuldade de organização. Necessita de: fragmentação de tarefas, lembretes visuais, posição estratégica em sala, tempo adicional em avaliações."},{c:"(04) Conhecimentos, Habilidades, Capacidades, Interesses",o:"Identifique o que o estudante JÁ SABE e JÁ CONSEGUE fazer, seus pontos fortes e interesses.",e:"Estudante demonstra excelente raciocínio lógico e interesse particular por atividades práticas de laboratório. Aprende melhor quando o conteúdo é contextualizado."},{c:"(05) Dificuldades Apresentadas",o:"Descreva as dificuldades observadas em relação ao componente curricular específico. Seja descritivo e evite julgamentos de valor.",e:"Dificuldade em acompanhar aulas expositivas longas. Tendência a não concluir atividades escritas extensas. Esquecimento frequente de materiais e prazos."},{c:"(06-07) Adaptações Razoáveis e Objetivos Específicos",o:"Defina as adaptações que serão implementadas e os objetivos para o estudante, derivados dos objetivos do componente curricular.",e:"ADAPTAÇÕES: Aulas com roteiro prévio; atividades divididas em etapas de até 15 minutos; avaliações em sala separada com 50% de tempo adicional."},{c:"(08-09) Conteúdos e Metodologia",o:"Liste os conteúdos programáticos priorizados e descreva as metodologias e recursos didáticos que serão utilizados.",e:"CONTEÚDOS: Hidrocarbonetos, Funções oxigenadas, Isomeria plana. METODOLOGIA: Slides estruturados com roteiro impresso; modelos moleculares 3D; vídeos curtos."},{c:"(10) Avaliação",o:"Descreva os instrumentos avaliativos, como serão aplicados e quais critérios serão utilizados.",e:"Prova escrita em sala separada com 50% de tempo adicional (Peso 3). Mapa conceitual (Peso 2). Relatório de atividade experimental em dupla (Peso 2)."},{c:"(11) Resultados Esperados",o:"Descreva o que se espera que o estudante alcance ao final do período letivo com as adaptações propostas.",e:"Espera-se que o estudante seja capaz de identificar e nomear os principais grupos funcionais da Química Orgânica e participar ativamente das atividades práticas."},{c:"(12-14) Bibliografias e Assinaturas",o:"Inclua a bibliografia básica e complementar do componente curricular. O PEI deve ser assinado pelo docente, pela coordenação de curso e pelo diretor/chefe do departamento de ensino.",e:null}].map((x,i)=>(
-      <Acc key={i} title={x.c} color={G} open0={i===0}>
-        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>{x.o}</p>
-        {x.e&&<div style={{padding:"11px 14px",borderRadius:9,background:"#F0FDF4",borderLeft:"3px solid #1B6B45",fontSize:13,lineHeight:1.7,color:"#333"}}>
-          <strong style={{color:G,fontSize:11,display:"block",marginBottom:3}}>📝 EXEMPLO</strong>{x.e}
-        </div>}
-      </Acc>
-    ))}
-  </div>
-);
-
-const PgRegistros=()=>(
-  <div>
-    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Registros, Relatórios e Documentação</h2>
-    <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>A documentação comprova as ações de acessibilidade realizadas e permite o acompanhamento longitudinal do estudante.</p>
-    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Relatório Bimestral de Avaliação (Anexo III)</h3>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:9,marginBottom:16}}>
-      {[{t:"Dificuldades Apresentadas",d:"Descreva as dificuldades observadas no período, com fatos concretos"},{t:"Evolução",d:"Relate a evolução em relação aos objetivos e conteúdos propostos no PEI"},{t:"Desempenho Geral",d:"Instrumentos avaliativos, objetivos funcionais, relações interpessoais, autonomia"},{t:"Adequações Avaliativas",d:"Observações sobre os critérios e instrumentos de avaliação utilizados"},{t:"Competências Desenvolvidas",d:"Habilidades profissionais e acadêmicas desenvolvidas pelo estudante"},{t:"Resultado Final",d:"Conceito ou nota no componente curricular do período"}].map((x,i)=>(
-        <div key={i} style={{padding:11,borderRadius:9,background:"white",border:`1.5px solid ${G}25`}}>
-          <h5 style={{margin:"0 0 3px",fontSize:12.5,color:"#0D2B1A",fontWeight:700}}>{x.t}</h5>
-          <p style={{margin:0,fontSize:12,color:"#666",lineHeight:1.5}}>{x.d}</p>
-        </div>
-      ))}
-    </div>
-    <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Trechos-Modelo para Relatórios</h3>
-    {[{t:"Evolução Positiva",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros.",c:"#166534"},{t:"Dificuldades Persistentes",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI.",c:"#B45309"},{t:"Adequações nos Critérios de Avaliação",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual.",c:"#1565C0"},{t:"Registro de Competências Profissionais",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever].",c:"#5B21B6"}].map((m,i)=>(
-      <div key={i} style={{marginBottom:12,padding:"13px 16px",borderRadius:11,background:`${m.c}08`,borderLeft:`3px solid ${m.c}`}}>
-        <h5 style={{margin:"0 0 5px",fontSize:13.5,color:m.c,fontWeight:700}}>{m.t}</h5>
-        <p style={{margin:0,fontSize:12.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
-      </div>
-    ))}
-    <Alert type="warning"><strong>Atenção:</strong> Relatórios devem ser descritivos e baseados em observações concretas. Descreva comportamentos observáveis, não julgamentos de caráter.</Alert>
-  </div>
-);
-
 const PgAlertas=()=>(
   <div>
     <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Alertas, Erros Comuns e Cuidados Éticos</h2>
@@ -531,7 +1036,7 @@ const PgRecursos=()=>(
             <strong style={{fontSize:13,color:"#0D2B1A",display:"block",marginBottom:2}}>{l.ref}</strong>
             <p style={{margin:0,fontSize:12,lineHeight:1.6,color:"#666"}}>{l.desc}</p>
           </div>
-          {l.url&&l.url!=="&num;"&&l.url!=="#"&&<a href={l.url} target="_blank" style={{flexShrink:0,padding:"5px 10px",borderRadius:7,background:G,color:"white",fontSize:11.5,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Acessar →</a>}
+          {l.url&&l.url!=="#"&&<a href={l.url} target="_blank" style={{flexShrink:0,padding:"5px 10px",borderRadius:7,background:G,color:"white",fontSize:11.5,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Acessar →</a>}
         </div>
       ))}
     </div>
@@ -542,7 +1047,7 @@ const PgSintese=()=>(
   <div>
     <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Síntese Prática</h2>
     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))",gap:13,marginBottom:20}}>
-      {[{t:"👀 O que Observar",c:"#0D3B6E",bg:"#EFF6FF",b:"#BFDBFE",i:["Mudanças no comportamento ou rendimento","Dificuldade persistente que destoa do padrão","Sinais de sobrecarga sensorial ou emocional","Discrepância entre capacidade oral e escrita","Desempenho flutuante sem causa aparente"]},{t:"📋 Como Planejar",c:G,bg:"#F0FDF4",b:"#BBF7D0",i:["Consulte o Relatório de Acolhimento antes de elaborar","Defina objetivos específicos a partir do currículo","Diversifique métodos e recursos didáticos","Preveja múltiplas formas de avaliação","Converse com a CAES e a equipe pedagógica"]},{t:"📝 Como Registrar",c:"#5B21B6",bg:"#F5F3FF",b:"#DDD6FE",i:["Preencha o PEI (Anexo II) para seu componente","Elabore o Relatório Bimestral (Anexo III)","Descreva fatos observáveis, não julgamentos","Registre adaptações implementadas e resultados","Entregue documentação para arquivamento"]},{t:"🤝 Quem Acompanha",c:"#B45309",bg:"#FFFBEB",b:"#FDE68A",i:["Docente: elabora e executa o PEI","Coordenação de Curso: orienta e acompanha","Diretoria de Ensino: supervisiona","CAES: acolhe, encaminha e dá suporte","Estudante: protagonista do processo"]}].map((q,i)=>(
+      {[{t:"👀 O que Observar",c:"#0D3B6E",bg:"#EFF6FF",b:"#BFDBFE",i:["Mudanças no comportamento ou rendimento","Dificuldade persistente que destoa do padrão","Sinais de sobrecarga sensorial ou emocional","Discrepância entre capacidade oral e escrita","Desempenho flutuante sem causa aparente"]},{t:"📋 Como Planejar",c:G,bg:"#F0FDF4",b:"#BBF7D0",i:["Consulte o Relatório de Acolhimento antes de elaborar","Defina objetivos específicos a partir do currículo","Diversifique métodos e recursos didáticos","Preveja múltiplas formas de avaliação","Converse com a Coordenação de Assistência Estudantil e Inclusão e a equipe pedagógica"]},{t:"📝 Como Registrar",c:"#5B21B6",bg:"#F5F3FF",b:"#DDD6FE",i:["Preencha o PEI (Anexo II) para seu componente","Elabore o Relatório Bimestral (Anexo III)","Descreva fatos observáveis, não julgamentos","Registre adaptações implementadas e resultados","Entregue documentação para arquivamento"]},{t:"🤝 Quem Acompanha",c:"#B45309",bg:"#FFFBEB",b:"#FDE68A",i:["Docente: elabora e executa o PEI","Coordenação de Curso: orienta e acompanha","Diretoria de Ensino: supervisiona","Coordenação de Assistência Estudantil e Inclusão: acolhe, encaminha e dá suporte","Estudante: protagonista do processo"]}].map((q,i)=>(
         <div key={i} style={{padding:16,borderRadius:12,background:q.bg,border:`1.5px solid ${q.b}`}}>
           <h4 style={{margin:"0 0 10px",fontSize:14,color:q.c,fontWeight:700}}>{q.t}</h4>
           {q.i.map((x,ii)=><div key={ii} style={{display:"flex",gap:6,marginBottom:5,fontSize:13,lineHeight:1.5,color:"#333"}}><span style={{color:q.c,fontWeight:700}}>›</span>{x}</div>)}
@@ -556,14 +1061,30 @@ const PgSintese=()=>(
   </div>
 );
 
-const PAGES={visao:<PgVisao/>,legislacao:<PgLegislacao/>,fluxo:<PgFluxo/>,necessidades:<PgNecessidades/>,estrategias:<PgEstrategias/>,elaboracao:<PgElaboracao/>,registros:<PgRegistros/>,alertas:<PgAlertas/>,recursos:<PgRecursos/>,sintese:<PgSintese/>};
+// ── Mapa de páginas ──
+const PAGES={
+  visao:<PgVisao/>,
+  legislacao:<PgLegislacao/>,
+  fluxo:<PgFluxo/>,
+  necessidades:<PgNecessidades/>,
+  estrategias:<PgEstrategias/>,
+  alertas:<PgAlertas/>,
+  recursos:<PgRecursos/>,
+  sintese:<PgSintese/>,
+};
 
-/* ── App ── */
+// ── App Principal ──
 function App(){
   const [tab,sTab]=useState("visao");
   const [drawer,sDrawer]=useState(false);
   const ref=useRef(null);
   useEffect(()=>{if(ref.current)ref.current.scrollTop=0;},[tab]);
+
+  const renderPage=()=>{
+    if(tab==="elaboracao")return <PgElaboracao/>;
+    if(tab==="registros")return <PgRegistros/>;
+    return PAGES[tab]||<PgVisao/>;
+  };
 
   return(
     <div style={{fontFamily:"system-ui,-apple-system,sans-serif",background:"#F4F6F4",minHeight:"100vh",display:"flex",flexDirection:"column"}}>
@@ -630,7 +1151,7 @@ function App(){
 
       {/* Conteúdo */}
       <main ref={ref} style={{flex:1,padding:"22px 24px 48px",maxWidth:980,width:"100%",margin:"0 auto"}}>
-        <div className="fade" key={tab}>{PAGES[tab]||<PgVisao/>}</div>
+        <div className="fade" key={tab}>{renderPage()}</div>
       </main>
     </div>
   );
