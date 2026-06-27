@@ -222,6 +222,7 @@ const TABS=[
   {id:"alertas",label:"Alertas e Ética"},
   {id:"recursos",label:"Recursos e Pesquisa"},
   {id:"sintese",label:"Síntese Prática"},
+  {id:"salvar",label:"Salvar e Exportar PEIs"},
 ];
 
 // ── Transtornos ──
@@ -483,12 +484,90 @@ const DocModal=({title,bodyHtml,fname,onClose})=>{
 // Usamos um objeto global simples para compartilhar estado sem Context
 const SHARED={};
 
+// ── Persistência: lista de PEIs salvos no localStorage ──
+const STORAGE_KEY="pei_ifmt_lrv_saved_v1";
+
+function loadSavedPEIs(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    return raw?JSON.parse(raw):[];
+  }catch(e){
+    return [];
+  }
+}
+
+function persistSavedPEIs(list){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(list));
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function makePEIRecordId(ident){
+  return (ident.nome||"sem-nome").trim().toLowerCase()+"__"+(ident.comp||"sem-componente").trim().toLowerCase();
+}
+
+function savePEIRecord({ident,fields,trans}){
+  const list=loadSavedPEIs();
+  const id=makePEIRecordId(ident);
+  const now=new Date().toISOString();
+  const idx=list.findIndex(r=>r.id===id);
+  const record={id,ident,fields,trans,savedAt:now};
+  if(idx>=0){list[idx]=record;}else{list.push(record);}
+  persistSavedPEIs(list);
+  return list;
+}
+
+function deletePEIRecord(id){
+  const list=loadSavedPEIs().filter(r=>r.id!==id);
+  persistSavedPEIs(list);
+  return list;
+}
+
+function exportAllPEIs(){
+  const list=loadSavedPEIs();
+  const json=JSON.stringify(list,null,2);
+  const blob=new Blob([json],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  const stamp=new Date().toISOString().slice(0,10);
+  a.download=`PEIs_IFMT_LRV_backup_${stamp}.json`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+function importAllPEIs(file,onDone){
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try{
+      const incoming=JSON.parse(e.target.result);
+      if(!Array.isArray(incoming))throw new Error("formato inválido");
+      const current=loadSavedPEIs();
+      const byId={};
+      current.forEach(r=>{byId[r.id]=r;});
+      incoming.forEach(r=>{if(r&&r.id)byId[r.id]=r;});
+      const merged=Object.values(byId);
+      persistSavedPEIs(merged);
+      onDone(true,merged.length);
+    }catch(err){
+      onDone(false,0);
+    }
+  };
+  reader.readAsText(file);
+}
+
 
 // ── Aba Elaborando o PEI ──
 const PgElaboracao=()=>{
   const [trans,setTrans]=useState(SHARED.trans||"TDAH");
   const [fields,setFields]=useState(SHARED.peiFields||{});
   const [ident,setIdent]=useState(SHARED.ident||{nome:"",resp:"",tel:"",curso:"",ano:"2026/1",vig:"",doc:"",comp:"",ch:""});
+  const [savedList,setSavedList]=useState(()=>loadSavedPEIs());
+  const [saveMsg,setSaveMsg]=useState("");
+  const fileInputRef=useRef(null);
 
   const updIdent=(k,v)=>{
     const next={...ident,[k]:v};
@@ -507,6 +586,65 @@ const PgElaboracao=()=>{
     SHARED.peiFields=next;
   };
   const selTrans=(k)=>{setTrans(k);SHARED.trans=k;};
+
+  const handleSavePEI=()=>{
+    if(!ident.nome||!ident.nome.trim()){
+      setSaveMsg("Informe o nome do estudante antes de salvar.");
+      setTimeout(()=>setSaveMsg(""),3000);
+      return;
+    }
+    const list=savePEIRecord({ident,fields,trans});
+    setSavedList(list);
+    setSaveMsg("PEI salvo neste navegador.");
+    setTimeout(()=>setSaveMsg(""),2500);
+  };
+
+  const handleOpenPEI=(record)=>{
+    setIdent(record.ident);
+    setFields(record.fields);
+    setTrans(record.trans);
+    SHARED.ident=record.ident;
+    SHARED.peiFields=record.fields;
+    SHARED.trans=record.trans;
+    setSaveMsg("PEI carregado: "+(record.ident.nome||"")+".");
+    setTimeout(()=>setSaveMsg(""),2500);
+  };
+
+  const handleDeletePEI=(id)=>{
+    if(!window.confirm("Excluir este PEI salvo? Esta ação não pode ser desfeita."))return;
+    const list=deletePEIRecord(id);
+    setSavedList(list);
+  };
+
+  const handleNewPEI=()=>{
+    if(!window.confirm("Limpar os campos para iniciar um novo PEI? Salve antes se não quiser perder os dados atuais."))return;
+    const blank={nome:"",resp:"",tel:"",curso:"",ano:"2026/1",vig:"",doc:"",comp:"",ch:""};
+    setIdent(blank);setFields({});setTrans("TDAH");
+    SHARED.ident=blank;SHARED.peiFields={};SHARED.trans="TDAH";
+  };
+
+  const handleImportClick=()=>{
+    if(fileInputRef.current)fileInputRef.current.click();
+  };
+
+  const handleImportFile=(e)=>{
+    const file=e.target.files&&e.target.files[0];
+    if(!file)return;
+    importAllPEIs(file,(ok,count)=>{
+      if(ok){
+        setSavedList(loadSavedPEIs());
+        setSaveMsg(`${count} PEI(s) importado(s) com sucesso.`);
+      }else{
+        setSaveMsg("Não foi possível importar este arquivo.");
+      }
+      setTimeout(()=>setSaveMsg(""),3000);
+    });
+    e.target.value="";
+  };
+
+  const goToHelp=()=>{
+    if(typeof SHARED.navigateTo==="function")SHARED.navigateTo("salvar");
+  };
 
   const [showPreview,setShowPreview]=useState(false);
 
@@ -552,6 +690,46 @@ ${secRow("14","ASSINATURAS")}
     <div>
       <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Elaborando o PEI na Prática</h2>
       <Alert type="success"><strong>Lembre-se:</strong> O PEI é elaborado pelo docente, com suporte da Coordenação de Curso, equipe pedagógica, Coordenação de Assistência Estudantil e Inclusão e equipe multiprofissional (Art. 9º, V).</Alert>
+
+      {/* MEUS PEIs SALVOS */}
+      <div className="pei-card">
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:8,marginBottom:11}}>
+          <div className="pei-card-title" style={{marginBottom:0}}>📁 Meus PEIs Salvos ({savedList.length})</div>
+          <button onClick={handleNewPEI} style={{fontSize:13,color:G,background:"none",border:`1px solid ${G}50`,borderRadius:7,padding:"6px 12px",cursor:"pointer",fontWeight:600}}>+ Novo PEI</button>
+        </div>
+
+        <div onClick={goToHelp} style={{cursor:"pointer",background:"#FFF8E1",border:"1px solid #e8d6a8",borderRadius:9,padding:"10px 13px",marginBottom:12,display:"flex",alignItems:"center",gap:9}}>
+          <span style={{fontSize:16}}>💡</span>
+          <span style={{fontSize:13,color:"#7c5a14",flex:1}}>Os PEIs salvos ficam guardados neste navegador. Toque aqui para entender como funciona e como fazer backup.</span>
+          <span style={{fontSize:13,color:"#7c5a14",fontWeight:700}}>›</span>
+        </div>
+
+        {savedList.length===0?(
+          <p style={{fontSize:14,color:"#5a6b52",fontStyle:"italic",marginBottom:10}}>Nenhum PEI salvo ainda. Preencha os dados abaixo e clique em "Salvar PEI" para adicionar à lista.</p>
+        ):(
+          <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:12}}>
+            {savedList.slice().sort((a,b)=>(b.savedAt||"").localeCompare(a.savedAt||"")).map(rec=>(
+              <div key={rec.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 13px",borderRadius:9,border:"1px solid #e0e0e0",background:"#fafafa",gap:10,flexWrap:"wrap"}}>
+                <div style={{flex:1,minWidth:160}}>
+                  <div style={{fontSize:14,fontWeight:700,color:"#1a1a1a"}}>{rec.ident.nome||"(sem nome)"} {rec.ident.comp&&<span style={{color:"#5a6b52",fontWeight:400}}>— {rec.ident.comp}</span>}</div>
+                  <div style={{fontSize:12,color:"#999"}}>Salvo em {rec.savedAt?new Date(rec.savedAt).toLocaleString("pt-BR"):"—"}</div>
+                </div>
+                <div style={{display:"flex",gap:7}}>
+                  <button onClick={()=>handleOpenPEI(rec)} style={{fontSize:13,color:"#fff",background:G,border:"none",borderRadius:7,padding:"7px 14px",cursor:"pointer",fontWeight:600}}>Abrir</button>
+                  <button onClick={()=>handleDeletePEI(rec.id)} style={{fontSize:13,color:"#991B1B",background:"#FEF2F2",border:"1px solid #fecaca",borderRadius:7,padding:"7px 11px",cursor:"pointer",fontWeight:600}}>🗑</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center",paddingTop:10,borderTop:"1px solid #e0e0e0"}}>
+          <button onClick={exportAllPEIs} style={{fontSize:13,color:G,background:"#F0FDF4",border:`1px solid ${G}40`,borderRadius:7,padding:"8px 14px",cursor:"pointer",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>⬇ Exportar todos (backup)</button>
+          <button onClick={handleImportClick} style={{fontSize:13,color:"#0D47A1",background:"#E3F2FD",border:"1px solid #90CAF9",borderRadius:7,padding:"8px 14px",cursor:"pointer",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>⬆ Importar backup</button>
+          <input ref={fileInputRef} type="file" accept="application/json" onChange={handleImportFile} style={{display:"none"}}/>
+          {saveMsg&&<span style={{fontSize:13,color:G,fontWeight:600}}>{saveMsg}</span>}
+        </div>
+      </div>
 
       <div style={{marginBottom:16,padding:14,borderRadius:12,background:"linear-gradient(135deg,#E8F5E9,#F1F8E9)",border:"2px solid #66BB6A"}}>
         <h4 style={{margin:"0 0 4px",fontSize:16,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
@@ -625,6 +803,7 @@ ${secRow("14","ASSINATURAS")}
         <span style={{fontSize:13,color:"#5a6b52"}}>Dados mantidos durante a sessão. Visualize o documento ao finalizar.</span>
           <span style={{fontSize:13,color:"#5a6b52"}}>Na visualização você pode imprimir, baixar (.doc) ou copiar para colar no SUAP.</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          <button onClick={handleSavePEI} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:"#fff",color:G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer"}}>💾 Salvar PEI</button>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar PEI</button>
         </div>
       </div>
@@ -1129,6 +1308,58 @@ const PgRecursos=()=>(
   </div>
 );
 
+const PgSalvar=()=>{
+  const [count,setCount]=useState(()=>loadSavedPEIs().length);
+  useEffect(()=>{setCount(loadSavedPEIs().length);},[]);
+  return(
+    <div>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Salvar e Exportar PEIs</h2>
+      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Entenda como funciona o salvamento de PEIs neste guia, e como evitar perder seus dados.</p>
+
+      <Alert type="info"><strong>Você tem {count} PEI(s) salvo(s)</strong> neste navegador agora. Veja abaixo onde eles ficam guardados e como protegê-los.</Alert>
+
+      <Acc title="📁 Como funciona a lista de PEIs salvos" open0 color={G}>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Na aba <strong>Elaborando o PEI</strong>, há um card chamado <strong>Meus PEIs Salvos</strong>. Ao preencher os dados de um estudante e clicar em <strong>💾 Salvar PEI</strong>, esse plano entra numa lista guardada no seu navegador.</p>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Cada PEI é identificado pela combinação de <strong>nome do estudante + componente curricular</strong>. Se você salvar novamente um PEI já existente (mesmo nome e mesmo componente), ele é <strong>atualizado</strong> — não duplicado.</p>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>Para retomar um PEI depois — seja para revisar, seja para preencher o relatório bimestral seguinte — basta clicar em <strong>Abrir</strong> na lista, e todos os campos voltam exatamente como estavam.</p>
+      </Acc>
+
+      <Acc title="⚠️ A limitação importante: onde os dados realmente ficam" color="#B45309">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Os PEIs salvos ficam gravados <strong>no navegador deste computador específico</strong> (tecnicamente, no chamado <em>localStorage</em>). Isso tem consequências importantes:</p>
+        <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:10}}>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se você limpar o histórico/dados de navegação do navegador, <strong>os PEIs salvos são perdidos</strong>.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se abrir este mesmo arquivo em <strong>outro computador, outro navegador, ou no celular</strong>, a lista aparece vazia — os dados não acompanham o arquivo, ficam no navegador onde foram salvos.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Não é compartilhável automaticamente entre diferentes professores ou dispositivos.</div>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>Por isso, recomendamos fortemente usar a exportação de backup descrita abaixo.</p>
+      </Acc>
+
+      <Acc title="⬇⬆ Como fazer backup (exportar e importar)" color="#1565C0">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Na aba <strong>Elaborando o PEI</strong>, no card "Meus PEIs Salvos", há dois botões:</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:10,marginBottom:10}}>
+          <div style={{padding:13,borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13.5,color:"#0D2B1A",fontWeight:700}}>⬇ Exportar todos (backup)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Gera um arquivo <code>.json</code> com todos os PEIs salvos até agora. Guarde esse arquivo numa pasta segura — Google Drive, pen drive, e-mail para você mesmo.</p>
+          </div>
+          <div style={{padding:13,borderRadius:9,background:"#E3F2FD",border:"1px solid #90CAF9"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13.5,color:"#0D47A1",fontWeight:700}}>⬆ Importar backup</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Escolhe um arquivo <code>.json</code> exportado anteriormente e devolve aqueles PEIs à lista — útil ao trocar de computador ou recuperar dados após limpar o navegador.</p>
+          </div>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>A importação faz a <strong>combinação</strong> dos PEIs do arquivo com os que já existem no navegador — nenhum dado é apagado nesse processo.</p>
+      </Acc>
+
+      <Acc title="✅ Recomendação prática" color="#166534">
+        <div style={{display:"flex",flexDirection:"column",gap:7}}>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span>Sempre que terminar de preencher ou atualizar um PEI, clique em <strong>💾 Salvar PEI</strong>.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span>Periodicamente — por exemplo, ao final de cada bimestre — clique em <strong>⬇ Exportar todos</strong> e guarde o arquivo numa pasta segura, fora do navegador.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span>Se for usar outro computador, leve esse arquivo de backup e use <strong>⬆ Importar backup</strong> assim que abrir o guia lá.</div>
+        </div>
+      </Acc>
+    </div>
+  );
+};
+
 const PgSintese=()=>(
   <div>
     <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Síntese Prática</h2>
@@ -1157,6 +1388,7 @@ const PAGES={
   alertas:<PgAlertas/>,
   recursos:<PgRecursos/>,
   sintese:<PgSintese/>,
+  salvar:<PgSalvar/>,
 };
 
 // ── App Principal ──
@@ -1165,6 +1397,7 @@ function App(){
   const [drawer,sDrawer]=useState(false);
   const ref=useRef(null);
   useEffect(()=>{if(ref.current)ref.current.scrollTop=0;},[tab]);
+  useEffect(()=>{SHARED.navigateTo=(id)=>sTab(id);},[]);
 
   const renderPage=()=>{
     if(tab==="elaboracao")return <PgElaboracao/>;
