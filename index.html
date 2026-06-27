@@ -27,70 +27,70 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4;color:#1a
   --bd:#e0ddd5;--muted:#5a6b52;
 }
 .pei-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:12px}
-.pei-card-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:13px}
+.pei-card-title{font-size:15px;font-weight:700;color:var(--green);margin-bottom:13px}
 .pei-grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .pei-grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
 .pei-fld{display:flex;flex-direction:column;gap:4px}
-.pei-label{font-size:11px;font-weight:700;color:var(--green)}
-.pei-input{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;transition:border .15s;color:#1a1a1a}
+.pei-label{font-size:13px;font-weight:700;color:var(--green)}
+.pei-input{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:15px;font-family:inherit;background:#fff;transition:border .15s;color:#1a1a1a}
 .pei-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
-.pei-textarea{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;resize:vertical;line-height:1.55;transition:border .15s;color:#1a1a1a}
+.pei-textarea{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:15px;font-family:inherit;background:#fff;resize:vertical;line-height:1.55;transition:border .15s;color:#1a1a1a}
 .pei-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
 
 /* Transtorno cards */
 .t-card{border:2px solid #e0e0e0;border-radius:8px;padding:11px;cursor:pointer;transition:all .15s;background:#fff;min-height:80px}
 .t-card:hover{border-color:#BBF7D0}
 .t-card.sel{border-color:var(--green);background:var(--green3)}
-.t-short{font-size:13px;font-weight:700;margin-bottom:3px;color:#1a1a1a}
-.t-name{font-size:10px;color:var(--muted);line-height:1.3;margin-bottom:5px}
+.t-short{font-size:15px;font-weight:700;margin-bottom:3px;color:#1a1a1a}
+.t-name{font-size:12px;color:var(--muted);line-height:1.35;margin-bottom:5px}
 .t-cid{display:none}
 
 /* Field blocks */
 .field-block{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #e0e0e0}
 .field-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.field-num{font-size:10px;font-weight:700;color:var(--green);background:var(--green3);padding:1px 7px;border-radius:4px;margin-right:5px}
+.field-num{font-size:11px;font-weight:700;color:var(--green);background:var(--green3);padding:1px 7px;border-radius:4px;margin-right:5px}
 .field-lbl{font-size:14px;font-weight:700;color:#1a1a1a}
-.field-sub{font-size:11px;color:var(--muted);margin-left:4px}
-.field-guide{font-size:11px;color:var(--muted);font-style:italic;line-height:1.45;margin-bottom:7px}
-.field-row{display:grid;grid-template-columns:1fr 290px;gap:14px;align-items:start}
+.field-sub{font-size:13px;color:var(--muted);margin-left:4px}
+.field-guide{font-size:14px;color:var(--muted);font-style:italic;line-height:1.5;margin-bottom:7px}
+.field-row{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
 
 /* Suggestions */
 .sugg-wrap{border:1px solid #BBF7D0;border-radius:7px;background:#f4f8ee;overflow:hidden}
-.sugg-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;cursor:pointer;font-size:12px;font-weight:700;color:var(--green);user-select:none}
+.sugg-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;cursor:pointer;font-size:13.5px;font-weight:700;color:var(--green);user-select:none}
 .sugg-hdr:hover{background:#eaf1e0}
-.sugg-note{padding:0 11px 5px;font-size:10px;color:var(--muted);font-style:italic;line-height:1.4}
+.sugg-note{padding:0 11px 5px;font-size:12.5px;color:var(--muted);font-style:italic;line-height:1.45}
 .sugg-list{padding:0 9px 9px;display:flex;flex-direction:column;gap:5px}
-.sugg-btn{background:#fff;border:1px solid #dde8d4;border-radius:5px;padding:7px 9px;font-size:11.5px;color:#1a1a1a;cursor:pointer;text-align:left;line-height:1.4;transition:all .15s;display:flex;gap:6px;align-items:flex-start;width:100%}
+.sugg-btn{background:#fff;border:1px solid #dde8d4;border-radius:5px;padding:7px 9px;font-size:13.5px;color:#1a1a1a;cursor:pointer;text-align:left;line-height:1.45;transition:all .15s;display:flex;gap:6px;align-items:flex-start;width:100%}
 .sugg-btn:hover{background:#fffbf0;border-color:var(--amber)}
-.sugg-plus{color:var(--green);font-weight:900;font-size:14px;flex-shrink:0;line-height:1.3}
+.sugg-plus{color:var(--green);font-weight:900;font-size:15px;flex-shrink:0;line-height:1.3}
 .sugg-btn:hover .sugg-plus{color:var(--amber)}
 
 /* Bimestre */
 .bim-row{display:flex;gap:8px;flex-wrap:wrap}
-.bim-btn{padding:9px 18px;border:2px solid #e0e0e0;border-radius:7px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--muted);min-height:42px}
+.bim-btn{padding:9px 18px;border:2px solid #e0e0e0;border-radius:7px;background:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--muted);min-height:42px}
 .bim-btn.sel{border-color:var(--green);background:var(--green3);color:var(--green)}
 
 /* Checkboxes */
 .ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;margin-top:7px}
-.ck-btn{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;text-align:left;min-height:42px;width:100%}
+.ck-btn{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;font-size:14px;color:var(--muted);transition:all .15s;text-align:left;min-height:42px;width:100%}
 .ck-btn:hover{border-color:#BBF7D0}
 .ck-btn.on{border-color:var(--green);background:var(--green3);color:var(--green);font-weight:600}
 .ck-box{width:18px;height:18px;border:2px solid #bbb;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .ck-btn.on .ck-box{background:var(--green);border-color:var(--green)}
 .ck-tick{color:#fff;font-size:11px;font-weight:900}
-.sect-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--green);margin:12px 0 4px}
+.sect-lbl{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--green);margin:12px 0 4px}
 
 /* Action row */
 .act-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0}
-.dl-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;min-height:46px}
+.dl-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;min-height:46px}
 .dl-btn:hover{background:var(--green2)}
 
 /* Warn */
-.pei-warn{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:9px 12px;font-size:12px;color:#7c5a14;display:flex;align-items:center;gap:7px;margin-bottom:12px}
-.t-badge{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:7px 11px;font-size:12px;color:#7c5a14;margin-bottom:12px}
+.pei-warn{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:9px 12px;font-size:14px;color:#7c5a14;display:flex;align-items:center;gap:7px;margin-bottom:12px}
+.t-badge{background:#fff8e7;border:1px solid #e8d6a8;border-radius:7px;padding:7px 11px;font-size:14px;color:#7c5a14;margin-bottom:12px}
 
 /* Alert boxes */
-.alert{padding:13px 16px;border-radius:9px;margin-bottom:14px;font-size:14.5px;line-height:1.7}
+.alert{padding:13px 16px;border-radius:9px;margin-bottom:14px;font-size:16px;line-height:1.7}
 .alert-warning{background:#FFF8E1;border-left:4px solid #F59E0B;color:#92400E}
 .alert-info{background:#EBF5FB;border-left:4px solid #2196F3;color:#1565C0}
 .alert-danger{background:#FEF2F2;border-left:4px solid #EF4444;color:#991B1B}
@@ -556,8 +556,8 @@ ${secRow("14","ASSINATURAS")}
       <Alert type="success"><strong>Lembre-se:</strong> O PEI é elaborado pelo docente, com suporte da Coordenação de Curso, equipe pedagógica, Coordenação de Assistência Estudantil e Inclusão e equipe multiprofissional (Art. 9º, V).</Alert>
 
       <div style={{marginBottom:16,padding:14,borderRadius:12,background:"linear-gradient(135deg,#E8F5E9,#F1F8E9)",border:"2px solid #66BB6A"}}>
-        <h4 style={{margin:"0 0 4px",fontSize:14,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
-        <p style={{margin:0,fontSize:12,color:"#2E7D32",lineHeight:1.5}}>Campus Lucas do Rio Verde - Ano Letivo 2026 · Verifique e-mail enviado pela Diretoria de Ensino.</p>
+        <h4 style={{margin:"0 0 4px",fontSize:16,fontWeight:700,color:"#1B5E20"}}>Relação de Estudantes com Deficiência ou NEEs</h4>
+        <p style={{margin:0,fontSize:14,color:"#2E7D32",lineHeight:1.5}}>Campus Lucas do Rio Verde - Ano Letivo 2026 · Verifique e-mail enviado pela Diretoria de Ensino.</p>
       </div>
 
       {/* IDENTIFICAÇÃO */}
@@ -584,7 +584,7 @@ ${secRow("14","ASSINATURAS")}
       {/* NECESSIDADE */}
       <div className="pei-card">
         <div className="pei-card-title">⚠️ Necessidade Educacional Específica</div>
-        <p style={{fontSize:12,color:"#5a6b52",marginBottom:11}}>Selecione o transtorno para ativar o banco de sugestões pedagógicas em todos os campos.</p>
+        <p style={{fontSize:14,color:"#5a6b52",marginBottom:11}}>Selecione o transtorno para ativar o banco de sugestões pedagógicas em todos os campos.</p>
         <div className="pei-grid4">
           {Object.keys(TR).map(k=>(
             <div key={k} className={`t-card${trans===k?" sel":""}`} onClick={()=>selTrans(k)}>
@@ -624,8 +624,8 @@ ${secRow("14","ASSINATURAS")}
       </div>
 
       <div className="act-row">
-        <span style={{fontSize:11,color:"#5a6b52"}}>Dados mantidos durante a sessão. Visualize o documento ao finalizar.</span>
-          <span style={{fontSize:11,color:"#5a6b52"}}>Na visualização você pode imprimir, baixar (.doc) ou copiar para colar no SUAP.</span>
+        <span style={{fontSize:13,color:"#5a6b52"}}>Dados mantidos durante a sessão. Visualize o documento ao finalizar.</span>
+          <span style={{fontSize:13,color:"#5a6b52"}}>Na visualização você pode imprimir, baixar (.doc) ou copiar para colar no SUAP.</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar PEI</button>
         </div>
@@ -707,9 +707,9 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
       <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>A documentação comprova as ações de acessibilidade realizadas e permite o acompanhamento longitudinal do estudante.</p>
 
       {ident.nome&&(
-        <div style={{padding:"10px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:14,fontSize:13,color:G}}>
+        <div style={{padding:"10px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:14,fontSize:15,color:G}}>
           <strong>Estudante:</strong> {ident.nome} &nbsp;|&nbsp; <strong>Componente:</strong> {ident.comp||"—"} &nbsp;|&nbsp; <strong>Docente:</strong> {ident.doc||"—"}
-          <span style={{fontSize:11,color:"#5a6b52",display:"block",marginTop:3}}>Dados propagados da aba "Elaborando o PEI".</span>
+          <span style={{fontSize:13,color:"#5a6b52",display:"block",marginTop:3}}>Dados propagados da aba "Elaborando o PEI".</span>
         </div>
       )}
 
@@ -776,13 +776,13 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
       <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Trechos-Modelo para Relatórios</h3>
       {[{t:"Evolução Positiva",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros.",c:"#166534"},{t:"Dificuldades Persistentes",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI.",c:"#B45309"},{t:"Adequações nos Critérios de Avaliação",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual.",c:"#1565C0"},{t:"Registro de Competências Profissionais",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever].",c:"#5B21B6"}].map((m,i)=>(
         <div key={i} style={{marginBottom:12,padding:"13px 16px",borderRadius:11,background:`${m.c}08`,borderLeft:`3px solid ${m.c}`}}>
-          <h5 style={{margin:"0 0 5px",fontSize:13.5,color:m.c,fontWeight:700}}>{m.t}</h5>
-          <p style={{margin:0,fontSize:12.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
+          <h5 style={{margin:"0 0 5px",fontSize:15.5,color:m.c,fontWeight:700}}>{m.t}</h5>
+          <p style={{margin:0,fontSize:14.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
         </div>
       ))}
 
       <div className="act-row">
-        <span style={{fontSize:11,color:"#5a6b52"}}>Dados de identificação propagados da aba "Elaborando o PEI".</span>
+        <span style={{fontSize:13,color:"#5a6b52"}}>Dados de identificação propagados da aba "Elaborando o PEI".</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar Relatório</button>
         </div>
