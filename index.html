@@ -32,7 +32,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4;color:#1a
 .pei-label{font-size:13px;font-weight:700;color:var(--green)}
 .pei-input{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:15px;font-family:inherit;background:#fff;transition:border .15s;color:#1a1a1a}
 .pei-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
-.pei-textarea{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:15px;font-family:inherit;background:#fff;resize:vertical;line-height:1.55;transition:border .15s;color:#1a1a1a}
+.pei-textarea{width:100%;padding:9px 11px;border:1px solid #BBF7D0;border-radius:7px;font-size:15px;font-family:inherit;background:#fff;resize:vertical;line-height:1.55;transition:border .15s;min-height:96px;max-height:340px;overflow-y:auto;color:#1a1a1a}
 .pei-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(27,107,69,.1)}
 
 /* Transtorno cards */
@@ -372,6 +372,13 @@ const Acc=({title,children,open0=false,color=G})=>{
   );
 };
 
+const AutoTextarea=({value,onChange,placeholder,minRows=5})=>{
+  const r=useRef(null);
+  const fit=()=>{const el=r.current;if(!el)return;el.style.height="auto";el.style.height=el.scrollHeight+"px";};
+  useEffect(fit,[value]);
+  return <textarea ref={r} className="pei-textarea" rows={minRows} value={value} placeholder={placeholder} onChange={onChange} onInput={fit}/>;
+};
+
 const Card=({title,children,onClick,active,idx=0})=>{
   const tones=["#1B6B45","#24885A","#1A7A50","#155C3A","#20A066","#197348"];
   const bg=tones[idx%tones.length];
@@ -567,6 +574,7 @@ const PgElaboracao=()=>{
   const [ident,setIdent]=useState(SHARED.ident||{nome:"",resp:"",tel:"",curso:"",ano:"2026/1",vig:"",doc:"",comp:"",ch:""});
   const [savedList,setSavedList]=useState(()=>loadSavedPEIs());
   const [saveMsg,setSaveMsg]=useState("");
+  const [justSaved,setJustSaved]=useState(false);
   const fileInputRef=useRef(null);
 
   const updIdent=(k,v)=>{
@@ -596,6 +604,8 @@ const PgElaboracao=()=>{
     const list=savePEIRecord({ident,fields,trans});
     setSavedList(list);
     setSaveMsg("PEI salvo neste navegador.");
+    setJustSaved(true);
+    setTimeout(()=>setJustSaved(false),2200);
     setTimeout(()=>setSaveMsg(""),2500);
   };
 
@@ -791,11 +801,11 @@ ${secRow("14","ASSINATURAS")}
               <div className="field-guide">{f.g}</div>
               {suggs.length>0?(
                 <div className="field-row">
-                  <textarea className="pei-textarea" rows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+                  <AutoTextarea minRows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
                   <SuggPanel suggs={suggs} transKey={trans} onInsert={txt=>appendField(f.k,txt)}/>
                 </div>
               ):(
-                <textarea className="pei-textarea" rows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite..."/>
+                <AutoTextarea minRows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite..."/>
               )}
             </div>
           );
@@ -806,7 +816,7 @@ ${secRow("14","ASSINATURAS")}
         <span style={{fontSize:13,color:"#5a6b52"}}>Dados mantidos durante a sessão. Visualize o documento ao finalizar.</span>
           <span style={{fontSize:13,color:"#5a6b52"}}>Na visualização você pode imprimir, baixar (.doc) ou copiar para colar no SUAP.</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
-          <button onClick={handleSavePEI} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:"#fff",color:G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer"}}>💾 Salvar PEI</button>
+          <button onClick={handleSavePEI} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:justSaved?G:"#fff",color:justSaved?"#fff":G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{justSaved?"✓ PEI salvo!":"💾 Salvar PEI"}</button>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar PEI</button>
         </div>
       </div>
@@ -928,7 +938,7 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
         <div className="field-row">
           <div>
             <div className="field-guide">Dificuldades apresentadas, evolução quanto aos objetivos e conteúdos propostos, competências e habilidades profissionais desenvolvidas pelo/a estudante.</div>
-            <textarea className="pei-textarea" rows={5} value={relObs} onChange={e=>setRelObs(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+            <AutoTextarea minRows={5} value={relObs} onChange={e=>setRelObs(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
           </div>
           <SuggPanel suggs={relObsEstSuggs} transKey={trans} onInsert={appendObs}/>
         </div>
@@ -940,7 +950,7 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
         <div className="field-row">
           <div>
             <div className="field-guide">Desempenho geral do estudante quanto à(s) forma(s) de avaliação, relacionamento interpessoal, exercício da autonomia.</div>
-            <textarea className="pei-textarea" rows={5} value={relAdeq} onChange={e=>setRelAdeq(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+            <AutoTextarea minRows={5} value={relAdeq} onChange={e=>setRelAdeq(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
           </div>
           <SuggPanel suggs={relObsAdeqSuggs} transKey={trans} onInsert={appendAdeq}/>
         </div>
