@@ -1027,7 +1027,7 @@ const NECS=[
     {n:"Altas Habilidades / Superdotação",d:"Estudantes que demonstram potencial elevado em áreas isoladas ou combinadas: intelectual, acadêmica, liderança, psicomotricidade, artes.",s:["Aprendizagem rápida e profunda","Pensamento criativo e divergente","Possível tédio com atividades repetitivas"],imp:["Desengajamento por falta de desafio"],sup:["Enriquecimento curricular","Projetos de pesquisa e extensão","Mentoria"],p:"O PEI para superdotação não busca facilitar, mas enriquecer."},
   ]},
   {cat:"Outras Condições Limitantes",color:"#B91C1C",items:[
-    {n:"Condições Crônicas de Saúde",d:"Condições de saúde que exigem tratamentos prolongados e resultam em afastamentos frequentes.",s:["Faltas frequentes por tratamento","Fadiga ou efeitos colaterais de medicação"],imp:["Descontinuidade no acompanhamento das aulas"],sup:["Flexibilização de prazos e formas de avaliação","Material digitalizado para acompanhamento remoto"],p:"O PEI deve ser flexível para se adaptar aos ciclos de tratamento."},
+    {n:"Condições Crônicas de Saúde",d:"Condições de saúde que exigem tratamentos prolongados e resultam em afastamentos frequentes.",s:["Faltas frequentes por tratamento","Fadiga ou efeitos colaterais de medicação","Afastamento por saúde superior a 10 dias"],imp:["Descontinuidade no acompanhamento das aulas"],sup:["Flexibilização de prazos e formas de avaliação","Material digitalizado para acompanhamento remoto","Regime de Exercícios Domiciliares (RED) quando o afastamento por saúde for superior a 10 dias (Art. 204 do Regulamento Didático do IFMT)","Articulação entre o PEI e o programa de estudos do RED: a mesma metodologia e as mesmas formas de avaliação adaptadas alimentam o plano domiciliar"],p:"O PEI deve ser flexível para se adaptar aos ciclos de tratamento. Em afastamentos prolongados, articula-se ao RED (Regulamento Didático do IFMT) — veja o bloco detalhado ao final desta página."},
     {n:"Transtornos de Saúde Mental",d:"Inclui depressão, transtorno de ansiedade, síndrome do pânico, transtorno bipolar e outros transtornos psicológicos.",s:["Mudança abrupta de comportamento ou rendimento","Isolamento social progressivo","Crises de ansiedade em ambiente escolar"],imp:["A capacidade de aprender fica diretamente afetada"],sup:["Acompanhamento psicológico via Coordenação de Assistência Estudantil e Inclusão","Flexibilização de prazos durante crises","Ambiente acolhedor e previsível"],p:"O PEI deve ser revisado com mais frequência, acompanhando a evolução do quadro clínico."},
   ]},
 ];
@@ -1037,6 +1037,7 @@ const NORMAS=[
   {ref:"Decreto nº 12.773/2025",desc:"Reforça obrigatoriedade do PEI e amplia formação docente",url:"https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12773.htm"},
   {ref:"Lei nº 14.254/2021",desc:"Acompanhamento integral para dislexia, TDAH e outros transtornos",url:"https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14254.htm"},
   {ref:"IN Conjunta 2/2023",desc:"Norma operacional que regulamenta o PEI no IFMT",url:"https://drive.google.com/file/d/18boP3UoLiS86lylzG3lP-UKvTRQWeSwN/view"},
+  {ref:"Regulamento Didático do IFMT",desc:"RED – Regime de Exercícios Domiciliares (Art. 202–212); adaptações no plano de ensino (Art. 186, §2); necessidades específicas, definitivas ou temporárias (Art. 84–86)",url:"https://ifmt.edu.br/wp-content/uploads/2024/08/Regulamento-Didatico-do-IFMT.pdf"},
   {ref:"Lei nº 13.146/2015 (LBI)",desc:"Lei Brasileira de Inclusão da Pessoa com Deficiência",url:"https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm"},
   {ref:"Lei nº 12.764/2012",desc:"Política Nacional de Proteção dos Direitos da Pessoa com TEA",url:"https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm"},
   {ref:"NT 04/2014 MEC",desc:"Dispensa de laudo para início de encaminhamentos",url:"http://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=15898-nott04-secadi-dpee-23012014&Itemid=30192"},
@@ -1203,6 +1204,28 @@ const PgNecessidades=()=>{
           ))}
         </div>
       ))}
+      <Acc title="📋 Regime de Exercícios Domiciliares (RED) — Regulamento Didático do IFMT" color="#B91C1C">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>O RED é o mecanismo institucional do IFMT para o estudante impossibilitado de frequentar as aulas por motivo de saúde. Em condições crônicas, é o principal apoio formal — e se articula diretamente ao PEI: as adaptações já definidas no PEI alimentam o programa de estudos domiciliar.</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:10,marginBottom:12}}>
+          <div style={{padding:13,borderRadius:9,background:"#FEF2F2",border:"1px solid #FECACA"}}>
+            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#991B1B",fontWeight:700}}>Quando cabe (Art. 203–204)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Impossibilidade de frequência por motivo de saúde por período <strong>superior a 10 dias</strong>, atestada por médico. Amparo no Decreto-Lei 1.044/1969 e, para gestantes, na Lei 6.202/1975. Casos: gestante (a partir do 8º mês, por 3 meses); doenças infectocontagiosas ou outros estados que impossibilitem a frequência; acompanhamento de familiar de 1º grau com necessidade de assistência intensiva.</p>
+          </div>
+          <div style={{padding:13,borderRadius:9,background:"#FFFBEB",border:"1px solid #FDE68A"}}>
+            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#92400E",fontWeight:700}}>Prazos e procedimento (Art. 205–209)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Requerimento à coordenação em até <strong>3 dias letivos</strong> do início do afastamento — <strong>não é retroativo</strong>. Atestado/laudo com CRM, período, natureza do impedimento, <strong>CID</strong> e parecer sobre as condições para estudo domiciliar. A coordenação aciona os docentes em até 1 dia letivo; os docentes elaboram o programa de estudos em até 2 dias letivos. O estudante contata a coordenação após 72h e entrega as atividades nos prazos.</p>
+          </div>
+        </div>
+        <div style={{padding:"12px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:10}}>
+          <h5 style={{margin:"0 0 6px",fontSize:13,color:"#166534",fontWeight:700}}>O programa de estudos deve conter (Art. 208, §2) — e espelha o PEI</h5>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+            {["Conteúdos a estudar","Metodologia","Tarefas a cumprir","Critérios de exigência + prazo","Formas de avaliação"].map((x,i)=>(<span key={i} style={{display:"inline-flex",gap:4,padding:"3px 9px",borderRadius:5,background:"#fff",border:"1px solid #BBF7D0",fontSize:12.5,color:"#166534"}}><span style={{fontWeight:700}}>✓</span>{x}</span>))}
+          </div>
+          <p style={{margin:"8px 0 0",fontSize:12.5,lineHeight:1.6,color:"#555"}}>Esses campos correspondem aos do PEI (conteúdos, metodologia, adaptações e avaliação). Para um estudante com condição crônica, reaproveite as adaptações do PEI ao montar o programa de estudos do RED.</p>
+        </div>
+        <Alert type="warning"><strong>Limites e alternativas.</strong> O RED <strong>não</strong> se aplica a estágio supervisionado, práticas educativo-pedagógicas, aulas práticas, de laboratório e de campo (Art. 211) — relevante nos cursos técnicos, em que essas cargas exigem outra solução. A continuidade após o fim do período letivo exige novo requerimento (Art. 210). Quando o RED não for suficiente, há o trancamento por incapacidade por doença (Art. 117 e Art. 119, III).</Alert>
+        <p style={{margin:"6px 0 0",fontSize:11.5,color:"#888",fontStyle:"italic"}}>Base: Regulamento Didático do IFMT, Seção II — Do Regime de Exercícios Domiciliares (Art. 202–212).</p>
+      </Acc>
     </div>
   );
 };
