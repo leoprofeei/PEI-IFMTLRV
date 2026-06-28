@@ -1204,28 +1204,6 @@ const PgNecessidades=()=>{
           ))}
         </div>
       ))}
-      <Acc title="📋 Regime de Exercícios Domiciliares (RED) — Regulamento Didático do IFMT" color="#B91C1C">
-        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>O RED é o mecanismo institucional do IFMT para o estudante impossibilitado de frequentar as aulas por motivo de saúde. Em condições crônicas, é o principal apoio formal — e se articula diretamente ao PEI: as adaptações já definidas no PEI alimentam o programa de estudos domiciliar.</p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:10,marginBottom:12}}>
-          <div style={{padding:13,borderRadius:9,background:"#FEF2F2",border:"1px solid #FECACA"}}>
-            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#991B1B",fontWeight:700}}>Quando cabe (Art. 203–204)</h5>
-            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Impossibilidade de frequência por motivo de saúde por período <strong>superior a 10 dias</strong>, atestada por médico. Amparo no Decreto-Lei 1.044/1969 e, para gestantes, na Lei 6.202/1975. Casos: gestante (a partir do 8º mês, por 3 meses); doenças infectocontagiosas ou outros estados que impossibilitem a frequência; acompanhamento de familiar de 1º grau com necessidade de assistência intensiva.</p>
-          </div>
-          <div style={{padding:13,borderRadius:9,background:"#FFFBEB",border:"1px solid #FDE68A"}}>
-            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#92400E",fontWeight:700}}>Prazos e procedimento (Art. 205–209)</h5>
-            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Requerimento à coordenação em até <strong>3 dias letivos</strong> do início do afastamento — <strong>não é retroativo</strong>. Atestado/laudo com CRM, período, natureza do impedimento, <strong>CID</strong> e parecer sobre as condições para estudo domiciliar. A coordenação aciona os docentes em até 1 dia letivo; os docentes elaboram o programa de estudos em até 2 dias letivos. O estudante contata a coordenação após 72h e entrega as atividades nos prazos.</p>
-          </div>
-        </div>
-        <div style={{padding:"12px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:10}}>
-          <h5 style={{margin:"0 0 6px",fontSize:13,color:"#166534",fontWeight:700}}>O programa de estudos deve conter (Art. 208, §2) — e espelha o PEI</h5>
-          <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-            {["Conteúdos a estudar","Metodologia","Tarefas a cumprir","Critérios de exigência + prazo","Formas de avaliação"].map((x,i)=>(<span key={i} style={{display:"inline-flex",gap:4,padding:"3px 9px",borderRadius:5,background:"#fff",border:"1px solid #BBF7D0",fontSize:12.5,color:"#166534"}}><span style={{fontWeight:700}}>✓</span>{x}</span>))}
-          </div>
-          <p style={{margin:"8px 0 0",fontSize:12.5,lineHeight:1.6,color:"#555"}}>Esses campos correspondem aos do PEI (conteúdos, metodologia, adaptações e avaliação). Para um estudante com condição crônica, reaproveite as adaptações do PEI ao montar o programa de estudos do RED.</p>
-        </div>
-        <Alert type="warning"><strong>Limites e alternativas.</strong> O RED <strong>não</strong> se aplica a estágio supervisionado, práticas educativo-pedagógicas, aulas práticas, de laboratório e de campo (Art. 211) — relevante nos cursos técnicos, em que essas cargas exigem outra solução. A continuidade após o fim do período letivo exige novo requerimento (Art. 210). Quando o RED não for suficiente, há o trancamento por incapacidade por doença (Art. 117 e Art. 119, III).</Alert>
-        <p style={{margin:"6px 0 0",fontSize:11.5,color:"#888",fontStyle:"italic"}}>Base: Regulamento Didático do IFMT, Seção II — Do Regime de Exercícios Domiciliares (Art. 202–212).</p>
-      </Acc>
     </div>
   );
 };
@@ -1336,7 +1314,7 @@ const PgEstrategias=()=>(
     </Acc>
 
     <Acc title="📊 Suporte Situacional × Nível Clínico (DSM-5)" color="#1565C0">
-      <Alert type="warning"><strong>O \u201cnível de suporte\u201d (1, 2 ou 3) não é um rótulo pedagógico fixo.</strong> Ele foi criado para a saúde e indica apoio geral na vida diária. Na escola, a necessidade de apoio muda de uma aula para outra, de um ambiente para outro — às vezes dentro da mesma atividade.</Alert>
+      <Alert type="warning"><strong>O “nível de suporte” (1, 2 ou 3) não é um rótulo pedagógico fixo.</strong> Ele foi criado para a saúde e indica apoio geral na vida diária. Na escola, a necessidade de apoio muda de uma aula para outra, de um ambiente para outro — às vezes dentro da mesma atividade.</Alert>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:10}}>
         <div style={{padding:14,borderRadius:10,background:"#FEF2F2",border:"1px solid #FECACA"}}>
           <h5 style={{margin:"0 0 6px",fontSize:13.5,color:"#991B1B",fontWeight:700}}>Nível clínico de suporte (DSM-5)</h5>
@@ -1382,6 +1360,28 @@ const PgEstrategias=()=>(
         ))}
       </div>
     </Acc>
+      <Acc title="📋 Regime de Exercícios Domiciliares (RED) — Regulamento Didático do IFMT" color="#B91C1C">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>O RED é o mecanismo institucional do IFMT para o estudante impossibilitado de frequentar as aulas por motivo de saúde. Em condições crônicas, é o principal apoio formal — e se articula diretamente ao PEI: as adaptações já definidas no PEI alimentam o programa de estudos domiciliar.</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:10,marginBottom:12}}>
+          <div style={{padding:13,borderRadius:9,background:"#FEF2F2",border:"1px solid #FECACA"}}>
+            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#991B1B",fontWeight:700}}>Quando cabe (Art. 203–204)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Impossibilidade de frequência por motivo de saúde por período <strong>superior a 10 dias</strong>, atestada por médico. Amparo no Decreto-Lei 1.044/1969 e, para gestantes, na Lei 6.202/1975. Casos: gestante (a partir do 8º mês, por 3 meses); doenças infectocontagiosas ou outros estados que impossibilitem a frequência; acompanhamento de familiar de 1º grau com necessidade de assistência intensiva.</p>
+          </div>
+          <div style={{padding:13,borderRadius:9,background:"#FFFBEB",border:"1px solid #FDE68A"}}>
+            <h5 style={{margin:"0 0 5px",fontSize:13,color:"#92400E",fontWeight:700}}>Prazos e procedimento (Art. 205–209)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Requerimento à coordenação em até <strong>3 dias letivos</strong> do início do afastamento — <strong>não é retroativo</strong>. Atestado/laudo com CRM, período, natureza do impedimento, <strong>CID</strong> e parecer sobre as condições para estudo domiciliar. A coordenação aciona os docentes em até 1 dia letivo; os docentes elaboram o programa de estudos em até 2 dias letivos. O estudante contata a coordenação após 72h e entrega as atividades nos prazos.</p>
+          </div>
+        </div>
+        <div style={{padding:"12px 14px",borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0",marginBottom:10}}>
+          <h5 style={{margin:"0 0 6px",fontSize:13,color:"#166534",fontWeight:700}}>O programa de estudos deve conter (Art. 208, §2) — e espelha o PEI</h5>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+            {["Conteúdos a estudar","Metodologia","Tarefas a cumprir","Critérios de exigência + prazo","Formas de avaliação"].map((x,i)=>(<span key={i} style={{display:"inline-flex",gap:4,padding:"3px 9px",borderRadius:5,background:"#fff",border:"1px solid #BBF7D0",fontSize:12.5,color:"#166534"}}><span style={{fontWeight:700}}>✓</span>{x}</span>))}
+          </div>
+          <p style={{margin:"8px 0 0",fontSize:12.5,lineHeight:1.6,color:"#555"}}>Esses campos correspondem aos do PEI (conteúdos, metodologia, adaptações e avaliação). Para um estudante com condição crônica, reaproveite as adaptações do PEI ao montar o programa de estudos do RED.</p>
+        </div>
+        <Alert type="warning"><strong>Limites e alternativas.</strong> O RED <strong>não</strong> se aplica a estágio supervisionado, práticas educativo-pedagógicas, aulas práticas, de laboratório e de campo (Art. 211) — relevante nos cursos técnicos, em que essas cargas exigem outra solução. A continuidade após o fim do período letivo exige novo requerimento (Art. 210). Quando o RED não for suficiente, há o trancamento por incapacidade por doença (Art. 117 e Art. 119, III).</Alert>
+        <p style={{margin:"6px 0 0",fontSize:11.5,color:"#888",fontStyle:"italic"}}>Base: Regulamento Didático do IFMT, Seção II — Do Regime de Exercícios Domiciliares (Art. 202–212).</p>
+      </Acc>
   </div>
 );
 
