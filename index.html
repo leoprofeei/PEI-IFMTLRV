@@ -225,7 +225,7 @@ const TABS=[
   {id:"alertas",label:"Alertas e Ética"},
   {id:"recursos",label:"Recursos e Pesquisa"},
   {id:"sintese",label:"Síntese Prática"},
-  {id:"salvar",label:"Salvar e Exportar PEIs"},
+  {id:"salvar",label:"Salvar e exportar"},
 ];
 
 // ── Transtornos ──
@@ -577,6 +577,39 @@ function importAllPEIs(file,onDone){
   reader.readAsText(file);
 }
 
+function exportAllRels(){
+  const list=loadSavedRels();
+  const json=JSON.stringify(list,null,2);
+  const blob=new Blob([json],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  const stamp=new Date().toISOString().slice(0,10);
+  a.download=`Relatorios_IFMT_LRV_backup_${stamp}.json`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+function importAllRels(file,onDone){
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try{
+      const incoming=JSON.parse(e.target.result);
+      if(!Array.isArray(incoming))throw new Error("formato inválido");
+      const current=loadSavedRels();
+      const byId={};
+      current.forEach(r=>{byId[r.id]=r;});
+      incoming.forEach(r=>{if(r&&r.id)byId[r.id]=r;});
+      const merged=Object.values(byId);
+      persistSavedRels(merged);
+      onDone(true,merged.length);
+    }catch(err){
+      onDone(false,0);
+    }
+  };
+  reader.readAsText(file);
+}
+
 
 // ── Aba Elaborando o PEI ──
 const PgElaboracao=()=>{
@@ -876,6 +909,8 @@ const PgRegistros=()=>{
   const [relNota,setRelNota]=useState("");
   const [savedRels,setSavedRels]=useState(()=>loadSavedRels());
   const [relSaved,setRelSaved]=useState(false);
+  const [relMsg,setRelMsg]=useState("");
+  const relFileRef=useRef(null);
   const trans=SHARED.trans||"TDAH";
 
   const toggleCk=(k)=>setChecks(p=>({...p,[k]:!p[k]}));
@@ -891,6 +926,17 @@ const PgRegistros=()=>{
   };
   const handleLoadRel=(rec)=>{setBim(rec.bim||"1");setChecks(rec.checks||{});setRelObs(rec.relObs||"");setRelAdeq(rec.relAdeq||"");setRelNota(rec.relNota||"");};
   const handleDeleteRel=(id)=>{if(!window.confirm("Excluir este relatório salvo? Esta ação não pode ser desfeita."))return;setSavedRels(deleteRelRecord(id));};
+  const handleImportRelClick=()=>{if(relFileRef.current)relFileRef.current.click();};
+  const handleImportRelFile=(e)=>{
+    const file=e.target.files&&e.target.files[0];
+    if(!file)return;
+    importAllRels(file,(ok,count)=>{
+      if(ok){setSavedRels(loadSavedRels());setRelMsg(count+" relatório(s) importado(s).");}
+      else{setRelMsg("Não foi possível importar este arquivo.");}
+      setTimeout(()=>setRelMsg(""),3000);
+    });
+    e.target.value="";
+  };
 
   const [showPreview,setShowPreview]=useState(false);
 
@@ -959,6 +1005,12 @@ ${CK_ITEMS.map(sec=>`<strong>${esc(sec.sect)}:</strong><br/>`+sec.items.map(it=>
             ))}
           </div>
         )}
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center",marginTop:12,paddingTop:10,borderTop:"1px solid #e0e0e0"}}>
+          <button onClick={exportAllRels} style={{fontSize:13,color:G,background:"#F0FDF4",border:`1px solid ${G}40`,borderRadius:7,padding:"8px 14px",cursor:"pointer",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>⬇ Exportar relatórios (backup)</button>
+          <button onClick={handleImportRelClick} style={{fontSize:13,color:"#0D47A1",background:"#E3F2FD",border:"1px solid #90CAF9",borderRadius:7,padding:"8px 14px",cursor:"pointer",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>⬆ Importar backup</button>
+          <input ref={relFileRef} type="file" accept="application/json" onChange={handleImportRelFile} style={{display:"none"}}/>
+          {relMsg&&<span style={{fontSize:13,color:G,fontWeight:600}}>{relMsg}</span>}
+        </div>
       </div>
 
       {/* BIMESTRE */}
@@ -1559,14 +1611,26 @@ const PgRecursos=()=>(
 );
 
 const PgSalvar=()=>{
-  const [count,setCount]=useState(()=>loadSavedPEIs().length);
-  useEffect(()=>{setCount(loadSavedPEIs().length);},[]);
+  const [sub,setSub]=useState("peis");
+  const [pCount,setPCount]=useState(()=>loadSavedPEIs().length);
+  const [rCount,setRCount]=useState(()=>loadSavedRels().length);
+  useEffect(()=>{setPCount(loadSavedPEIs().length);setRCount(loadSavedRels().length);},[]);
+  const subBtn=(id,label)=>(
+    <button onClick={()=>setSub(id)} style={{fontSize:14,fontWeight:sub===id?700:600,color:sub===id?"#fff":"#5a6b52",background:sub===id?G:"transparent",border:"none",borderRadius:8,padding:"8px 18px",cursor:"pointer",transition:"all .15s"}}>{label}</button>
+  );
   return(
     <div>
-      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Salvar e Exportar PEIs</h2>
-      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Entenda como funciona o salvamento de PEIs neste guia, e como evitar perder seus dados.</p>
+      <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Salvar e exportar</h2>
+      <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:14}}>Entenda como funciona o salvamento neste guia e como evitar perder seus dados. Escolha abaixo entre PEIs e relatórios.</p>
 
-      <Alert type="info"><strong>Você tem {count} PEI(s) salvo(s)</strong> neste navegador agora. Veja abaixo onde eles ficam guardados e como protegê-los.</Alert>
+      <div style={{display:"inline-flex",background:"#eef2ee",borderRadius:10,padding:4,gap:4,marginBottom:16}}>
+        {subBtn("peis","📘 PEIs")}
+        {subBtn("relatorios","📊 Relatórios")}
+      </div>
+
+      {sub==="peis"?(
+      <div>
+      <Alert type="info"><strong>Você tem {pCount} PEI(s) salvo(s)</strong> neste navegador agora. Veja abaixo onde eles ficam guardados e como protegê-los.</Alert>
 
       <Acc title="📁 Como funciona a lista de PEIs salvos" open0 color={G}>
         <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Na aba <strong>Elaborando o PEI</strong>, há um card chamado <strong>Meus PEIs Salvos</strong>. Ao preencher os dados de um estudante e clicar em <strong>💾 Salvar PEI</strong>, esse plano entra numa lista guardada no seu navegador.</p>
@@ -1606,6 +1670,51 @@ const PgSalvar=()=>{
           <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span>Se for usar outro computador, leve esse arquivo de backup e use <strong>⬆ Importar backup</strong> assim que abrir o guia lá.</div>
         </div>
       </Acc>
+      </div>
+      ):(
+      <div>
+      <Alert type="info"><strong>Você tem {rCount} relatório(s) salvo(s)</strong> neste navegador agora. Funcionam exatamente como os PEIs.</Alert>
+
+      <Acc title="📁 Como funciona a lista de relatórios salvos" open0 color={G}>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Na aba <strong>Registros e Relatórios</strong>, há um card chamado <strong>Meus Relatórios Salvos</strong>. Ao preencher o relatório bimestral e clicar em <strong>💾 Salvar Relatório</strong>, ele entra numa lista guardada no seu navegador.</p>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Cada relatório é identificado pela combinação de <strong>nome do estudante + componente + bimestre</strong>. Se você salvar novamente o mesmo relatório (mesmo estudante, componente e bimestre), ele é <strong>atualizado</strong> — não duplicado.</p>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>Para retomar um relatório depois, clique em <strong>Abrir</strong> na lista, e os tipos de avaliação, observações e conceito voltam exatamente como estavam.</p>
+      </Acc>
+
+      <Acc title="⚠️ A limitação importante: onde os dados realmente ficam" color="#B45309">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Como os PEIs, os relatórios salvos ficam gravados <strong>no navegador deste computador específico</strong> (no <em>localStorage</em>). Isso significa que:</p>
+        <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:10}}>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se você limpar os dados de navegação, <strong>os relatórios salvos são perdidos</strong>.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Em outro computador, navegador ou celular, a lista aparece vazia — os dados não acompanham o arquivo.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Não é compartilhável automaticamente entre professores ou dispositivos.</div>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>Por isso, use a exportação de backup descrita abaixo.</p>
+      </Acc>
+
+      <Acc title="⬇⬆ Como fazer backup (exportar e importar)" color="#1565C0">
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Na aba <strong>Registros e Relatórios</strong>, no card "Meus Relatórios Salvos", há dois botões:</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:10,marginBottom:10}}>
+          <div style={{padding:13,borderRadius:9,background:"#F0FDF4",border:"1px solid #BBF7D0"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13.5,color:"#0D2B1A",fontWeight:700}}>⬇ Exportar relatórios (backup)</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Gera um arquivo <code>.json</code> apenas com os relatórios salvos — <strong>separado</strong> do arquivo de backup dos PEIs. Guarde-o numa pasta segura.</p>
+          </div>
+          <div style={{padding:13,borderRadius:9,background:"#E3F2FD",border:"1px solid #90CAF9"}}>
+            <h5 style={{margin:"0 0 4px",fontSize:13.5,color:"#0D47A1",fontWeight:700}}>⬆ Importar backup</h5>
+            <p style={{margin:0,fontSize:12.5,lineHeight:1.6,color:"#555"}}>Escolhe um arquivo <code>.json</code> de relatórios exportado antes e devolve aqueles relatórios à lista — útil ao trocar de computador ou recuperar dados.</p>
+          </div>
+        </div>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>A importação <strong>combina</strong> os relatórios do arquivo com os que já existem no navegador — nenhum dado é apagado.</p>
+      </Acc>
+
+      <Acc title="✅ Recomendação prática" color="#166534">
+        <div style={{display:"flex",flexDirection:"column",gap:7}}>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span>Ao terminar cada relatório bimestral, clique em <strong>💾 Salvar Relatório</strong>.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span>Ao final de cada bimestre, clique em <strong>⬇ Exportar relatórios</strong> e guarde o arquivo fora do navegador.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span>Ao usar outro computador, leve o backup e use <strong>⬆ Importar backup</strong> ao abrir o guia lá.</div>
+        </div>
+      </Acc>
+      </div>
+      )}
     </div>
   );
 };
