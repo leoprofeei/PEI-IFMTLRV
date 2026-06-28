@@ -533,6 +533,14 @@ function deletePEIRecord(id){
   return list;
 }
 
+// ── Persistência: relatórios bimestrais salvos no localStorage ──
+const REL_STORAGE_KEY="rel_ifmt_lrv_saved_v1";
+function loadSavedRels(){try{const raw=localStorage.getItem(REL_STORAGE_KEY);return raw?JSON.parse(raw):[];}catch(e){return [];}}
+function persistSavedRels(list){try{localStorage.setItem(REL_STORAGE_KEY,JSON.stringify(list));return true;}catch(e){return false;}}
+function makeRelRecordId(ident,bim){return (ident.nome||"sem-nome").trim().toLowerCase()+"__"+(ident.comp||"sem-componente").trim().toLowerCase()+"__b"+bim;}
+function saveRelRecord({ident,bim,checks,relObs,relAdeq,relNota,trans}){const list=loadSavedRels();const id=makeRelRecordId(ident,bim);const now=new Date().toISOString();const idx=list.findIndex(r=>r.id===id);const record={id,ident,bim,checks,relObs,relAdeq,relNota,trans,savedAt:now};if(idx>=0){list[idx]=record;}else{list.push(record);}persistSavedRels(list);return list;}
+function deleteRelRecord(id){const list=loadSavedRels().filter(r=>r.id!==id);persistSavedRels(list);return list;}
+
 function exportAllPEIs(){
   const list=loadSavedPEIs();
   const json=JSON.stringify(list,null,2);
@@ -833,12 +841,38 @@ ${secRow("14","ASSINATURAS")}
 };
 
 // ── Aba Registros e Relatórios ──
+const CK_ITEMS=[
+  {sect:"Projetos educacionais",items:[{k:"projEnsino",l:"Ensino"},{k:"projPesquisa",l:"Pesquisa"},{k:"projExtensao",l:"Extensão"}]},
+  {sect:"Atividades diferenciadas",items:[{k:"seminarios",l:"Seminários"},{k:"debates",l:"Debates"},{k:"provaEscInd",l:"Provas escritas individuais"},{k:"provaEscDup",l:"Provas escritas em dupla/grupo"},{k:"provaOralInd",l:"Provas orais individuais"},{k:"provaOralDup",l:"Provas orais em dupla/grupo"}]},
+  {sect:"Produções e trabalhos",items:[{k:"trabDirig",l:"Trabalhos/atividades dirigidas"},{k:"relatorios",l:"Relatórios (aula prática, visita técnica, estágio)"},{k:"portfolio",l:"Portfólio"},{k:"prodTextual",l:"Produções textuais (resenhas, artigos, relatos)"},{k:"listasFix",l:"Listas/atividades de fixação"},{k:"estudoCaso",l:"Estudos de caso"},{k:"projIntegr",l:"Projetos integradores/pesquisas"},{k:"maquetes",l:"Maquetes, produtos ou protótipos"}]},
+  {sect:"Práticas e laboratório",items:[{k:"atividadePrat",l:"Atividades práticas/de laboratório"},{k:"provaPratica",l:"Provas práticas"},{k:"oficinas",l:"Oficinas"},{k:"visitaCampo",l:"Visitas técnicas / pesquisa de campo"}]},
+  {sect:"Avaliação processual",items:[{k:"fichaObs",l:"Fichas/registros de observação"},{k:"autoaval",l:"Autoavaliação"},{k:"avalPares",l:"Avaliação por pares"},{k:"participacao",l:"Participação e engajamento"}]},
+];
+
+const REL_MODELS=[
+  {t:"Evolução Positiva",c:"#166534",target:"obs",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros."},
+  {t:"Dificuldades Persistentes",c:"#B45309",target:"obs",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI."},
+  {t:"Adequações nos Critérios de Avaliação",c:"#1565C0",target:"adeq",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual."},
+  {t:"Registro de Competências Profissionais",c:"#5B21B6",target:"obs",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever]."},
+  {t:"Linha de Base / Início do Acompanhamento",c:"#0D9488",target:"obs",tx:"No início do [X]º bimestre, registra-se a linha de base do estudante [nome]: [descrever habilidades, interesses e barreiras observadas]. Estas informações orientarão o acompanhamento e a verificação da evolução ao longo do período."},
+  {t:"Recomendação de Reavaliação do PEI",c:"#B45309",target:"obs",tx:"Com base nas observações deste bimestre, recomenda-se a reavaliação do PEI do estudante [nome], em conjunto com a equipe pedagógica e a CAEI, para ajustar [objetivos/adaptações/recursos] às necessidades atuais."},
+  {t:"Articulação com a Família",c:"#166534",target:"obs",tx:"Houve articulação com a família do estudante [nome] no [X]º bimestre, por meio de [contato/reunião]. Foram alinhados [estratégias/combinados], e a família relatou [informações relevantes para o planejamento]."},
+  {t:"Encaminhamento à Equipe Multiprofissional",c:"#7C3AED",target:"obs",tx:"Em razão de [motivo], o estudante [nome] foi encaminhado à equipe multiprofissional / CAEI para [avaliação/acompanhamento], visando subsidiar as estratégias pedagógicas previstas no PEI."},
+  {t:"Uso e Efetividade de Tecnologia Assistiva",c:"#1565C0",target:"adeq",tx:"No [X]º bimestre, foram utilizados os seguintes recursos de Tecnologia Assistiva: [listar]. Observou-se [efetividade/ajustes necessários] quanto ao acesso ao conteúdo e à demonstração da aprendizagem."},
+  {t:"Participação em Atividades Práticas / Estágio",c:"#0D9488",target:"obs",tx:"O estudante [nome] participou das atividades práticas / de laboratório / de estágio com [descrever desempenho e apoios utilizados]. Registra-se [evolução/dificuldade] no desenvolvimento das competências profissionais previstas."},
+  {t:"Manejo de Crise / Sobrecarga",c:"#6A1B9A",target:"obs",tx:"Durante o bimestre, registraram-se episódios de sobrecarga em situações de [descrever]. Foram adotadas as estratégias de prevenção e manejo previstas (previsibilidade, redução de estímulos, espaço de regulação), com [resultado observado]."},
+  {t:"Frequência e RED (Condições de Saúde)",c:"#B91C1C",target:"obs",tx:"Em decorrência de [condição de saúde], o estudante [nome] apresentou afastamento no [X]º bimestre. As atividades foram conduzidas em articulação com o Regime de Exercícios Domiciliares (RED), conforme o Regulamento Didático, mantendo-se as adaptações do PEI."},
+  {t:"Bimestre sem Intercorrências / Manutenção das Adaptações",c:"#166534",target:"adeq",tx:"No [X]º bimestre, o estudante [nome] acompanhou as atividades sem intercorrências relevantes. Recomenda-se a manutenção das adaptações e dos recursos de acessibilidade já previstos no PEI, que se mostraram adequados."},
+];
+
 const PgRegistros=()=>{
   const [bim,setBim]=useState("1");
   const [checks,setChecks]=useState({});
   const [relObs,setRelObs]=useState("");
   const [relAdeq,setRelAdeq]=useState("");
   const [relNota,setRelNota]=useState("");
+  const [savedRels,setSavedRels]=useState(()=>loadSavedRels());
+  const [relSaved,setRelSaved]=useState(false);
   const trans=SHARED.trans||"TDAH";
 
   const toggleCk=(k)=>setChecks(p=>({...p,[k]:!p[k]}));
@@ -846,6 +880,14 @@ const PgRegistros=()=>{
   const appendAdeq=(txt)=>setRelAdeq(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);
 
   const ident=SHARED.ident||{};
+
+  const handleSaveRel=()=>{
+    if(!ident.nome||!ident.nome.trim()){window.alert("Informe o nome do estudante (na aba Elaborando o PEI) antes de salvar o relatório.");return;}
+    const list=saveRelRecord({ident,bim,checks,relObs,relAdeq,relNota,trans});
+    setSavedRels(list);setRelSaved(true);setTimeout(()=>setRelSaved(false),2200);
+  };
+  const handleLoadRel=(rec)=>{setBim(rec.bim||"1");setChecks(rec.checks||{});setRelObs(rec.relObs||"");setRelAdeq(rec.relAdeq||"");setRelNota(rec.relNota||"");};
+  const handleDeleteRel=(id)=>{if(!window.confirm("Excluir este relatório salvo? Esta ação não pode ser desfeita."))return;setSavedRels(deleteRelRecord(id));};
 
   const [showPreview,setShowPreview]=useState(false);
 
@@ -866,12 +908,7 @@ const PgRegistros=()=>{
 <tr><td style="font-weight:bold;border:1px solid #000;padding:5pt 7pt">Necessidade Educacional Específica:</td><td style="border:1px solid #000;padding:5pt 7pt">${esc(ti.label)}</td></tr>
 <tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">TIPOS DE AVALIAÇÕES APLICADAS</td></tr>
 <tr><td colspan="2" style="padding:7pt;border:1px solid #000">
-<strong>Projetos educacionais:</strong><br/>
-${cb("projEnsino")} Ensino &nbsp;&nbsp; ${cb("projPesquisa")} Pesquisa &nbsp;&nbsp; ${cb("projExtensao")} Extensão<br/><br/>
-<strong>Atividades diferenciadas:</strong><br/>
-${cb("seminarios")} Seminários &nbsp;&nbsp; ${cb("debates")} Debates<br/>
-${cb("provaEscInd")} Provas escritas individuais &nbsp;&nbsp; ${cb("provaEscDup")} Provas escritas em dupla/grupo<br/>
-${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")} Provas orais em dupla/grupo
+${CK_ITEMS.map(sec=>`<strong>${esc(sec.sect)}:</strong><br/>`+sec.items.map(it=>`${cb(it.k)} ${esc(it.l)}`).join(" &nbsp;&nbsp; ")).join("<br/><br/>")}
 </td></tr>
 <tr><td colspan="2" style="background:#d4e9c5;font-weight:bold;padding:5pt 7pt">OBSERVAÇÕES SOBRE O/A ESTUDANTE</td></tr>
 <tr><td colspan="2" style="padding:7pt;border:1px solid #000"><em style="color:#555;font-size:10pt">Dificuldades apresentadas, evolução quanto aos objetivos e conteúdos propostos, competências e habilidades profissionais desenvolvidas.</em><br/><br/>${nl(esc(relObs))}</td></tr>
@@ -882,11 +919,6 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
 </table>
 <div style="margin-top:28pt;text-align:center"><p>________________________________________________</p><p>Assinatura do(a) Docente &nbsp;&nbsp;&nbsp; Data: ___ / ___ / ______</p></div>`;
   };
-
-  const CK_ITEMS=[
-    {sect:"Projetos educacionais",items:[{k:"projEnsino",l:"Ensino"},{k:"projPesquisa",l:"Pesquisa"},{k:"projExtensao",l:"Extensão"}]},
-    {sect:"Atividades diferenciadas",items:[{k:"seminarios",l:"Seminários"},{k:"debates",l:"Debates"},{k:"provaEscInd",l:"Provas escritas individuais"},{k:"provaEscDup",l:"Provas escritas em dupla/grupo"},{k:"provaOralInd",l:"Provas orais individuais"},{k:"provaOralDup",l:"Provas orais em dupla/grupo"}]},
-  ];
 
   const relObsEstSuggs=(SG[trans]||{}).relObsEst||[];
   const relObsAdeqSuggs=(SG[trans]||{}).relObsAdeq||[];
@@ -902,6 +934,29 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
           <span style={{fontSize:13,color:"#5a6b52",display:"block",marginTop:3}}>Dados propagados da aba "Elaborando o PEI".</span>
         </div>
       )}
+
+      {/* MEUS RELATÓRIOS SALVOS */}
+      <div className="pei-card">
+        <div className="pei-card-title">📁 Meus Relatórios Salvos ({savedRels.length})</div>
+        {savedRels.length===0?(
+          <p style={{fontSize:14,color:"#5a6b52",fontStyle:"italic"}}>Nenhum relatório salvo ainda. Preencha o relatório e clique em "💾 Salvar Relatório".</p>
+        ):(
+          <div style={{display:"flex",flexDirection:"column",gap:7}}>
+            {savedRels.slice().sort((a,b)=>(b.savedAt||"").localeCompare(a.savedAt||"")).map(rec=>(
+              <div key={rec.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 13px",borderRadius:9,border:"1px solid #e0e0e0",background:"#fafafa",gap:10,flexWrap:"wrap"}}>
+                <div style={{flex:1,minWidth:160}}>
+                  <div style={{fontSize:14,fontWeight:700,color:"#1a1a1a"}}>{rec.ident.nome||"(sem nome)"} <span style={{color:"#5a6b52",fontWeight:400}}>— {rec.bim}º bim.{rec.ident.comp?" · "+rec.ident.comp:""}</span></div>
+                  <div style={{fontSize:12,color:"#999"}}>Salvo em {rec.savedAt?new Date(rec.savedAt).toLocaleString("pt-BR"):"—"}</div>
+                </div>
+                <div style={{display:"flex",gap:7}}>
+                  <button onClick={()=>handleLoadRel(rec)} style={{fontSize:13,color:"#fff",background:G,border:"none",borderRadius:7,padding:"7px 14px",cursor:"pointer",fontWeight:600}}>Abrir</button>
+                  <button onClick={()=>handleDeleteRel(rec.id)} style={{fontSize:13,color:"#991B1B",background:"#FEF2F2",border:"1px solid #fecaca",borderRadius:7,padding:"7px 11px",cursor:"pointer",fontWeight:600}}>🗑</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* BIMESTRE */}
       <div className="pei-card">
@@ -964,9 +1019,12 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
 
       {/* TRECHOS MODELO */}
       <h3 style={{fontSize:20,fontWeight:700,color:"#0D2B1A",margin:"20px 0 10px"}}>Trechos-Modelo para Relatórios</h3>
-      {[{t:"Evolução Positiva",tx:"Durante o [X]º bimestre, o estudante [nome] apresentou evolução significativa em relação aos objetivos propostos no PEI. Observou-se maior autonomia na realização de atividades práticas e melhora na organização dos registros.",c:"#166534"},{t:"Dificuldades Persistentes",tx:"No [X]º bimestre, o estudante [nome] manteve dificuldades significativas com [descrever]. As adaptações previstas no PEI foram implementadas, porém mostraram-se insuficientes para os conteúdos de [especificar]. Sugere-se reavaliação do PEI.",c:"#B45309"},{t:"Adequações nos Critérios de Avaliação",tx:"Conforme previsto no PEI, as avaliações do estudante [nome] foram aplicadas com as seguintes adequações: [listar]. O desempenho foi avaliado com base nos objetivos específicos definidos no Plano, priorizando a demonstração de compreensão conceitual.",c:"#1565C0"},{t:"Registro de Competências Profissionais",tx:"O estudante [nome] desenvolveu, ao longo do bimestre, habilidades relacionadas a [listar competências]. Destaca-se a capacidade de [competência específica], demonstrada na atividade de [descrever].",c:"#5B21B6"}].map((m,i)=>(
+      {REL_MODELS.map((m,i)=>(
         <div key={i} style={{marginBottom:12,padding:"13px 16px",borderRadius:11,background:`${m.c}08`,borderLeft:`3px solid ${m.c}`}}>
-          <h5 style={{margin:"0 0 5px",fontSize:15.5,color:m.c,fontWeight:700}}>{m.t}</h5>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:5,flexWrap:"wrap"}}>
+            <h5 style={{margin:0,fontSize:15.5,color:m.c,fontWeight:700}}>{m.t}</h5>
+            <button onClick={()=>(m.target==="adeq"?appendAdeq:appendObs)(m.tx)} style={{fontSize:13,color:"#fff",background:m.c,border:"none",borderRadius:7,padding:"6px 12px",cursor:"pointer",fontWeight:600,whiteSpace:"nowrap"}}>+ Inserir em {m.target==="adeq"?"Adequações":"Observações"}</button>
+          </div>
           <p style={{margin:0,fontSize:14.5,lineHeight:1.7,color:"#444",fontStyle:"italic"}}>"{m.tx}"</p>
         </div>
       ))}
@@ -974,6 +1032,7 @@ ${cb("provaOralInd")} Provas orais individuais &nbsp;&nbsp; ${cb("provaOralDup")
       <div className="act-row">
         <span style={{fontSize:13,color:"#5a6b52"}}>Dados de identificação propagados da aba "Elaborando o PEI".</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
+          <button onClick={handleSaveRel} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:relSaved?G:"#fff",color:relSaved?"#fff":G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{relSaved?"✓ Relatório salvo!":"💾 Salvar Relatório"}</button>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar Relatório</button>
         </div>
       </div>
