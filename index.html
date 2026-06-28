@@ -17,6 +17,9 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F4F6F4;color:#1a
 @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 .fade{animation:fadeIn 0.25s ease}
 .slide{animation:slideIn 0.2s ease}
+.tabbar::-webkit-scrollbar{height:6px}
+.tabbar::-webkit-scrollbar-track{background:rgba(0,0,0,.14)}
+.tabbar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:3px}
 
 /* PEI Form styles */
 :root{
@@ -1131,6 +1134,10 @@ const PgVisao=()=>{
   ];
   return(
     <div>
+      <div style={{background:"linear-gradient(135deg,#0D2B1A,#1B6B45)",color:"white",borderRadius:12,padding:"16px 18px",marginBottom:18}}>
+        <div style={{fontSize:"clamp(19px,3vw,24px)",fontWeight:800,letterSpacing:-0.3}}>Plano Educacional Individualizado</div>
+        <div style={{fontSize:"clamp(12px,2vw,14px)",fontWeight:400,opacity:0.85,marginTop:3}}>Guia completo para educadores · IN Conjunta 2/2023</div>
+      </div>
       <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Visão Geral — PEI</h2>
       <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Bem-vindo ao guia completo do PEI para educadores do IFMT Campus Lucas do Rio Verde. Clique nos cards para explorar cada tema.</p>
       <Alert type="warning"><strong>Atualização 2025–2026:</strong> O Decreto 12.686/2025 e a Portaria MEC 421/2026 tornaram o PEI <strong>legalmente obrigatório</strong>.</Alert>
@@ -1686,12 +1693,11 @@ function App(){
         </div>
       )}
 
-      {/* Título */}
-      <div style={{background:"linear-gradient(135deg,#0D2B1A,#1B6B45)",padding:"18px 24px",color:"white"}}>
-        <h1 style={{margin:0,display:"flex",alignItems:"baseline",gap:8,flexWrap:"wrap"}}>
-          <span style={{fontSize:"clamp(20px,3vw,26px)",fontWeight:800,letterSpacing:-0.3}}>Plano Educacional Individualizado</span>
-          <span style={{fontSize:"clamp(14px,2vw,18px)",fontWeight:400,opacity:0.8}}>· Guia completo para educadores · IN Conjunta 2/2023</span>
-        </h1>
+      {/* Barra de Abas */}
+      <div className="tabbar" style={{background:G,display:"flex",overflowX:"auto",position:"sticky",top:118,zIndex:190,boxShadow:"0 2px 6px rgba(0,0,0,0.18)"}}>
+        {TABS.map(t=>(
+          <button key={t.id} onClick={()=>sTab(t.id)} style={{flexShrink:0,whiteSpace:"nowrap",padding:"12px 17px",border:"none",cursor:"pointer",fontSize:14,fontWeight:tab===t.id?700:500,color:"#fff",background:tab===t.id?"#0D2B1A":"transparent",borderBottom:tab===t.id?"3px solid #fff":"3px solid transparent",transition:"all 0.15s"}}>{t.label}</button>
+        ))}
       </div>
 
       {/* Conteúdo */}
