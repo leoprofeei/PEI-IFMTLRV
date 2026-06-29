@@ -923,7 +923,7 @@ const PgRegistros=()=>{
     const list=saveRelRecord({ident,bim,checks,relObs,relAdeq,relNota,trans});
     setSavedRels(list);setRelSaved(true);setTimeout(()=>setRelSaved(false),2200);
   };
-  const handleLoadRel=(rec)=>{setBim(rec.bim||"1");setChecks(rec.checks||{});setRelObs(rec.relObs||"");setRelAdeq(rec.relAdeq||"");setRelNota(rec.relNota||"");};
+  const handleLoadRel=(rec)=>{setBim(rec.bim||"1");setChecks(rec.checks||{});setRelObs(rec.relObs||"");setRelAdeq(rec.relAdeq||"");setRelNota(rec.relNota||"");setRelMsg("Relatório carregado: "+((rec.ident&&rec.ident.nome)||"")+".");setTimeout(()=>setRelMsg(""),3000);};
   const handleDeleteRel=(id)=>{if(!window.confirm("Excluir este relatório salvo? Esta ação não pode ser desfeita."))return;setSavedRels(deleteRelRecord(id));};
   const handleImportRelClick=()=>{if(relFileRef.current)relFileRef.current.click();};
   const handleImportRelFile=(e)=>{
