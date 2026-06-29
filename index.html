@@ -1680,8 +1680,8 @@ const PgSalvar=()=>{
       <Acc title="⚠️ A limitação importante: onde os dados realmente ficam" color="#B45309">
         <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Os PEIs salvos ficam gravados <strong>no navegador deste computador específico</strong> (tecnicamente, no chamado <em>localStorage</em>). Isso tem consequências importantes:</p>
         <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:10}}>
-          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se você limpar o histórico/dados de navegação do navegador, <strong>os PEIs salvos são perdidos</strong>.</div>
-          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se abrir este mesmo arquivo em <strong>outro computador, outro navegador, ou no celular</strong>, a lista aparece vazia — os dados não acompanham o arquivo, ficam no navegador onde foram salvos.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span><span>Se você limpar o histórico/dados de navegação do navegador, <strong>os PEIs salvos são perdidos</strong>.</span></div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span><span>Se abrir este mesmo arquivo em <strong>outro computador, outro navegador, ou no celular</strong>, a lista aparece vazia — os dados não acompanham o arquivo, ficam no navegador onde foram salvos.</span></div>
           <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Não é compartilhável automaticamente entre diferentes professores ou dispositivos.</div>
         </div>
         <p style={{fontSize:14,lineHeight:1.7,color:"#444"}}>Por isso, recomendamos fortemente usar a exportação de backup descrita abaixo.</p>
@@ -1704,9 +1704,9 @@ const PgSalvar=()=>{
 
       <Acc title="✅ Recomendação prática" color="#166534">
         <div style={{display:"flex",flexDirection:"column",gap:7}}>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span>Sempre que terminar de preencher ou atualizar um PEI, clique em <strong>💾 Salvar PEI</strong>.</div>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span>Periodicamente — por exemplo, ao final de cada bimestre — clique em <strong>⬇ Exportar todos</strong> e guarde o arquivo numa pasta segura, fora do navegador.</div>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span>Se for usar outro computador, leve esse arquivo de backup e use <strong>⬆ Importar backup</strong> assim que abrir o guia lá.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span><span>Sempre que terminar de preencher ou atualizar um PEI, clique em <strong>💾 Salvar PEI</strong>.</span></div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span><span>Periodicamente — por exemplo, ao final de cada bimestre — clique em <strong>⬇ Exportar todos</strong> e guarde o arquivo numa pasta segura, fora do navegador.</span></div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span><span>Se for usar outro computador, leve esse arquivo de backup e use <strong>⬆ Importar backup</strong> assim que abrir o guia lá.</span></div>
         </div>
       </Acc>
       </div>
@@ -1723,7 +1723,7 @@ const PgSalvar=()=>{
       <Acc title="⚠️ A limitação importante: onde os dados realmente ficam" color="#B45309">
         <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:10}}>Como os PEIs, os relatórios salvos ficam gravados <strong>no navegador deste computador específico</strong> (no <em>localStorage</em>). Isso significa que:</p>
         <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:10}}>
-          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Se você limpar os dados de navegação, <strong>os relatórios salvos são perdidos</strong>.</div>
+          <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span><span>Se você limpar os dados de navegação, <strong>os relatórios salvos são perdidos</strong>.</span></div>
           <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Em outro computador, navegador ou celular, a lista aparece vazia — os dados não acompanham o arquivo.</div>
           <div style={{display:"flex",gap:7,fontSize:13.5,color:"#555"}}><span style={{color:"#B45309",fontWeight:700,flexShrink:0}}>•</span>Não é compartilhável automaticamente entre professores ou dispositivos.</div>
         </div>
@@ -1747,9 +1747,9 @@ const PgSalvar=()=>{
 
       <Acc title="✅ Recomendação prática" color="#166534">
         <div style={{display:"flex",flexDirection:"column",gap:7}}>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span>Ao terminar cada relatório bimestral, clique em <strong>💾 Salvar Relatório</strong>.</div>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span>Ao final de cada bimestre, clique em <strong>⬇ Exportar relatórios</strong> e guarde o arquivo fora do navegador.</div>
-          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span>Ao usar outro computador, leve o backup e use <strong>⬆ Importar backup</strong> ao abrir o guia lá.</div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>1.</span><span>Ao terminar cada relatório bimestral, clique em <strong>💾 Salvar Relatório</strong>.</span></div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>2.</span><span>Ao final de cada bimestre, clique em <strong>⬇ Exportar relatórios</strong> e guarde o arquivo fora do navegador.</span></div>
+          <div style={{display:"flex",gap:7,fontSize:14,color:"#444"}}><span style={{color:"#166534",fontWeight:700,flexShrink:0}}>3.</span><span>Ao usar outro computador, leve o backup e use <strong>⬆ Importar backup</strong> ao abrir o guia lá.</span></div>
         </div>
       </Acc>
       </div>
