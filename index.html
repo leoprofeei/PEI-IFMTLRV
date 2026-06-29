@@ -224,7 +224,6 @@ const TABS=[
   {id:"registros",label:"Registros e Relatórios"},
   {id:"alertas",label:"Alertas e Ética"},
   {id:"recursos",label:"Recursos e Pesquisa"},
-  {id:"sintese",label:"Síntese Prática"},
   {id:"salvar",label:"Salvar e exportar"},
 ];
 
@@ -1190,6 +1189,26 @@ const PgVisao=()=>{
         <div style={{fontSize:"clamp(19px,3vw,24px)",fontWeight:800,letterSpacing:-0.3}}>Plano Educacional Individualizado</div>
         <div style={{fontSize:"clamp(12px,2vw,14px)",fontWeight:400,opacity:0.85,marginTop:3}}>Guia completo para educadores · IN Conjunta 2/2023</div>
       </div>
+      <Acc title="ℹ️ Sobre este guia e autoria" color={G}>
+        <p style={{fontSize:14,lineHeight:1.7,color:"#444",marginBottom:12}}>Guia prático para a elaboração e o acompanhamento do Plano Educacional Individualizado no IFMT, com base na IN Conjunta nº 2/2023 (RTR-DSAE/RTR/IFMT) e na legislação de educação inclusiva.</p>
+        <div style={{fontSize:13,fontWeight:700,color:"#0D2B1A",marginBottom:8}}>Autoria e versões</div>
+        <div style={{display:"flex",gap:10,marginBottom:9}}>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}><div style={{width:11,height:11,borderRadius:"50%",background:G,marginTop:3}}/><div style={{width:2,flex:1,background:"#cfe0cf"}}/></div>
+          <div style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:9,padding:"9px 12px",flex:1}}>
+            <div style={{fontSize:10.5,fontWeight:700,color:G,letterSpacing:0.4}}>VERSÃO ATUAL</div>
+            <div style={{fontSize:13.5,color:"#0D2B1A",fontWeight:700,marginTop:2}}>Prof. EBTT Leonardo Santana de Lima</div>
+            <div style={{fontSize:12.5,color:"#555"}}>Área de Educação Especial · IFMT Campus Lucas do Rio Verde</div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:10}}>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}><div style={{width:11,height:11,borderRadius:"50%",background:"#9aa",marginTop:3}}/></div>
+          <div style={{background:"#fafafa",border:"1px solid #e0e0e0",borderRadius:9,padding:"9px 12px",flex:1}}>
+            <div style={{fontSize:10.5,fontWeight:700,color:"#777",letterSpacing:0.4}}>1ª VERSÃO (BASE)</div>
+            <div style={{fontSize:13.5,color:"#0D2B1A",fontWeight:700,marginTop:2}}>Prof. EBTT Emerson de Oliveira Figueiredo</div>
+            <div style={{fontSize:12.5,color:"#555"}}>Área de Química · IFMT Campus Cáceres</div>
+          </div>
+        </div>
+      </Acc>
       <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Visão Geral — PEI</h2>
       <p style={{fontSize:16,lineHeight:1.75,color:"#333",marginBottom:16}}>Bem-vindo ao guia completo do PEI para educadores do IFMT Campus Lucas do Rio Verde. Clique nos cards para explorar cada tema.</p>
       <Alert type="warning"><strong>Atualização 2025–2026:</strong> O Decreto 12.686/2025 e a Portaria MEC 421/2026 tornaram o PEI <strong>legalmente obrigatório</strong>.</Alert>
@@ -1289,6 +1308,21 @@ const PgFluxo=()=>{
         ))}
       </div>
       <Alert type="info"><strong>Recusa legítima:</strong> O estudante tem direito de recusar o apoio mediante assinatura da Declaração de Recusa (Anexo IV), conforme Art. 7º e Lei 13.146/15.</Alert>
+      <div style={{marginTop:22,paddingTop:18,borderTop:"2px dashed #d8e6d8"}}>
+        <h3 style={{fontSize:22,fontWeight:700,color:"#0D2B1A",marginBottom:14}}>✅ Resumo prático</h3>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))",gap:13,marginBottom:20}}>
+          {[{t:"👀 O que Observar",c:"#0D3B6E",bg:"#EFF6FF",b:"#BFDBFE",i:["Mudanças no comportamento ou rendimento","Dificuldade persistente que destoa do padrão","Sinais de sobrecarga sensorial ou emocional","Discrepância entre capacidade oral e escrita","Desempenho flutuante sem causa aparente"]},{t:"📋 Como Planejar",c:G,bg:"#F0FDF4",b:"#BBF7D0",i:["Consulte o Relatório de Acolhimento antes de elaborar","Defina objetivos específicos a partir do currículo","Diversifique métodos e recursos didáticos","Preveja múltiplas formas de avaliação","Converse com a Coordenação de Assistência Estudantil e Inclusão e a equipe pedagógica"]},{t:"📝 Como Registrar",c:"#5B21B6",bg:"#F5F3FF",b:"#DDD6FE",i:["Preencha o PEI (Anexo II) para seu componente","Elabore o Relatório Bimestral (Anexo III)","Descreva fatos observáveis, não julgamentos","Registre adaptações implementadas e resultados","Entregue documentação para arquivamento"]},{t:"🤝 Quem Acompanha",c:"#B45309",bg:"#FFFBEB",b:"#FDE68A",i:["Docente: elabora e executa o PEI","Coordenação de Curso: orienta e acompanha","Diretoria de Ensino: supervisiona","Coordenação de Assistência Estudantil e Inclusão: acolhe, encaminha e dá suporte","Estudante: protagonista do processo"]}].map((q,i)=>(
+            <div key={i} style={{padding:16,borderRadius:12,background:q.bg,border:`1.5px solid ${q.b}`}}>
+              <h4 style={{margin:"0 0 10px",fontSize:14,color:q.c,fontWeight:700}}>{q.t}</h4>
+              {q.i.map((x,ii)=><div key={ii} style={{display:"flex",gap:6,marginBottom:5,fontSize:13,lineHeight:1.5,color:"#333"}}><span style={{color:q.c,fontWeight:700}}>›</span>{x}</div>)}
+            </div>
+          ))}
+        </div>
+        <div style={{padding:20,borderRadius:14,background:`linear-gradient(135deg,${G}10,${G}05)`,border:`1.5px solid ${G}40`,textAlign:"center"}}>
+          <p style={{margin:0,fontSize:14,lineHeight:1.8,color:"#0D2B1A",fontStyle:"italic"}}>"Ensinar com equidade é oferecer a cada estudante o que ele(ela) precisa para chegar aonde todos têm direito de chegar."</p>
+          <p style={{margin:"8px 0 0",fontSize:11,color:"#666"}}>IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT) · IFMT Campus Lucas do Rio Verde · Diretoria de Ensino · Educação Especial Inclusiva</p>
+        </div>
+      </div>
     </div>
   );
 };
@@ -1719,24 +1753,6 @@ const PgSalvar=()=>{
   );
 };
 
-const PgSintese=()=>(
-  <div>
-    <h2 style={{fontSize:28,fontWeight:700,color:"#0D2B1A",marginBottom:12}}>Síntese Prática</h2>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(210px,1fr))",gap:13,marginBottom:20}}>
-      {[{t:"👀 O que Observar",c:"#0D3B6E",bg:"#EFF6FF",b:"#BFDBFE",i:["Mudanças no comportamento ou rendimento","Dificuldade persistente que destoa do padrão","Sinais de sobrecarga sensorial ou emocional","Discrepância entre capacidade oral e escrita","Desempenho flutuante sem causa aparente"]},{t:"📋 Como Planejar",c:G,bg:"#F0FDF4",b:"#BBF7D0",i:["Consulte o Relatório de Acolhimento antes de elaborar","Defina objetivos específicos a partir do currículo","Diversifique métodos e recursos didáticos","Preveja múltiplas formas de avaliação","Converse com a Coordenação de Assistência Estudantil e Inclusão e a equipe pedagógica"]},{t:"📝 Como Registrar",c:"#5B21B6",bg:"#F5F3FF",b:"#DDD6FE",i:["Preencha o PEI (Anexo II) para seu componente","Elabore o Relatório Bimestral (Anexo III)","Descreva fatos observáveis, não julgamentos","Registre adaptações implementadas e resultados","Entregue documentação para arquivamento"]},{t:"🤝 Quem Acompanha",c:"#B45309",bg:"#FFFBEB",b:"#FDE68A",i:["Docente: elabora e executa o PEI","Coordenação de Curso: orienta e acompanha","Diretoria de Ensino: supervisiona","Coordenação de Assistência Estudantil e Inclusão: acolhe, encaminha e dá suporte","Estudante: protagonista do processo"]}].map((q,i)=>(
-        <div key={i} style={{padding:16,borderRadius:12,background:q.bg,border:`1.5px solid ${q.b}`}}>
-          <h4 style={{margin:"0 0 10px",fontSize:14,color:q.c,fontWeight:700}}>{q.t}</h4>
-          {q.i.map((x,ii)=><div key={ii} style={{display:"flex",gap:6,marginBottom:5,fontSize:13,lineHeight:1.5,color:"#333"}}><span style={{color:q.c,fontWeight:700}}>›</span>{x}</div>)}
-        </div>
-      ))}
-    </div>
-    <div style={{padding:20,borderRadius:14,background:`linear-gradient(135deg,${G}10,${G}05)`,border:`1.5px solid ${G}40`,textAlign:"center"}}>
-      <p style={{margin:0,fontSize:14,lineHeight:1.8,color:"#0D2B1A",fontStyle:"italic"}}>"Incluir não é apenas garantir a matrícula. É garantir que cada estudante tenha condições reais de aprender, participar e se desenvolver plenamente."</p>
-      <p style={{margin:"8px 0 0",fontSize:11,color:"#666"}}>IN Conjunta 2/2023 (RTR-DSAE/RTR/IFMT) · IFMT Campus Lucas do Rio Verde · Diretoria de Ensino · Educação Especial Inclusiva</p>
-    </div>
-  </div>
-);
-
 // ── Mapa de páginas ──
 const PAGES={
   visao:<PgVisao/>,
@@ -1746,7 +1762,6 @@ const PAGES={
   estrategias:<PgEstrategias/>,
   alertas:<PgAlertas/>,
   recursos:<PgRecursos/>,
-  sintese:<PgSintese/>,
   salvar:<PgSalvar/>,
 };
 
