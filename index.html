@@ -374,12 +374,14 @@ const Acc=({title,children,open0=false,color=G})=>{
   );
 };
 
-const AutoTextarea=({value,onChange,placeholder,minRows=5})=>{
+const AutoTextarea=({value,onChange,placeholder,minRows=5,id})=>{
   const r=useRef(null);
   const fit=()=>{const el=r.current;if(!el)return;el.style.height="auto";el.style.height=el.scrollHeight+"px";};
   useEffect(fit,[value]);
-  return <textarea ref={r} className="pei-textarea" rows={minRows} value={value} placeholder={placeholder} onChange={onChange} onInput={fit}/>;
+  return <textarea id={id} ref={r} className="pei-textarea" rows={minRows} value={value} placeholder={placeholder} onChange={onChange} onInput={fit}/>;
 };
+
+function focusField(id){setTimeout(()=>{const el=document.getElementById(id);if(!el)return;try{el.focus({preventScroll:true});}catch(e){el.focus();}const len=(el.value||"").length;try{el.setSelectionRange(len,len);}catch(e){}el.scrollIntoView({behavior:"smooth",block:"center"});},60);}
 
 const Card=({title,children,onClick,active,idx=0})=>{
   const tones=["#1B6B45","#24885A","#1A7A50","#155C3A","#20A066","#197348"];
@@ -618,6 +620,7 @@ const PgElaboracao=()=>{
   const [savedList,setSavedList]=useState(()=>loadSavedPEIs());
   const [saveMsg,setSaveMsg]=useState("");
   const [justSaved,setJustSaved]=useState(false);
+  const [saveErr,setSaveErr]=useState(false);
   const fileInputRef=useRef(null);
 
   const updIdent=(k,v)=>{
@@ -635,13 +638,14 @@ const PgElaboracao=()=>{
     const next={...fields,[k]:cur+(cur&&!cur.endsWith("\n")?"\n":"")+txt};
     setFields(next);
     SHARED.peiFields=next;
+    focusField("ta-pei-"+k);
   };
   const selTrans=(k)=>{setTrans(k);SHARED.trans=k;};
 
   const handleSavePEI=()=>{
     if(!ident.nome||!ident.nome.trim()){
-      setSaveMsg("Informe o nome do estudante antes de salvar.");
-      setTimeout(()=>setSaveMsg(""),3000);
+      setSaveErr(true);
+      setTimeout(()=>setSaveErr(false),2800);
       return;
     }
     const list=savePEIRecord({ident,fields,trans});
@@ -844,7 +848,7 @@ ${secRow("14","ASSINATURAS")}
               <div className="field-guide">{f.g}</div>
               {suggs.length>0?(
                 <div className="field-row">
-                  <AutoTextarea minRows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+                  <AutoTextarea id={"ta-pei-"+f.k} minRows={rows} value={fields[f.k]||""} onChange={e=>updField(f.k,e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
                   <SuggPanel suggs={suggs} transKey={trans} onInsert={txt=>appendField(f.k,txt)}/>
                 </div>
               ):(
@@ -859,7 +863,7 @@ ${secRow("14","ASSINATURAS")}
         <span style={{fontSize:13,color:"#5a6b52"}}>Dados mantidos durante a sessão. Visualize o documento ao finalizar.</span>
           <span style={{fontSize:13,color:"#5a6b52"}}>Na visualização você pode imprimir, baixar (.doc) ou copiar para colar no SUAP.</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
-          <button onClick={handleSavePEI} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:justSaved?G:"#fff",color:justSaved?"#fff":G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{justSaved?"✓ PEI salvo!":"💾 Salvar PEI"}</button>
+          <button onClick={handleSavePEI} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:saveErr?"#B91C1C":(justSaved?G:"#fff"),color:(saveErr||justSaved)?"#fff":G,border:`2px solid ${saveErr?"#B91C1C":G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{saveErr?"⚠ Informe o nome do estudante":(justSaved?"✓ PEI salvo!":"💾 Salvar PEI")}</button>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar PEI</button>
         </div>
       </div>
@@ -908,18 +912,19 @@ const PgRegistros=()=>{
   const [relNota,setRelNota]=useState("");
   const [savedRels,setSavedRels]=useState(()=>loadSavedRels());
   const [relSaved,setRelSaved]=useState(false);
+  const [relErr,setRelErr]=useState(false);
   const [relMsg,setRelMsg]=useState("");
   const relFileRef=useRef(null);
   const trans=SHARED.trans||"TDAH";
 
   const toggleCk=(k)=>setChecks(p=>({...p,[k]:!p[k]}));
-  const appendObs=(txt)=>setRelObs(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);
-  const appendAdeq=(txt)=>setRelAdeq(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);
+  const appendObs=(txt)=>{setRelObs(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);focusField("ta-relObs");};
+  const appendAdeq=(txt)=>{setRelAdeq(p=>p+(p&&!p.endsWith("\n")?"\n":"")+txt);focusField("ta-relAdeq");};
 
   const ident=SHARED.ident||{};
 
   const handleSaveRel=()=>{
-    if(!ident.nome||!ident.nome.trim()){window.alert("Informe o nome do estudante (na aba Elaborando o PEI) antes de salvar o relatório.");return;}
+    if(!ident.nome||!ident.nome.trim()){setRelErr(true);setTimeout(()=>setRelErr(false),2800);return;}
     const list=saveRelRecord({ident,bim,checks,relObs,relAdeq,relNota,trans});
     setSavedRels(list);setRelSaved(true);setTimeout(()=>setRelSaved(false),2200);
   };
@@ -1047,7 +1052,7 @@ ${CK_ITEMS.map(sec=>`<strong>${esc(sec.sect)}:</strong><br/>`+sec.items.map(it=>
         <div className="field-row">
           <div>
             <div className="field-guide">Dificuldades apresentadas, evolução quanto aos objetivos e conteúdos propostos, competências e habilidades profissionais desenvolvidas pelo/a estudante.</div>
-            <AutoTextarea minRows={5} value={relObs} onChange={e=>setRelObs(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+            <AutoTextarea id="ta-relObs" minRows={5} value={relObs} onChange={e=>setRelObs(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
           </div>
           <SuggPanel suggs={relObsEstSuggs} transKey={trans} onInsert={appendObs}/>
         </div>
@@ -1059,7 +1064,7 @@ ${CK_ITEMS.map(sec=>`<strong>${esc(sec.sect)}:</strong><br/>`+sec.items.map(it=>
         <div className="field-row">
           <div>
             <div className="field-guide">Desempenho geral do estudante quanto à(s) forma(s) de avaliação, relacionamento interpessoal, exercício da autonomia.</div>
-            <AutoTextarea minRows={5} value={relAdeq} onChange={e=>setRelAdeq(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
+            <AutoTextarea id="ta-relAdeq" minRows={5} value={relAdeq} onChange={e=>setRelAdeq(e.target.value)} placeholder="Digite ou use as sugestões ao lado..."/>
           </div>
           <SuggPanel suggs={relObsAdeqSuggs} transKey={trans} onInsert={appendAdeq}/>
         </div>
@@ -1086,7 +1091,7 @@ ${CK_ITEMS.map(sec=>`<strong>${esc(sec.sect)}:</strong><br/>`+sec.items.map(it=>
       <div className="act-row">
         <span style={{fontSize:13,color:"#5a6b52"}}>Dados de identificação propagados da aba "Elaborando o PEI".</span>
         <div style={{display:"flex",gap:10,alignItems:"center"}}>
-          <button onClick={handleSaveRel} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:relSaved?G:"#fff",color:relSaved?"#fff":G,border:`2px solid ${G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{relSaved?"✓ Relatório salvo!":"💾 Salvar Relatório"}</button>
+          <button onClick={handleSaveRel} style={{display:"flex",alignItems:"center",gap:8,padding:"12px 18px",background:relErr?"#B91C1C":(relSaved?G:"#fff"),color:(relErr||relSaved)?"#fff":G,border:`2px solid ${relErr?"#B91C1C":G}`,borderRadius:9,fontSize:15,fontWeight:700,cursor:"pointer",transition:"background .2s,color .2s"}}>{relErr?"⚠ Informe o nome do estudante":(relSaved?"✓ Relatório salvo!":"💾 Salvar Relatório")}</button>
           <button className="dl-btn" onClick={()=>setShowPreview(true)}><IcoEye/> Visualizar Relatório</button>
         </div>
       </div>
